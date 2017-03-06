@@ -1,10 +1,43 @@
-.upgrade {
-	border: 1px solid black;
-	padding: 5px;
-	float:left;
-	margin-top:10px;
+* {
+	cursor:default;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	 -khtml-user-select: none; /* Konqueror HTML */
+	   -moz-user-select: none; /* Firefox */
+	    -ms-user-select: none; /* Internet Explorer/Edge */
+	        user-select: none; /* Non-prefixed version, currently
+	                              supported by Chrome and Opera */
 }
 
-.upgrade button {
-	
+#number {
+	float:left;
+	font-size:30px;
+	width:75px;
+	cursor:hand;
+
+
+}
+
+.generator_container {
+	float:left;
+	margin-top:10px;
+	margin-right:10px;
+}
+
+.generator_container .bar {
+	background-color:blue;
+	color:white;
+	font-size:16px;
+	text-align: center;
+	/*vertical-align:middle;*/
+}
+
+.generator {
+	border: 1px solid black;
+	padding: 5px;
+
+}
+
+.generator button {
+
 }
