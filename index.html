@@ -1,0 +1,21 @@
+<!DOCTYPE html5>
+<html>
+	<head>
+		<script src="idle.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body onload="init()">
+		<div>
+			<span id="number"></span>
+			<br><span id="rate"></span>/s
+			<br><button onClick="cheat()">+10</button>
+		</div>
+		<div class="upgrade">
+			<strong class="upgrade_title">Upgrade A</strong>
+			<br>Costs <span id="upgrade_0_cost"></span>
+			<br><span id="upgrade_0_owned"></span> owned
+			<br>+<span id="upgrade_0_rate"></span>/s
+			<br><button id="upgrade_0_button" onclick="buyUpgrade(0)">Buy</button>
+		</div>
+	</body>
+</html>
