@@ -3,7 +3,8 @@ var baserate = 1;
 var ticks_per_second = 100;
 
 var number = 0;
-var time = 0;
+var lastTime = null;
+//var time = 0;
 var upgrades = [
 	{
 		name: "Upgrade A",
@@ -22,8 +23,9 @@ function init() {
 }
 
 function update(){
-	time += 0.01;
-	number += (getRate()/ticks_per_second);
+	var interval = getInterval;
+	number += getInterval() * getRate();
+	//number += (getRate()/ticks_per_second);
 	document.getElementById("number").innerHTML = formatNumber(number);
 	document.getElementById("rate").innerHTML = getRate();
 	for(var i = 0; i < upgrades.length; i++)
@@ -31,6 +33,18 @@ function update(){
 }
 
 ////
+
+
+function getInterval(){
+	var interval;
+	var now = new Date().getTime();
+	if(lastTime === null)
+		interval = 0;
+	else
+		interval = now - lastTime;
+	lastTime = now;
+	return interval / 1000;
+}
 
 function cheat(){
 	number += 10;
