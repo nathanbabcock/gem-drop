@@ -2,6 +2,7 @@
 var baserate = 1;
 var ticks_per_second = 100;
 var bar_maxheight = 100;
+var anim_duration = 1000;
 
 var number = 0;
 var lastTime = null;
@@ -42,9 +43,14 @@ var generators = [
 ];
 
 function init() {
+	var genView = document.getElementById("generators");
+
 	// Construct generators HTML
-	for(var i = 0; i < generators.length; i++)
-		document.getElementById("generators").innerHTML += getGeneratorHTML(i);
+	for(var i = 0; i < generators.length; i++){
+		genView.innerHTML += getGeneratorHTML(i);
+		var thisGen = generators[i].container = genView.lastChild;
+		//thisGen.name = thisGen.getElementById("")
+	}
 
 	setInterval(update, 1000 / ticks_per_second);
 	// for(var i = 0; i < generators.length; i++)
@@ -59,9 +65,14 @@ function getGeneratorHTML(id){
 				<br>Costs <span id="generator_`+id+`_cost"></span>
 				<br><span id="generator_`+id+`_owned"></span> owned
 				<br>+<span id="generator_`+id+`_rate"></span>/s
-				<br><button id="generator_`+id+`_button" onclick="buygenerator(`+id+`)">Buy</button>
+				<br><button id="generator_`+id+`_button" 
+					onclick="buyGenerator(`+id+`)"
+					onmouseover="previewGenerator(`+id+`)"
+					onmouseout="clearPreview(`+id+`)"
+					ondeactive="clearPreview(`+id+`)">Buy</button>
 			</div>
 			<div class="bar" id="generator_`+id+`_bar"></div>
+			<div id="generator_`+id+`_preview"></div>
 		</div>`;
 }
 
@@ -73,12 +84,25 @@ function update(){
 	document.getElementById("rate").innerHTML = getRate();
 	document.getElementById("perclick").innerHTML = getPerClick();
 
-
 	for(var i = 0; i < generators.length; i++)
 		updateGenerator(i);
 }
 
 ////
+
+function previewGenerator(id){
+	var preview = document.getElementById("generator_"+id+"_preview");
+	preview.style.backgroundColor="red";
+	preview.innerText="-x%";
+	preview.style.visibility = "visible";
+}
+
+function clearPreview(id){
+	var preview = document.getElementById("generator_"+id+"_preview");
+	preview.style.backgroundColor="red";
+	preview.innerText="-x%";
+	preview.style.visibility = "hidden";
+}
 
 var perClick = 10;
 function getPerClick(){
@@ -113,9 +137,17 @@ function updateGenerator(id){
 
 	// Bar
 	var percent = (generator.getTotalRate() / getRate());
-	var bar = document.getElementById("generator_"+id+"_bar")
+	// var bar = d3.select("#generator_"+id+"_bar");//document.getElementById("generator_"+id+"_bar")
+	// bar.style("height", percent * bar_maxheight)
+	// 	.text(Math.round(percent * 100) + "%");
+
+	var bar = document.getElementById("generator_"+id+"_bar");//document.getElementById("generator_"+id+"_bar")
 	bar.style.height = percent * bar_maxheight;
-	bar.innerHTML = Math.round(percent * 100) + "%";
+	bar.innerText=Math.round(percent * 100) + "%";
+
+
+	//bar.style.height = percent * bar_maxheight;
+	//bar.innerHTML = Math.round(percent * 100) + "%";
 	if(percent <= 0.05)
 		bar.style.color = "black";
 	else
@@ -133,7 +165,7 @@ function updateGenerator(id){
 	}
 }
 
-function buygenerator(id){
+function buyGenerator(id){
 	var generator = generators[id];
 	number -= generator.getCost();
 	generator.owned++;

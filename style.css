@@ -29,7 +29,12 @@
 	color:white;
 	font-size:16px;
 	text-align: center;
+	height:0px;
 	/*vertical-align:middle;*/
+
+	-webkit-transition: height 0.5s;
+	-moz-transition: height 0.5s;
+	transition: height 0.5s;
 }
 
 .generator {
