@@ -44,7 +44,19 @@
 .generator {
 	border: 1px solid black;
 	padding: 5px;
+}
 
+#upgrades, #generators {
+	clear:both;
+}
+
+.upgrade {
+	width:200px;
+	border: 1px solid black;
+	padding: 5px;
+	float:left;
+	margin-right:10px;
+	margin-top:10px;
 }
 
 .generator button {

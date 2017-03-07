@@ -1,19 +1,27 @@
-// CONFIG
-var baserate = 1;
-var ticks_per_second = 100;
-var bar_maxheight = 100;
-var anim_duration = 1000;
+// ENUM
+var GENERATOR_PERCENT_BONUS = 0,
+	CLICK_FLAT_BONUS = 1;
 
-var number = 0;
-var lastTime = null;
+// CONFIG
+var baserate = 1,
+	basePerClick = 10,
+	ticks_per_second = 100,
+	bar_maxheight = 100,
+	anim_duration = 1000;
+
+// GLOBAL
+var number = 0,
+	lastTime = null;
 //var time = 0;
+
+// DATA
 var generators = [
 	{
 		name: "Generator A",
 		//baseCost: 10,
 		owned: 0,
 		getCost: function(owned = this.owned) { return Math.floor(10 * Math.pow(1.3, owned)); },
-		getRate: function() { return 1; },
+		getRate: function() { return 1 * getMultiplier(this); },
 		getTotalRate: function(owned = this.owned) { return this.getRate(owned) * owned;}
 	},
 	{
@@ -21,7 +29,7 @@ var generators = [
 		//baseCost: 10,
 		owned: 0,
 		getCost: function() { return Math.floor(100 * Math.pow(1.3, this.owned)); },
-		getRate: function() { return 10; },
+		getRate: function() { return 10 * getMultiplier(this); },
 		getTotalRate: function() { return this.getRate() * this.owned;}
 	},
 	{
@@ -29,7 +37,7 @@ var generators = [
 		//baseCost: 10,
 		owned: 0,
 		getCost: function() { return Math.floor(1000 * Math.pow(1.3, this.owned)); },
-		getRate: function() { return 100; },
+		getRate: function() { return 100 * getMultiplier(this); },
 		getTotalRate: function() { return this.getRate() * this.owned;}
 	},
 	{
@@ -37,10 +45,41 @@ var generators = [
 		//baseCost: 10,
 		owned: 0,
 		getCost: function() { return Math.floor(10000 * Math.pow(1.3, this.owned)); },
-		getRate: function() { return 1000; },
+		getRate: function() { return 1000 * getMultiplier(this); },
 		getTotalRate: function() { return this.getRate() * this.owned;}
 	},
 ];
+
+var upgrades = [
+	{
+		name: "Upgrade A",
+		icon: null,
+		owned: false,
+		getCost: function() { return 100; },
+		type: GENERATOR_PERCENT_BONUS,
+		generator: generators[0],
+		multiplier: 2.0,
+		description: "+100% production to Generator A"
+	},
+	{
+		name: "Click Rate I",
+		icon: null,
+		owned: false,
+		getCost: function() { return 100; },
+		type: CLICK_FLAT_BONUS,
+		bonus: 10,
+		description: "+10 per click"
+	}
+]
+
+
+function getMultiplier(generator){
+	var mult = 1.0;
+	for(var i = 0; i < upgrades.length; i++)
+		if(upgrades[i].type === GENERATOR_PERCENT_BONUS && upgrades[i].owned && upgrades[i].generator === generator)
+			mult *= upgrades[i].multiplier;
+	return mult;
+}
 
 function getGeneratorHTML(gen){
 	// TODO I wish I knew a less cancerous way of constructing DOM elements
@@ -107,7 +146,7 @@ function getGeneratorHTML(gen){
 	refs.bar.className = "bar";
 	refs.container.appendChild(refs.bar);
 
-	// Bar
+	// Preview
 	refs.preview = document.createElement("div");
 	refs.preview.className = "preview";
 	refs.container.appendChild(refs.preview);
@@ -115,16 +154,63 @@ function getGeneratorHTML(gen){
 	return refs;
 }
 
-function init() {
-	var genView = document.getElementById("generators");
+function getUpgradeHTML(upgrade){
+	// <div class="upgrade">
+	// 	<strong>Upgrade A</strong>
+	// 	<br><span>+100% production from Generator A</span>
+	// 	<br>Costs <span>100</span>
+	// 	<br><button>Buy</button>
+	// </div>
+	var refs = {};
+	refs.container = document.createElement("div");
+	refs.container.className = "upgrade";
 
-	// Construct generators HTML
+	// Name
+	refs.name = document.createElement("strong");
+	refs.name.innerText = upgrade.name;
+	refs.container.appendChild(refs.name);
+
+	// Description
+	refs.container.appendChild(document.createElement("br"));
+	refs.description = document.createElement("span");
+	refs.description.innerText = upgrade.description;
+	refs.container.appendChild(refs.description);
+
+	// Costs
+	refs.container.appendChild(document.createElement("br"));
+	refs.container.appendChild(document.createTextNode("Costs "));
+	refs.cost = document.createElement("span");
+	refs.cost.innerHTML = upgrade.getCost();
+	refs.container.appendChild(refs.cost);
+
+	// Button
+	refs.container.appendChild(document.createElement("br"));
+	refs.button = document.createElement("button");
+	refs.button.innerText = "Buy";
+	refs.button.onclick = function() { buyUpgrade(upgrade); };
+	refs.container.appendChild(refs.button);
+
+	return refs;
+}
+
+function init() {
+	// Generators
+	var genView = document.getElementById("generators");
 	for(var i = 0; i < generators.length; i++){
 		var refs = getGeneratorHTML(generators[i]);
 		genView.appendChild(refs.container);
 		generators[i].gui = refs;
 	}
 
+	// Upgrades
+	var upgradeView = document.getElementById("upgrades");
+	for(var i = 0; i < upgrades.length; i++){
+		var refs = getUpgradeHTML(upgrades[i]);
+		upgradeView.appendChild(refs.container);
+		upgrades[i].gui = refs;
+	}
+
+	// Game loop
 	setInterval(update, 1000 / ticks_per_second);
 	// for(var i = 0; i < generators.length; i++)
 	// 	updateGenerator(i);
@@ -140,6 +226,9 @@ function update(){
 
 	for(var i = 0; i < generators.length; i++)
 		updateGenerator(generators[i]);
+
+	for(var i = 0; i < upgrades.length; i++)
+		updateUpgrade(upgrades[i]);
 }
 
 ////
@@ -149,19 +238,23 @@ function previewPurchase(gen){
 	preview.style.backgroundColor="green";
 
 	preview.innerText="+x%";
-	preview.style.visibility = "visible";
+	preview.style.display = "block";
 }
 
 function clearPreview(gen){
 	var preview = gen.gui.preview;
 	preview.style.backgroundColor="red";
 	preview.innerText="-x%";
-	preview.style.visibility = "hidden";
+	preview.style.display = "none";
 }
 
-var perClick = 10;
 function getPerClick(){
-	return perClick;
+	var mult = 1.0;
+	var bonus = 0.0;
+	for(var i = 0; i < upgrades.length; i++)
+		if(upgrades[i].type === CLICK_FLAT_BONUS && upgrades[i].owned)
+			bonus += upgrades[i].bonus;
+	return (basePerClick + bonus) * mult;
 }
 
 function getInterval(){
@@ -220,9 +313,28 @@ function updateGenerator(gen){
 	}
 }
 
+function updateUpgrade(upgrade){
+	if(upgrade.owned)
+		upgrade.gui.container.style.display = "none";
+	else if(upgrade.getCost() > number){
+		upgrade.gui.cost.style.color = "red";
+		upgrade.gui.button.disabled = true;
+	}
+	else {
+		upgrade.gui.cost.style.color = "green";
+		upgrade.gui.button.disabled = false;
+	}
+}
+
 function buyGenerator(gen){
 	number -= gen.getCost();
 	gen.owned++;
+	//updateGenerator(id);
+}
+
+function buyUpgrade(upgrade){
+	number -= upgrade.getCost();
+	upgrade.owned = true;
 	//updateGenerator(id);
 }
 
