@@ -14,8 +14,6 @@
 	font-size:30px;
 	width:75px;
 	cursor:hand;
-
-
 }
 
 .generator_container {
@@ -32,6 +30,12 @@
 	height:0px;
 	/*vertical-align:middle;*/
 
+	-webkit-transition: height 0.5s;
+	-moz-transition: height 0.5s;
+	transition: height 0.5s;
+}
+
+.generator_container .preview {
 	-webkit-transition: height 0.5s;
 	-moz-transition: height 0.5s;
 	transition: height 0.5s;
