@@ -13,31 +13,20 @@ var Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies;
 
-// Game globals
-var money = 0;
-
-// UI refs
-var ui = {
-	flush: document.getElementById("flush"),
-	money: document.getElementById("money")
-};
-
 // create engine
 var engine = Engine.create(),
     world = engine.world;
 
 // create renderer
 var render = Render.create({
-    element: document.body,
+    element: document.getElementById("render"),
     engine: engine,
     options: {
-        width: Math.min(document.documentElement.clientWidth, 800),
+        width: Math.min(document.documentElement.clientWidth, 300),
         height: Math.min(document.documentElement.clientHeight, 600),
         wireframes: false
     }
 });
-
-var GEM = 0;
 
 // Set up collision filters
 var MOUSE_FILTER = {
@@ -63,15 +52,18 @@ Engine.run(engine);
 Render.run(render);
 
 // create two boxes and a ground
-var wallOptions = { isStatic: true, collisionFilter: BODY_FILTER };
+var wallOptions = {
+	isStatic: true,
+	collisionFilter: BODY_FILTER,
+	render: {
+		fillStyle: "gray"
+	}
+};
 var boxA = Bodies.rectangle(400, 200, 80, 80, {collisionFilter: BODY_FILTER});
 var boxB = Bodies.rectangle(450, 50, 80, 80, {collisionFilter: BODY_FILTER});
 var left = Bodies.rectangle(0, 300, 20, 600, wallOptions);
-var right = Bodies.rectangle(800, 300, 20, 600, wallOptions);
-var ground = Bodies.rectangle(400, 610, 810, 60, wallOptions);
-ground.render.fillStyle = "gray";
-left.render.fillStyle = "gray";
-right.render.fillStyle = "gray";
+var right = Bodies.rectangle(300, 300, 20, 600, wallOptions);
+var ground = Bodies.rectangle(150, 610, 310, 60, wallOptions);
 
 // add all of the bodies to the world
 World.add(engine.world, [boxA, boxB, ground, left, right]);
@@ -97,39 +89,80 @@ World.add(world, mouseConstraint);
 // an example of using mouse events on a mouse
 Events.on(mouseConstraint, 'mousedown', function(event) {
     var mousePosition = event.mouse.position;
-    console.log('mousedown at ' + mousePosition.x + ' ' + mousePosition.y);
-    var gem = Bodies.circle(mousePosition.x, mousePosition.y, 10, { collisionFilter: BODY_FILTER });
-    gem.gameType = GEM;
-    World.add(engine.world, gem);
-    //shakeScene(engine);
+    // console.log('mousedown at ' + mousePosition.x + ' ' + mousePosition.y);
+    //var gem = Bodies.circle(mousePosition.x, mousePosition.y, 10, { collisionFilter: BODY_FILTER });
+    //gem.gameType = GEM;
+    //World.add(engine.world, gem);
+    
+    var gemsToAdd = doClick();
+    gemsToAdd.forEach(function(e){
+    	spawnGem(mousePosition, e);
+    });
 });
+
+function spawnGem(pos, gem){
+	var body;
+	switch(gem.name){
+		case "Quartz":
+			body = Bodies.circle(pos.x, pos.y, 20, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "white",
+					strokeStyle: "grey"
+				}
+			});
+			break;
+		case "Topaz":
+			body = Bodies.circle(pos.x, pos.y, 20, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "orange",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		default:
+			console.log("Unknown gem of type " + gem.name);
+			return false;
+	}
+	body.gem = gem;
+	World.add(engine.world, body);
+}
+
+var lastTime = 0;
 
 Events.on(engine, 'tick', function(event) {
 	// Remove gems falling through bottom
 	for(var i = 0; i < world.bodies.length; i++){
 		var body = world.bodies[i];
-		if(body.gameType === GEM){
-			console.log(body.position.y);
+		if(body.gem !== undefined){
+			//console.log(body.position.y);
 			if(!Bounds.contains(render.bounds, body.position)){
-				sellGem(body);
+				Composite.remove(world, body);
+				sellGem(body.gem);
 				//Composite.remove(world, body);
 			}
 		}
 	}
+
+	var delta = event.timestamp - lastTime;
+	lastTime = event.timestamp;
+	// genGems(delta);
 });
 
-function sellGem(body){
-	Composite.remove(world, body);
-	money++;
-	ui.money.innerText = money;
+// TODO
+function genGems(delta){
+	factories.forEach(function(e){
+		var chance = (delta / 1000) * e.getRate() * e.owned;
+	});
 }
 
 // Flush
-ui.flush.onmousedown = function(){
+ui.drop.onmousedown = function(){
 	ground.collisionFilter = BG_FILTER;
 	ground.render.fillStyle = "#D3D3D3";
 }
-ui.flush.onmouseup = function(){
+ui.drop.onmouseup = function(){
 	ground.collisionFilter = BODY_FILTER;
 	ground.render.fillStyle = "gray";
 }
