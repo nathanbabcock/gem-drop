@@ -64,6 +64,7 @@ var boxB = Bodies.rectangle(450, 50, 80, 80, {collisionFilter: BODY_FILTER});
 var left = Bodies.rectangle(0, 300, 20, 600, wallOptions);
 var right = Bodies.rectangle(300, 300, 20, 600, wallOptions);
 var ground = Bodies.rectangle(150, 610, 310, 60, wallOptions);
+// var debug = Bodies.rectangle(20, 20, 20, 20, wallOptions);
 
 // add all of the bodies to the world
 World.add(engine.world, [boxA, boxB, ground, left, right]);
@@ -136,24 +137,36 @@ Events.on(engine, 'tick', function(event) {
 	for(var i = 0; i < world.bodies.length; i++){
 		var body = world.bodies[i];
 		if(body.gem !== undefined){
-			//console.log(body.position.y);
-			if(!Bounds.contains(render.bounds, body.position)){
+			if(body.position.y > render.bounds.max.y){
 				Composite.remove(world, body);
 				sellGem(body.gem);
-				//Composite.remove(world, body);
+			} else if(body.position.y < 0) {
+				Composite.remove(world, body);
 			}
 		}
 	}
 
-	var delta = event.timestamp - lastTime;
+	var delta = (event.timestamp - lastTime) / 1000;
 	lastTime = event.timestamp;
-	// genGems(delta);
+	genGems(delta);
 });
 
-// TODO
+var spawnRect = {x1: 0, y1: 0, x2: render.bounds.max.x, y2: 50};
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function genGems(delta){
-	factories.forEach(function(e){
-		var chance = (delta / 1000) * e.getRate() * e.owned;
+	//var toSpawn = genGems_deterministic(delta) = genGems_probabilistic(delta);
+	var toSpawn = genGems_deterministic(delta);
+	toSpawn.forEach(function(g){
+		var pos = {
+			x: getRandomInt(spawnRect.x1, spawnRect.x2),
+			y: getRandomInt(spawnRect.y1, spawnRect.y2)
+		};
+		//console.log(pos);
+		spawnGem(pos, g);
 	});
 }
 

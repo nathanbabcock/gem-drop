@@ -227,4 +227,49 @@ function cheat(){
 	updateMoney();
 }
 
+function getTotalRate(){
+	var rate = 0;
+	for(var i = 0; i < factories.length; i++){
+		var factory = factories[i];
+		if(!factory.owned) continue;
+		rate += factory.getRate() * factory.owned;
+	}
+	return rate;
+}
+
+function genGems_deterministic(delta){
+	var toSpawn = [];
+	factories.forEach(function(f){
+		var rate = f.getRate() * f.owned;
+		if(rate <= 0)
+			return false;
+		//console.log("Rate = " + rate);
+		if(f.cooldown === undefined)
+			f.cooldown = 0;
+		else
+			f.cooldown -= delta;
+
+		while(f.cooldown <= 0){
+			toSpawn[toSpawn.length] = f.gem;
+			f.cooldown += (1 / rate);
+		}
+	});
+	return toSpawn;
+}
+
+
+function genGems_probabilistic(delta){
+	var toSpawn = [];
+	factories.forEach(function(f){
+		var chance = delta * f.getRate() * f.owned;
+		while(chance > 1){
+			toSpawn[toSpawn.length] = f.gem;
+			chance--;
+		}
+		if(Math.random() < chance)
+			toSpawn[toSpawn.length] = f.gem;
+	});
+	return toSpawn;
+}
+
 init();
