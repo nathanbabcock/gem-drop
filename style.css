@@ -1,4 +1,4 @@
-#render, #ui {
+#render_container, #ui {
 	float:left;
 }
 
@@ -14,20 +14,67 @@
 
 #money {
 	font-size:30px;
-	position: absolute;
+/*	position: absolute;
 	top:15px;
 	left:25px;
-	background-color:none;
-}
-
-.gem_click_power, .factory {
-	float:left;
-	border:1px solid black;
-	padding: 10px;
-	margin:10px;
-	cursor:hand;
+	background-color:none;*/
+	background-color:#89ff97;
+	padding:10px;
+	text-align: center;
 }
 
 .section, .section_name {
 	clear:both;
+}
+
+/* POPUPS */
+.popup_container {
+	position: relative;
+	display: inline-block;
+	margin: 10px;
+}
+
+.popup_anchor {
+	float:left;
+	border:1px solid black;
+	padding: 10px;
+	cursor:hand;
+}
+
+.popup_container .popup {
+	visibility: hidden;
+	position: absolute;
+	z-index: 1;
+
+	background-color: #000;
+    color: #fff;
+	opacity:0;
+	border-radius: 6px;
+	padding:10px;
+
+	transition: margin-top 0.1s, opacity 0.1s, visibility 0.1s;
+
+	width: 120px;
+    top: 100%;
+    margin-top:25px;
+    left: 50%; 
+    margin-left: -70px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.popup_container .popup::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.popup_container:hover .popup {
+	visibility: visible;
+	margin-top:7px;
+	top: 90%;
+	opacity: 1;
 }

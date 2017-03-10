@@ -18,33 +18,40 @@
 		<div id="generators"></div>
 	</body> -->
 	<body>
-		<div id="render">
+		<div id="render_container">
+			<div id="render"></div>
 			<div id="money"></div>	
 		</div>
 		<div id="ui">
 			<strong class="section_name">Click Powers</strong>
 			<div id="click_powers" class="section">
-<!-- 			<div class="gem_click_power">
-					<strong class="name">Quartz</strong>
-					<div class="rate">+1 per click</div>
-					<div class="price">$1 each</div>
+<!-- 			<div class="gem_click_power popup_container">
+					<div class="popup_anchor">Quartz</span>
+					<div class="popup">
+						<strong class="name">Quartz</strong>
+						<div class="rate">+1 per click</div>
+						<div class="price">$1 each</div>
+					</div>
 				</div> -->
 			</div>
 			<strong class="section_name">Factories</strong>
 			<div id="factories" class="section">
-<!-- 			<div class="factory">
-					<strong class="name">Quartz Factory</strong>
-					<div class="rate">+1 per second</div>
-					<div class="price">Costs $18</div>
-					<div class="owned">0 owned</div>
+<!-- 			<div class="factory popup_container">
+					<div class="popup_anchor">Quartz</span>
+					<div class="popup">
+					
+					</div>
+
 				</div> -->
 			</div>
 			<strong class="section_name">Upgrades</strong>
 			<div id="upgrades" class="section">
 			</div>
-			<button id="drop">Drop</button><button onclick="cheat()">Cheat</button>
+			<button id="drop">Drop</button>
+			<button onclick="cheat()">Cheat</button>
+			<button onclick="debug()">Debug</button>
 		</div>
 		<script src="game.js"></script>
-		<script src="idle.js"></script>
+		<script src="physics.js"></script>
 	</body>
 </html>

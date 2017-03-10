@@ -37,7 +37,7 @@ clickPowers = [
 		gem: gems[1],
 		baseRate: 1,
 		getRate: function() { return this.baseRate; },
-		basePrice: 100,
+		basePrice: 120,
 		getPrice: function() { return this.basePrice; }
 	}
 ];
@@ -47,7 +47,7 @@ factories = [
 		name: "Quartz Factory",
 		description: "Generates 1 quartz per second",
 		gem: gems[0],
-		baseRate: 1,
+		baseRate: 0.2,
 		getRate: function(){ return this.baseRate; },
 		basePrice: 18,
 		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.3, owned); },
@@ -59,86 +59,115 @@ factories = [
 		gem: gems[1],
 		baseRate: 1,
 		getRate: function(){ return this.baseRate; },
-		basePrice: 123,
+		basePrice: 500,
 		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.3, owned); },
 		owned: 0
 	}, 
 ];
 
 function getClickPowerHMTL(clickpower){
-/*	<div class="gem_click_power">
-		<strong class="name">Quartz</strong>
-		<div class="rate">+1 per click</div>
-		<div class="price">$1 each</div>
+/*	<div class="gem_click_power popup_container">
+		<div class="popup_anchor">Quartz</span>
+		<div class="popup">
+			<strong class="name">Quartz</strong>
+			<div class="rate">+1 per click</div>
+			<div class="price">$1 each</div>
+		</div>
 	</div>*/
 	var refs = clickpower.ui = {};
 	refs.container = document.createElement("div");
-	refs.container.className = "gem_click_power";
+	refs.container.className = "gem_click_power popup_container";
+
+	// Anchor
+	refs.anchor = document.createElement("div");
+	refs.anchor.className = "popup_anchor";
+	refs.anchor.innerText = clickpower.name;
+	refs.container.appendChild(refs.anchor);
+
+	// Popup
+	refs.popup = document.createElement("div");
+	refs.popup.className = "popup";
+	refs.container.appendChild(refs.popup);
 
 	// Name
 	refs.name = document.createElement("strong");
 	refs.name.className = "name";
 	refs.name.innerText = clickpower.name;
-	refs.container.appendChild(refs.name);
+	refs.popup.appendChild(refs.name);
 
 	// Rate
 	refs.rate = document.createElement("div");
 	refs.rate.className = "rate";
 	// refs.rate.innerText = "+" + clickpower.getRate() + " per click";
-	refs.container.appendChild(refs.rate);
+	refs.popup.appendChild(refs.rate);
 
 	// Price
 	refs.price = document.createElement("div");
 	refs.price.className = "price";
 	// refs.price.innerText = "$" + clickpower.gem.getPrice() + " each";
-	refs.container.appendChild(refs.price);
+	refs.popup.appendChild(refs.price);
 
 	// Costs
 	refs.costs = document.createElement("div");
 	refs.costs.className = "costs";
-	refs.container.appendChild(refs.costs);
+	refs.popup.appendChild(refs.costs);
 
 	// Onclick
-	refs.container.onclick = function() { buyClickPower(clickpower); };
+	refs.anchor.onclick = function() { buyClickPower(clickpower); };
 
 	updateClickPower(clickpower);
 	return refs.container;
 }
 
 function getFactoryHTML(factory){
-/*	<div class="factory">
-		<strong class="name">Quartz Factory</strong>
-		<div class="rate">+1 per second</div>
-		<div class="price">Costs $18</div>
-		<div class="owned">0 owned</div>
+/*	<div class="factory popup_container">
+		<div class="popup_anchor">Quartz</span>
+		<div class="popup">
+			<strong class="name">Quartz Factory</strong>
+			<div class="rate">+1 per second</div>
+			<div class="price">Costs $18</div>
+			<div class="owned">0 owned</div>
+		</div>
 	</div>*/
+
 	var refs = factory.ui = {};
 	refs.container = document.createElement("div");
-	refs.container.className = "factory";
+	refs.container.className = "factory popup_container";
+
+	// Anchor
+	refs.anchor = document.createElement("div");
+	refs.anchor.className = "popup_anchor";
+	refs.anchor.innerText = factory.name;
+	refs.container.appendChild(refs.anchor);
+
+	// Popup
+	refs.popup = document.createElement("div");
+	refs.popup.className = "popup";
+	refs.container.appendChild(refs.popup);
 
 	// Name
 	refs.name = document.createElement("strong");
 	refs.name.className = "name";
 	refs.name.innerText = factory.name;
-	refs.container.appendChild(refs.name);
+	refs.popup.appendChild(refs.name);
 
 	// Rate
 	refs.rate = document.createElement("div");
 	refs.rate.className = "rate";
-	refs.container.appendChild(refs.rate);
+	refs.popup.appendChild(refs.rate);
 
 	// Price
 	refs.price = document.createElement("div");
 	refs.price.className = "price";
-	refs.container.appendChild(refs.price);
+	refs.popup.appendChild(refs.price);
 
 	// Owned
 	refs.owned = document.createElement("div");
 	refs.owned.className = "owned";
-	refs.container.appendChild(refs.owned);
+	refs.popup.appendChild(refs.owned);
 
 	// Onclick
-	refs.container.onclick = function() { buyFactory(factory); };
+	refs.anchor.onclick = function() { buyFactory(factory); };
 
 	updateFactory(factory);
 	return refs.container;
@@ -199,7 +228,7 @@ function buyClickPower(clickPower){
 }
 
 function formatMoney(num = money){
-	return "$" + Math.round(num);
+	return "$" + Math.floor(num);
 }
 
 function doClick(){
@@ -225,6 +254,8 @@ function sellGem(gem){
 function cheat(){
 	money+=100;
 	updateMoney();
+	// factories[0].owned = 1000;
+	// updateFactory(factories[0]);
 }
 
 function getTotalRate(){
