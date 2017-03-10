@@ -3,12 +3,16 @@ var money = 0;
 
 // UI refs
 var ui = {
+	click_powers: document.getElementById("click_powers"),
+	factories: document.getElementById("factories"),
+	upgrades: document.getElementById("upgrades"),
 	drop: document.getElementById("drop"),
-	money: document.getElementById("money")
+	actual_money: document.getElementById("actual_money"),
+	predicted_money: document.getElementById("predicted_money"),
 };
 
 // Game data
-gems = [
+var gems = [
 	{
 		name: "Quartz",
 		basePrice: 1,
@@ -21,7 +25,7 @@ gems = [
 	}
 ];
 
-clickPowers = [
+var clickPowers = [
 	{
 		name: "Quartz",
 		owned: true,
@@ -42,7 +46,7 @@ clickPowers = [
 	}
 ];
 
-factories = [
+var factories = [
 	{
 		name: "Quartz Factory",
 		description: "Generates 1 quartz per second",
@@ -64,6 +68,37 @@ factories = [
 		owned: 0
 	}, 
 ];
+
+var UPGRADE_CATEGORY = {
+	AUTO_DROP: 0
+}
+
+var upgrades = [
+	{
+		name: "Auto Drop",
+		description: "Automatically drops gems every 30 seconds.",
+		basePrice:10000,
+		getPrice: function() { return this.basePrice; },
+		category: UPGRADE_CATEGORY.AUTO_DROP,
+		rate: 30,
+		owned: false
+	}
+];
+
+//////////////
+
+var auto_drop = {
+	open:false,
+	timer:0,
+	getOpenDuration:function(){
+		return 3;
+	},
+	getRate:function(){
+		if(upgrades[0].owned)
+			return upgrades[0].rate;
+		return -1;
+	}
+};
 
 function getClickPowerHMTL(clickpower){
 /*	<div class="gem_click_power popup_container">
@@ -173,11 +208,53 @@ function getFactoryHTML(factory){
 	return refs.container;
 }
 
-function updateFactory(factory){
-	//factory.ui.name.innerText = 
-	factory.ui.rate.innerText = factory.getRate() + " per second";
-	factory.ui.price.innerText = formatMoney(factory.getPrice());
-	factory.ui.owned.innerText = factory.owned + " owned";
+function getUpgradeHTML(upgrade){
+/*	<div class="upgrade popup_container">
+		<div class="popup_anchor">asdf</span>
+		<div class="popup">
+			<strong class="name">asdf</strong>
+			<div class="description">blah blah blah</div>
+			<div class="price">Costs $18</div>
+		</div>
+	</div>*/
+
+	var refs = upgrade.ui = {};
+	refs.container = document.createElement("div");
+	refs.container.className = "upgrade popup_container";
+
+	// Anchor
+	refs.anchor = document.createElement("div");
+	refs.anchor.className = "popup_anchor";
+	refs.anchor.innerText = upgrade.name;
+	refs.container.appendChild(refs.anchor);
+
+	// Popup
+	refs.popup = document.createElement("div");
+	refs.popup.className = "popup";
+	refs.container.appendChild(refs.popup);
+
+	// Name
+	refs.name = document.createElement("strong");
+	refs.name.className = "name";
+	refs.name.innerText = upgrade.name;
+	refs.popup.appendChild(refs.name);
+
+	// Description
+	refs.description = document.createElement("div");
+	refs.description.className = "description";
+	refs.description.innerText = upgrade.description;
+	refs.popup.appendChild(refs.description);
+
+	// Price
+	refs.costs = document.createElement("div");
+	refs.costs.className = "costs";
+	refs.popup.appendChild(refs.costs);
+
+	// Onclick
+	refs.anchor.onclick = function() { buyUpgrade(upgrade); };
+
+	updateUpgrade(upgrade);
+	return refs.container;
 }
 
 function updateClickPower(clickpower){
@@ -190,19 +267,37 @@ function updateClickPower(clickpower){
 		clickpower.ui.costs.innerText = "";
 }
 
+function updateFactory(factory){
+	//factory.ui.name.innerText = 
+	factory.ui.rate.innerText = factory.getRate() + " per second";
+	factory.ui.price.innerText = formatMoney(factory.getPrice());
+	factory.ui.owned.innerText = factory.owned + " owned";
+}
+
+function updateUpgrade(upgrade){
+	if(!upgrade.owned)
+		upgrade.ui.costs.innerText = "Costs " + formatMoney(upgrade.getPrice());
+	else
+		upgrade.ui.costs.innerText = "";
+}
 
 function init(){
 	updateMoney();
 
 	// Click powers
-	var clickPowersPanel = document.getElementById("click_powers");
-	for(var i = 0; i < clickPowers.length; i++)
-		clickPowersPanel.appendChild(getClickPowerHMTL(clickPowers[i]));
+	clickPowers.forEach(function(clickpower){
+		ui.click_powers.appendChild(getClickPowerHMTL(clickpower));
+	});
 
 	// Factories
-	var factoriesPanel = document.getElementById("factories");
-	for(var i = 0; i < factories.length; i++)
-		factoriesPanel.appendChild(getFactoryHTML(factories[i]));
+	factories.forEach(function(factory){
+		ui.factories.appendChild(getFactoryHTML(factory));
+	});
+
+	// Upgrades
+	upgrades.forEach(function(upgrade){
+		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
+	});
 }
 
 // function formatRate(num){
@@ -227,6 +322,15 @@ function buyClickPower(clickPower){
 	updateMoney();
 }
 
+function buyUpgrade(upgrade){
+	if(upgrade.owned || upgrade.getPrice() > money)
+		return false;
+	money -= upgrade.getPrice();
+	upgrade.owned = true;
+	updateUpgrade(upgrade);
+	updateMoney();
+}
+
 function formatMoney(num = money){
 	return "$" + Math.floor(num);
 }
@@ -242,8 +346,14 @@ function doClick(){
 	//gemsToMake[gemsToMake.length]
 }
 
+// TODO this gets immediatelly overwritten when physics.js loads
+function getInventoryValue(){
+	return 0;
+}
+
 function updateMoney(){
-	ui.money.innerText = formatMoney();
+	ui.actual_money.innerText = formatMoney();
+	ui.predicted_money.innerText = " (+" + formatMoney(getInventoryValue()).substring(1) + ")";
 }
 
 function sellGem(gem){
@@ -252,7 +362,8 @@ function sellGem(gem){
 }
 
 function cheat(){
-	money+=100;
+	money += 1000000000;
+	// money+=100;
 	updateMoney();
 	// factories[0].owned = 1000;
 	// updateFactory(factories[0]);

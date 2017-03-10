@@ -128,28 +128,49 @@ function spawnGem(pos, gem){
 	}
 	body.gem = gem;
 	World.add(engine.world, body);
+	updateMoney();
 }
 
 var lastTime = 0;
-
 Events.on(engine, 'tick', function(event) {
-	// Remove gems falling through bottom
-	for(var i = 0; i < world.bodies.length; i++){
-		var body = world.bodies[i];
+	// Remove gems
+	world.bodies.forEach(function(body){
 		if(body.gem !== undefined){
 			if(body.position.y > render.bounds.max.y){
 				Composite.remove(world, body);
 				sellGem(body.gem);
 			} else if(body.position.y < 0) {
 				Composite.remove(world, body);
+				updateMoney();
 			}
 		}
-	}
+	});
 
+	// Spawn gems
 	var delta = (event.timestamp - lastTime) / 1000;
 	lastTime = event.timestamp;
 	genGems(delta);
+
+	// Auto drop
+	var rate = auto_drop.getRate();
+	if(auto_drop.getRate() > 0){
+		auto_drop.timer -= delta;
+		if(auto_drop.timer <= 0){
+			if(auto_drop.open){
+				closeDrop();
+				auto_drop.open = false;
+				auto_drop.timer = rate;
+			} else {
+				openDrop();
+				auto_drop.open = true;
+				auto_drop.timer = auto_drop.getOpenDuration();
+			}
+		}
+		
+	}
+
 });
+
 
 var spawnRect = {x1: 0, y1: 0, x2: render.bounds.max.x, y2: 50};
 
@@ -170,14 +191,22 @@ function genGems(delta){
 	});
 }
 
-// Flush
-ui.drop.onmousedown = function(){
+function openDrop(){
 	ground.collisionFilter = BG_FILTER;
 	ground.render.fillStyle = "#D3D3D3";
 }
-ui.drop.onmouseup = function(){
+
+function closeDrop(){
 	ground.collisionFilter = BODY_FILTER;
 	ground.render.fillStyle = "gray";
+}
+
+// Drop
+ui.drop.onmousedown = function(){
+	openDrop();
+}
+ui.drop.onmouseup = function(){
+	closeDrop();
 }
 
 function debug(){
@@ -194,4 +223,14 @@ function debug(){
 		Engine.update(engine, 1000 / 60);
 	}
 	// engine.update(10);
+}
+
+function getInventoryValue(){
+	var val = 0;
+	world.bodies.forEach(function(body){
+		if(body.gem !== undefined){
+			val += body.gem.getPrice();
+		}
+	});
+	return val;
 }

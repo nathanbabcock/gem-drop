@@ -14,13 +14,13 @@
 
 #money {
 	font-size:30px;
-/*	position: absolute;
-	top:15px;
-	left:25px;
-	background-color:none;*/
 	background-color:#89ff97;
 	padding:10px;
 	text-align: center;
+}
+
+#predicted_money {
+	color:#a8a8a8;
 }
 
 .section, .section_name {
