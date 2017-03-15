@@ -11,6 +11,48 @@ var ui = {
 	predicted_money: document.getElementById("predicted_money"),
 };
 
+{
+	name: "Gem Name",
+	sellPrice: 1,
+	getSellPrice: function() { return this.sellPrice; },
+	 
+}
+
+var newgems = [
+	{
+		name: "Gem",
+		baseValue: 1,
+		getValue: function() { return this.baseValue; },
+		factory: {
+			owned: 0,
+			baseCostFactor: 1.15,
+			getCostFactor: function() { return this.baseCostFactor; },
+			basePrice: 100,
+			getPrice: function(owned = this.owned){ this.getCostFactor() * Math.pow(markup, owned); },
+			rate: 1
+		},
+		clickPower: {
+			owned: false,
+			basePrice: 100,
+			getPrice: function(){ return this.basePrice; },
+			baseRate: 1,
+			getRate: function(){ return this.baseRate; }
+		}
+	}
+];
+
+// TODO
+/*var stats = {
+	$: 0,
+	gems: 0,
+	gems_lost: 0,
+	largest_inventory: 0,
+	upgrades: 0,
+	achievements: 0,
+	clicks: 0,
+	factory_gems: 0
+}*/
+
 // Game data
 var gems = [
 	{
@@ -20,10 +62,49 @@ var gems = [
 	},
 	{
 		name: "Topaz",
-		basePrice: 10,
+		basePrice: 12,
 		getPrice: function() { return this.basePrice; }
-	}
+	},
+	{
+		name: "Amethyst",
+		basePrice: 150,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Sapphire",
+		basePrice: 1750,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Emerald",
+		basePrice: 25000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Ruby",
+		basePrice: 275000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Diamond",
+		basePrice: 1000000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Rainbow",
+		basePrice: 50000000,
+		getPrice: function() { return this.basePrice; }
+	},
 ];
+
+// function initClickPowerData(){
+// 	var cp = [];
+// 	gems.forEach(function(gem){
+// 		cp.push({
+
+// 		})
+// 	});
+// }
 
 var clickPowers = [
 	{
@@ -43,7 +124,61 @@ var clickPowers = [
 		getRate: function() { return this.baseRate; },
 		basePrice: 120,
 		getPrice: function() { return this.basePrice; }
-	}
+	},
+	{
+		name: "Amethyst",
+		owned: false,
+		gem: gems[2],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 1750,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Sapphire",
+		owned: false,
+		gem: gems[3],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 1750,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Emerald",
+		owned: false,
+		gem: gems[4],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 20000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Ruby",
+		owned: false,
+		gem: gems[4],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 3000000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Diamond",
+		owned: false,
+		gem: gems[5],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 12000000,
+		getPrice: function() { return this.basePrice; }
+	},
+	{
+		name: "Rainbow",
+		owned: false,
+		gem: gems[4],
+		baseRate: 1,
+		getRate: function() { return this.baseRate; },
+		basePrice: 3000000,
+		getPrice: function() { return this.basePrice; }
+	},
 ];
 
 var factories = [
@@ -51,10 +186,10 @@ var factories = [
 		name: "Quartz Factory",
 		description: "Generates 1 quartz per second",
 		gem: gems[0],
-		baseRate: 0.2,
+		baseRate: 1,
 		getRate: function(){ return this.baseRate; },
 		basePrice: 18,
-		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.3, owned); },
+		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.15, owned); },
 		owned: 0
 	}, 
 	{
@@ -64,9 +199,9 @@ var factories = [
 		baseRate: 1,
 		getRate: function(){ return this.baseRate; },
 		basePrice: 500,
-		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.3, owned); },
+		getPrice: function(owned = this.owned) { return this.basePrice * Math.pow(1.15, owned); },
 		owned: 0
-	}, 
+	}
 ];
 
 var UPGRADE_CATEGORY = {
@@ -91,7 +226,7 @@ var auto_drop = {
 	open:false,
 	timer:0,
 	getOpenDuration:function(){
-		return 3;
+		return 2;
 	},
 	getRate:function(){
 		if(upgrades[0].owned)
@@ -361,14 +496,6 @@ function sellGem(gem){
 	updateMoney();
 }
 
-function cheat(){
-	money += 1000000000;
-	// money+=100;
-	updateMoney();
-	// factories[0].owned = 1000;
-	// updateFactory(factories[0]);
-}
-
 function getTotalRate(){
 	var rate = 0;
 	for(var i = 0; i < factories.length; i++){
@@ -412,6 +539,14 @@ function genGems_probabilistic(delta){
 			toSpawn[toSpawn.length] = f.gem;
 	});
 	return toSpawn;
+}
+
+function cheat(){
+	// money += 1000000000;
+	// // money+=100;
+	// updateMoney();
+	factories[1].owned = 1000;
+	updateFactory(factories[0]);
 }
 
 init();

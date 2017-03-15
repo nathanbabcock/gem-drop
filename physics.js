@@ -165,12 +165,9 @@ Events.on(engine, 'tick', function(event) {
 				auto_drop.open = true;
 				auto_drop.timer = auto_drop.getOpenDuration();
 			}
-		}
-		
+		}	
 	}
-
 });
-
 
 var spawnRect = {x1: 0, y1: 0, x2: render.bounds.max.x, y2: 50};
 
