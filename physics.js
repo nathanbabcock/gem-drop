@@ -226,7 +226,7 @@ function getInventoryValue(){
 	var val = 0;
 	world.bodies.forEach(function(body){
 		if(body.gem !== undefined){
-			val += body.gem.getPrice();
+			val += body.gem.getValue();
 		}
 	});
 	return val;
