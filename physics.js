@@ -103,9 +103,10 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
 
 function spawnGem(pos, gem){
 	var body;
+	var DEFAULT_RADIUS = 20;
 	switch(gem.name){
 		case "Quartz":
-			body = Bodies.circle(pos.x, pos.y, 20, {
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "white",
@@ -114,11 +115,65 @@ function spawnGem(pos, gem){
 			});
 			break;
 		case "Topaz":
-			body = Bodies.circle(pos.x, pos.y, 20, {
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "orange",
 					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Amethyst":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "purple",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Sapphire":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "blue",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Emerald":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "green",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Ruby":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "red",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Diamond":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "white",
+					strokeStyle: "gold"
+				}
+			});
+			break;
+		case "Rainbow":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "pink",
+					strokeStyle: "red"
 				}
 			});
 			break;

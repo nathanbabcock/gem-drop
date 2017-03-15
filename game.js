@@ -238,7 +238,7 @@ function buyFactory(gem){
 		return false;
 	money -= factory.getCost();
 	factory.owned++;
-	updateFactory(factory);
+	updateFactory(gem);
 	updateMoney();
 }
 
@@ -262,7 +262,24 @@ function buyUpgrade(upgrade){
 }
 
 function formatMoney(num = money){
-	return "$" + Math.floor(num);
+	var thirdpower = 0;
+	while(num >= 1000){
+		num /= 1000;
+		thirdpower++;
+	}
+
+	var suffix = ["", "k", "M", "B", "T", "Q"];
+
+	var formatted ="";
+	if(thirdpower === 0 || num >= 100)
+		formatted = Math.floor(num);
+	else if (num >= 10) {
+		formatted = Math.floor(num * 10) / 10;
+	} else {
+		formatted = Math.floor(num * 100) / 100;
+	}
+	formatted += suffix[thirdpower];
+	return "$" + formatted;
 }
 
 function doClick(){
@@ -316,7 +333,7 @@ function genGems_deterministic(delta){
 			f.cooldown -= delta;
 
 		while(f.cooldown <= 0){
-			toSpawn[toSpawn.length] = f.gem;
+			toSpawn[toSpawn.length] = gem;
 			f.cooldown += (1 / rate);
 		}
 	});
@@ -330,11 +347,11 @@ function genGems_probabilistic(delta){
 		var f = gem.factory;
 		var chance = delta * f.getRate() * f.owned;
 		while(chance > 1){
-			toSpawn[toSpawn.length] = f.gem;
+			toSpawn[toSpawn.length] = gem;
 			chance--;
 		}
 		if(Math.random() < chance)
-			toSpawn[toSpawn.length] = f.gem;
+			toSpawn[toSpawn.length] = gem;
 	});
 	return toSpawn;
 }
