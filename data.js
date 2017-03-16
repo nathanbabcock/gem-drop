@@ -1,9 +1,5 @@
 var DEFAULT_COST_FACTOR = 1.15;
 
-var UPGRADE_CATEGORY = {
-	AUTO_DROP: 0
-}
-
 //////////////
 
 // Gem constructor
@@ -62,7 +58,10 @@ var Gems = [
 			baseCost: 0
 		},
 		factory: {
-			baseCost: 12
+			baseCost: 25
+		},
+		render: {
+
 		}
 	}),
 	new Gem({
@@ -72,7 +71,7 @@ var Gems = [
 			baseCost: 100
 		},
 		factory: {
-			baseCost: 150
+			baseCost: 500
 		}
 	}),
 	new Gem({
@@ -82,7 +81,7 @@ var Gems = [
 			baseCost: 1750
 		},
 		factory: {
-			baseCost: 2000
+			baseCost: 6000
 		}
 	}),
 	new Gem({
@@ -137,9 +136,45 @@ var Gems = [
 	})
 ];
 
-//Gems.all = [Gems.quartz, Gems.topaz, Gems.amethyst, Gems.sapphire, Gems.emerald, Gems.ruby, Gems.diamond, Gems.rainbow];
+var UPGRADE_CATEGORY = {
+	AUTO_DROP: 0,
+	INVENTORY_SIZE: 1
+}
 
 var Upgrades = [
+	{
+		name: "Inventory Size I",
+		description: "More space to hold gems.",
+		basePrice:12,
+		getPrice: function() { return this.basePrice; },
+		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
+		onPurchase: function(){
+			Inventory.build(Inventory.sizes[1]);
+		},
+		owned: false
+	},
+	{
+		name: "Inventory Size II",
+		description: "More space to hold gems.",
+		basePrice:250,
+		getPrice: function() { return this.basePrice; },
+		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
+		onPurchase: function(){
+			Inventory.build(Inventory.sizes[2]);
+		},
+		owned: false
+	},
+	{
+		name: "Inventory Size III",
+		description: "More space to hold gems.",
+		basePrice:4500,
+		getPrice: function() { return this.basePrice; },
+		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
+		onPurchase: function(){
+			Inventory.build(Inventory.sizes[3]);
+		},
+		owned: false
+	},
 	{
 		name: "Auto Drop",
 		description: "Automatically drops gems every 30 seconds.",

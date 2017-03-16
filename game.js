@@ -259,6 +259,8 @@ function buyUpgrade(upgrade){
 	upgrade.owned = true;
 	updateUpgrade(upgrade);
 	updateMoney();
+	if(upgrade.onPurchase !== undefined)
+		upgrade.onPurchase();
 }
 
 function formatMoney(num = money){
@@ -295,13 +297,15 @@ function doClick(){
 }
 
 // TODO this gets immediately overwritten when physics.js loads
-function getInventoryValue(){
-	return 0;
+var Inventory = {
+	getValue: function() {
+		return 0;
+	}
 }
 
 function updateMoney(){
 	ui.actual_money.innerText = formatMoney();
-	ui.predicted_money.innerText = " (+" + formatMoney(getInventoryValue()).substring(1) + ")";
+	ui.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";
 }
 
 function sellGem(gem){

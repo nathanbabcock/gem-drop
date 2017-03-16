@@ -24,6 +24,7 @@ var render = Render.create({
     options: {
         width: Math.min(document.documentElement.clientWidth, 300),
         height: Math.min(document.documentElement.clientHeight, 500),
+        background: '#fff',
         wireframes: false,
     }
 });
@@ -51,23 +52,69 @@ Engine.run(engine);
 // run the renderer
 Render.run(render);
 
-// create two boxes and a ground
-var wallOptions = {
-	isStatic: true,
-	collisionFilter: BODY_FILTER,
-	render: {
-		fillStyle: "gray"
+// INVENTORY
+var Inventory = {
+	// defaults
+	wall_radius: 5,
+	bottom_margin: 10,
+	wall_options: {
+		isStatic: true,
+		collisionFilter: BODY_FILTER,
+		render: {
+			fillStyle: "gray",
+			strokeStyle: "gray"
+		}
+	},
+	sizes: [
+		{ width: 50, height: 250 },
+		{ width: 100, height: 300 },
+		{ width: 200, height: 350 },
+		{ width: 300, height: 500}
+	],
+
+	// body references
+	left: undefined,
+	right: undefined,
+	ground: undefined,
+
+	// methods
+	build: function(size) {
+		// Remove old
+		[this.left, this.right, this.ground].forEach(function(body){
+			if(body !== undefined)
+				Composite.remove(world, body);
+		});
+
+		// Set canvas dims
+		render.canvas.width = size.width + this.wall_radius * 2;
+		render.canvas.height = size.height + this.wall_radius;
+
+		// Construct
+		this.left = Bodies.rectangle(this.wall_radius / 2, render.canvas.height / 2 - this.bottom_margin, this.wall_radius, render.canvas.height, this.wall_options);
+		this.right = Bodies.rectangle(render.canvas.width - (this.wall_radius / 2), render.canvas.height / 2  - this.bottom_margin, this.wall_radius, render.canvas.height, this.wall_options);
+		this.ground = Bodies.rectangle(render.canvas.width / 2, render.canvas.height - (this.wall_radius / 2) - this.bottom_margin, render.canvas.width, this.wall_radius, this.wall_options);
+
+		// Add
+		World.add(engine.world, [this.left, this.right, this.ground]);
+	},
+
+	getValue: function() {
+		var val = 0;
+		world.bodies.forEach(function(body){
+			if(body.gem !== undefined){
+				val += body.gem.getValue();
+			}
+		});
+		return val;
 	}
 };
-// var boxA = Bodies.rectangle(400, 200, 80, 80, {collisionFilter: BODY_FILTER});
-// var boxB = Bodies.rectangle(450, 50, 80, 80, {collisionFilter: BODY_FILTER});
-var left = Bodies.rectangle(0, 250, 20, 480, wallOptions);
-var right = Bodies.rectangle(300, 250, 20, 480, wallOptions);
-var ground = Bodies.rectangle(150, 480, 310, 20, wallOptions);
-// var debug = Bodies.rectangle(20, 20, 20, 20, wallOptions);
+
 
 // add all of the bodies to the world
-World.add(engine.world, [ground, left, right]);
+// World.add(engine.world, [ground, left, right]);
+
+Inventory.build(Inventory.sizes[0]);
+
 
 // add mouse control
 var mouse = Mouse.create(render.canvas),
@@ -191,7 +238,7 @@ Events.on(engine, 'tick', function(event) {
 	// Remove gems
 	world.bodies.forEach(function(body){
 		if(body.gem !== undefined){
-			if(body.position.y > render.bounds.max.y){
+			if(body.position.y > render.canvas.height){
 				Composite.remove(world, body);
 				sellGem(body.gem);
 			} else if(body.position.y < 0) {
@@ -224,7 +271,7 @@ Events.on(engine, 'tick', function(event) {
 	}
 });
 
-var spawnRect = {x1: 0, y1: 0, x2: render.bounds.max.x, y2: 50};
+var spawnRect = {x1: Inventory.wall_radius, y1: 0, x2: render.canvas.width, y2: 50};
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -244,13 +291,15 @@ function genGems(delta){
 }
 
 function openDrop(){
-	ground.collisionFilter = BG_FILTER;
-	ground.render.fillStyle = "#D3D3D3";
+	Inventory.ground.collisionFilter = BG_FILTER;
+	Inventory.ground.render.fillStyle = "#D3D3D3";
+	Inventory.ground.render.strokeStyle = "#D3D3D3"
 }
 
 function closeDrop(){
-	ground.collisionFilter = BODY_FILTER;
-	ground.render.fillStyle = "gray";
+	Inventory.ground.collisionFilter = BODY_FILTER;
+	Inventory.ground.render.fillStyle = "gray";
+	Inventory.ground.render.strokeStyle = "gray";
 }
 
 // Drop
@@ -275,14 +324,4 @@ function debug(){
 		Engine.update(engine, 1000 / 60);
 	}
 	// engine.update(10);
-}
-
-function getInventoryValue(){
-	var val = 0;
-	world.bodies.forEach(function(body){
-		if(body.gem !== undefined){
-			val += body.gem.getValue();
-		}
-	});
-	return val;
 }

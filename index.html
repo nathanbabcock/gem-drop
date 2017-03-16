@@ -18,49 +18,58 @@
 		<div id="generators"></div>
 	</body> -->
 	<body>
-		<div id="render_container">
-			<div id="render"></div>
-			<div id="money"><span id="actual_money"></span><span id="predicted_money"></span></div>	
-		</div>
-		<div id="ui">
-			<strong class="section_name">Click Powers</strong>
-			<div id="click_powers" class="section">
-<!-- 			<div class="gem_click_power popup_container">
-					<div class="popup_anchor">Quartz</span>
-					<div class="popup">
-						<strong class="name">Quartz</strong>
-						<div class="rate">+1 per click</div>
-						<div class="price">$1 each</div>
-					</div>
-				</div> -->
+		<div id="container">
+			<div id="render_container">
+				<div id="render"></div>
+				<div id="money"><span id="actual_money"></span><span id="predicted_money"></span></div>	
 			</div>
-			<strong class="section_name">Factories</strong>
-			<div id="factories" class="section">
-<!-- 			<div class="factory popup_container">
-					<div class="popup_anchor">Quartz</span>
-					<div class="popup">
-						<strong class="name">Quartz Factory</strong>
-						<div class="rate">+1 per second</div>
-						<div class="price">Costs $18</div>
-						<div class="owned">0 owned</div>
-					</div>
-				</div> -->
-			</div>
-			<strong class="section_name">Upgrades</strong>
-			<div id="upgrades" class="section">
-<!-- 			<div class="upgrade popup_container">
-					<div class="popup_anchor">asdf</span>
-					<div class="popup">
-						<strong class="name">asdf</strong>
-						<div class="description">blah blah blah</div>
-						<div class="price">Costs $18</div>
-					</div>
-				</div> -->
+			<div id="ui">
+				<div id="click_powers" class="section">
+					<strong class="section_name">Click Powers</strong>
+					<div class="clear"></div>
+	<!-- 			<div class="gem_click_power popup_container">
+						<div class="popup_anchor">Quartz</span>
+						<div class="popup">
+							<strong class="name">Quartz</strong>
+							<div class="rate">+1 per click</div>
+							<div class="price">$1 each</div>
+						</div>
+					</div> -->
+				</div>
+				<div id="factories" class="section">
+					<strong class="section_name">Factories</strong>
+					<div class="clear"></div>
+	<!-- 			<div class="factory popup_container">
+						<div class="popup_anchor">Quartz</span>
+						<div class="popup">
+							<strong class="name">Quartz Factory</strong>
+							<div class="rate">+1 per second</div>
+							<div class="price">Costs $18</div>
+							<div class="owned">0 owned</div>
+						</div>
+					</div> -->
+				</div>
+				
+				<div id="upgrades" class="section">
+					<strong class="section_name">Upgrades</strong>
+					<div class="clear"></div>
+	<!-- 			<div class="upgrade popup_container">
+						<div class="popup_anchor">asdf</span>
+						<div class="popup">
+							<strong class="name">asdf</strong>
+							<div class="description">blah blah blah</div>
+							<div class="price">Costs $18</div>
+						</div>
+					</div> -->
 
+				</div>
+				<div id="buttons">
+					<button id="drop">Drop</button>
+					<button onclick="cheat()">Cheat</button>
+					<button onclick="debug()">Debug</button>
+				</div>
 			</div>
-			<button id="drop">Drop</button>
-			<button onclick="cheat()">Cheat</button>
-			<button onclick="debug()">Debug</button>
+			<div class="clear"></div>
 		</div>
 		<script src="data.js"></script>
 		<script src="game.js"></script>

@@ -1,0 +1,541 @@
+3/2/17
+Parkour Platformer
+- Momentum
+- Complex, repeatable techniques (analagous to wavedash/half flip)
+- You can crouch to slide under things (Context: moving, action: +down)
+- You can hold jump to jump higher (Context: any, action: +jump)
+- Bunnyhopping is a method of maintaining momentum
+- But the downside is you have less control over where you land
+- SO: timing-based bunnyhopping as the simple core mechanic
+- auxiliary mechanic to micromanage landing
+    - grappling hook (terraria)?
+    - grappling hook (final ninja)?
+    - directional burst jetpack?
+    - unlockable abilities a la cluster truck? (blink, slomo, etc)
+
+hot pursuit remake??!?!?!?
+- graphics are ez (ish)
+- gameplay is linear
+- Challenges: car physics, juicy explosions
+- Then tack on a roguelike or launch/upgrade metagame, achievements, etc
+
+Ok back to parkour platformer:
+- Inspirations:
+    - Mirror's edge
+    - Quake/Reflex
+    - Smash (Melee)
+    - Fancy Pants (!!)
+    - Little Big Planet
+    - Dino run
+- Primary mechanics
+    - Bunnyhopping
+        - Bunnyhopping is timing based (can't just hold spacebar, need to keep a rythm going)
+        - Bunnyhopping increases speed (in an obvious way)
+- Aux mechanic:
+    - velocity burst
+        - pushes character AWAY from the click (slightly more predictive than towards click)
+        - resets on a timer OR on landing
+            - Exploitable? (super fast jump/velocity burst spam?) (feature or bug?)
+    - time slow (cluster truck)
+    - grappling hook (final ninja)
+- Contextual Mechanics:
+    - Wall jumping
+    - crouchslide (quake)
+    - Ledge hop (quake)
+- Stage mechanics:
+    - Rails (LBP)
+    - Moving platforms (cluster truck)
+- Swag mechanic
+    - flips or tricks or something
+- Metagames:
+    - achievements
+    - upgrades (launch game style)
+    - item collection (LBP)
+    - high scores/speedrunning
+- Polish:
+    - Soundtrack adapts to tempo of play
+- Extras:
+    - Endless mode (procedural)
+    - Cluster truck easter egg level
+- Design decisions:
+    - Game Progression Options:
+        1) Cluster truck style upgrades
+        2) Launch game style upgrades
+        3) LBP-style upgrades picked up within level
+        4) No upgrades (lolno)
+- Engine specs:
+    - Cross platform (web, desktop, android, iOS)
+    - Good community support
+- Dev timeline:
+    - Research and select engine
+    - Basic platforming: collision detection, movement, jump
+    - Bunnyhop mechanics, first round of tweaking
+    - ITERATE:
+        - [Stage | Contextual | Aux Mechanics
+]        - Level design
+        - Polish
+    - Marketing
+    - Release
+
+3/3/17
+
+Parkour Platformer
+- Engine requirements:
+    - Collision detection
+    - Velocity/acceleration model
+
+Parkour platformer too hard. Burned out from an unfruitful year of platform game dev.
+
+New strat: absolute 100% minimalism. Weeks, not months. One game mechanic and some supporting design.
+Minimalism over all else. Eventually maybe I can do bigger projects like a full size platformer or whatever
+but for now anything that needs complex physics and collision systems are too much.
+
+Idle game, or puzzle game, super minimalist platformer (bounding box only)
+
+3/6/17
+
+Idle game mechanics:
+- Producers
+- Upgrades
+    - +% to production of certain type
+    - Increased offline production
+    - Increased %/click
+    - Increased %/s (total)
+    - Autoclick
+- Achievements
+- Stats
+- Offline mode
+- Prestige
+===
+- Mana bar/spells
+- Events
+- Stock market
+
+Themes
+- "Star Clicker"
+- "Potato Clicker"
+- "Chair Tycoon"
+- "Garbage Tycoon"
+- "Geometry Clicker"
+
+Achievements
+- Hello world
+- Purchase X Upgrades
+- Purchase X of Y production
+- Reach X number
+- Produce X total
+- Spend X total
+- Collect X achievements
+- Click X times
+- Generate X offline
+- Prestige X times
+
+Gameplay Decisions
+- Offline vs. Active
+- Upgrades vs. Generators (?)
+- Achievement Hunt (?)
+
+3/7/17
+
+The role of data vis in an idle game
+- Provide important strategic information which would not otherwise be obvious
+- Emphasize the sense of progression through visual cues
+
+Visualizations
+- Generator income vs total income
+- Click income vs generator income
+- Cost vs savings (SKIP?)
+- Progress towards achievements
+- Metric: cost-efficiency of a given (single) generator 
+
+Do we really want a savings/income bar to be always visible? We don't care about visualizing
+magnitude on a scale, especially since that scale will change logarithmically over the course
+of the game. The PURPOSE of the visualization is only a comparison (i.e. only relative).
+
+Upgrade Types
+- generator mult
+- generator flat bonus
+- click mult
+- click flat bonus
+- autoclick
+- offline mode bonus
+- upgrade discount %
+- generator discount %
+
+Gameplay ideas
+- Achievements unlock upgrades/bonuses?
+- Upgrades have tiers/rebuy at higher price?
+- There should be a choice forced between clicking or generating (prices and upgrade trees must reflect)
+- Lategame: autobuy?
+    - Must simulate for offline mode/recalculate the growth curve piecewise
+- Buying and selling generators
+
+Brainstorming
+- What if generators changed efficiency over time? Tier 1 gets shit as you progress but then suddenly becomes efficient again later?
+    Making buying and selling generators to re-optimize a more important gameplay element
+    - In other words, price/volume of generators is no longer a simple curve, but a complex one
+    - Would probably need to carefully plan out the curves of all the different resource types and balance their power spikes against eachother
+    - Is this un-intuitive? Is the break from idle game expectations creative and fun or does it just make the game inaccessible?
+        - Is this another opportunity to use data vis to better inform the player about these complex states?
+        - Or at that point does it turn from a fun artificial sense of ladder-climbing progress to a mathematical optimization problem?
+        - How complex can you make the mechanics without sacrificing accessibility? Provide a puzzle without a higher skill floor?
+        - Does it destroy the sense of linear progression in the game by scrambling the order of generator progression?
+- Upgrade tree?
+    - With mutual exclusivity, like Kingdom Idle or whatever?
+- Idle games at their root aren't a puzzle game. They are barely a game at all, they are just artifical "progress" through arbitrary numbers.
+
+UI
+- Upgrades should be icons with popups. Move them once bought to a corner or panel
+
+3/8/2017
+Theme
+- Some kind of commodity with clear tiers
+    - Metals
+    - Gems
+- "Idle Forge"
+    - Similar: Blacksmith Lab
+- Jewel Drop -- see below.
+
+You fill up a "ball pit" on the left, one per click, and then empty it to sell all
+- (simple) Box2D physics
+- Gem tiers
+    - Topaz, Amethyst, Sapphire, Emerald, Ruby, Diamond, etc
+        - Tiers should be relatively obvious; Topaz <Amethyst < Diamond, but Emerald/Ruby/Sapphire is unlear
+    - Quartz, Turquoise, Tigers-eye, opal, 
+    - Treasure chest, crown
+    - Gold coins (stack slowly at bottom, in a different layer than other treasure)
+    - Random special drops
+    - Upgrade bubble drops (click on to claim)
+    - Rainbox gems: very low chance to spawn very valuable sparkly gem
+- Upgrades
+    - Click related
+        - Increase tier
+        - Increase number
+        - Increase size (?)
+        - Click and hold
+        - Clicking produces each kind of gem unlocked (upgrades apply)
+    - Auto related
+        - Auto produce certain gems of various tiers (generator, not upgrade)
+        - Increase production rate/size/number
+    - Inventory Related
+        - Autosell
+            - At various time increments, or eventually always keep open
+        - Increase inventory area?
+        - Reduce gem size?
+    - Misc
+        - Increase offline/background production
+        - Better sell price
+        - Auto claim buffs
+        - Increase buff drop rate
+        - Inrease treasure drop rate
+    - Easter egg/cosmetic
+        - Gems shoot towards cursor
+        - Fireworks from cursor
+- Gameplay/Design
+    - Start with a single tube in which to drop gems, quickly upgrade
+        - Phase 1 of gameplay involves maxing your inventory (not scalable into lategame)
+        - Again, inventory space should not be a very limiting factor in game advancement since it's kind of annoying.
+        - Just another quick and meaningful sense of progression in the early game
+        - Mid-late game it's just like any other clicker; buy generators, upgrades, etc
+        - Inventory management is really only a matter of convenience for active players, but it is a real
+            barrier to entry for auto play. Eliminating this barrier unlocks true idle play.
+    - Generators in physical space vs. just spawning
+        - Physical space: may constrict UI in an awkward way.
+    - Spawning may be a tradeoff of filling up inventory with low-tier gems vs. more space-efficient gems
+    - Random upgrade/buff drops (click to claim) active play incentive...
+        - Upgrade to auto-claim buffs (expensive)
+    - Should offline play be possible? (probably)
+    - Should everything be an upgrade (homogenous)? Or should there be factories, click upgrades, and misc upgrades
+- Graphics, Look & Feel
+    - Satisfying and varied physical properties
+    - Crisp and consistent graphics for gems
+    - Juicy animations for spawn and harvest of gems
+    - Pleasant sounds (can't go overboard and produce a sea of noise)
+    - How big should the gems be? (small or medium)
+- Misc
+    - Huge gems occasionally?
+- Challenges
+    - Offline/background mode/simulation (solvable...)
+        - You already know the auto spawn rates, cap limits and auto sell rate
+        - Even if drops are probabilistic it can be simulated
+        - It's just a javascript idle game LOL...
+    - In the LATE late game, ensure there is no (physical) bottleneck to infinite scalability
+- Far out of scope ideas which pollute the central gameplay
+    - Tower defense elements to protect the inventory
+    - Candy Crush mechanics in the inventory
+- Name
+    - Idle Jewels
+    - Jewel Clicker
+    - Treasure Drop
+    - Gem Drop
+    - Jewel Drop
+
+
+Fragments
+- I should divide "upgrades" into three categories:
+    1) Click Power; linear scale from quartz->topaz->amethyst->sapphire->ruby->emerald->diamond->rainbow->???
+                                        1       10      100       1k     10k    100k     1M        10M
+        - Reasoning: Gives a very clear ladder climb, shows both progress and goals
+    2) Factories; same as click power scale but auto
+        - Same reasoning.
+    3) Other upgrades; Special things like inventory size, auto-drop, upgrade auto-pickup and frequency, etc
+        - Ought to, as much as possible, be standalone unique passives. Some may come in tiers like inventory
+            and auto-drop, but in general.
+        - Also global production passives
+- The question is: Where do Factory upgrade belong? They are not unique passives, they are skill-tree/upgrade progression
+    tied to a particular factory. Should they appear as a "levelling up" of a given factory? Or just as another homogenous upgrade?
+    - Levelling up: Emphasizes increased depth in the Factories mechanic. Working towards unlocking upgrades gives a sense of purpose
+        over time even to older factories no longer at their prime efficiency.
+    - Just another upgrade: 
+- Generator name: "Generator" vs "Factory" vs "Mine" vs "Spawner"
+- Factory upgrades:
+    - Production rate bonus (% or flat): several tiers
+    - Size (i.e. "crit") chance bonus
+    - Cluster bonus (2x)
+- Large vs regular gems (rare chance of large, i.e. 1 in 10)
+- For ALL GEMS there exists:
+    1) A click power?
+    2) A factory?
+    - Yeah, probably. More than often. So handle the edge case if it comes up (rainbow/upgrade gems)
+- "Click Power, "Factories", and "Upgrades" vs. "Click Upgrades", "Factories", "Passives"
+- How does auto stuff work? Is it in the render loop? Somewhere else? It's weird...
+    - Render loop stops when page backgrounded. Ignore this for now
+    - Assume stable framerate. delta_time * gems_per_second chance to spawn a gem every tick
+        - Shortcomings: framerate dependent model updates
+
+3/9/17
+
+Brainstorming
+- What if there was an idle tetris game, similar to Gem Drop
+    - Selling = clearing a row tetris-style
+    - Would need to be physics based (?)
+- In Gem Drop, what about a very heavy gem type which displaces ("splashes") other gems out of the inventory?
+    - Cancer?
+- Look & Feel: Should overflowing balls be visible (falling over the edge of the inventory)? Maybe even make
+    them overlap (some of) the UI?
+- Should I first:
+    a) Work on game balance/progression of gem tiers, or
+    b) Solve the technical challenges of background running
+        - Background running involves a complete simulation, relying most on auto-drop. Maybe keep working until
+            auto-drop (at least) is implemented. Later RNG events of all kinds will involve sim algorithm reworks
+
+Sim Algo
+- First, without any physics determine how many gems would have been sold in the interval, taking into account
+    spawn rates, random events, inventory capacity, and auto-drop
+- Then determine the remainder: gems which would remain in the inventory at the end of the simulated interval
+- Divide the inv into a grid (how coarse?). Gems are spawned chronologically in the lowest available grid slot,
+    randomly on the x-axis. This distributes them evenly through the inventory in roughly the right pattern
+- Update the engine for enough timesteps for all the balls to settle. BUT, make sure not to spawn any more balls
+    during the sim updates!
+    a) Either instantly delete them afterwards, or
+    b) Set a sim flag during the simulation which is checked before spawning new balls in the render loop
+- Resume normal mode
+
+Brainstorming (continued):
+- "Estimated inventory value", perhaps with breakdown by gem type
+- UI: where does the $$$$ field go??
+    - Wait what about at the bottom....
+- Look & Feel art direction: interaction of physics and UI
+    - Balls spilling over the inventory and falling in front of UI
+    - Balls falling straight into the money field and "popping" there
+- Unique upgrades for each gem type?
+    - sell price
+    - spawn rate
+    - spawn quantity
+    - passive bonus per gem spawned
+        - +X% production for every Y in inventory
+- Upgrade: click a gem to sell it individually, creating strats?
+- Upgrade: clicked gems sell for x% more
+- Upgrade: every lower-tier gem an X collides with is upgraded to an tier(X)-1 tier gem
+    - Or: every gem an X collides with is upgraded by one tier
+- Upgrade: spawn velocity (help framerate?)
+- Upgrade: increase ball bounciness (warning: may cause spillage)
+- Should upgrades be sellable? Or otherwise disablable..
+
+UPGRADES Master List
+- Inventory Tier 1-4: Bigger Inventory
+- Auto-Drop Tier 1-3: Automatically drop gems every 30/10/0 seconds
+- Critical Gems Tier 1-4: Any time a gem spawns, 1%/10%/50%/100% chance for it to spawn as a large gem
+    (double size and sell price)
+- Buff Spawn Tier 1-4: Buffs randomly spawn (1x, 2x, 3x as often)
+- [2x, 5x, 10x] sell price for {gem}
+- x% increased offline production
+- Fallen gems are recovered for (20%/50%/100%) sell price
+- Buffs are automatically collected
+- Global sell price
+- Global spawn rate
+- Global quantity
+- Every click uses all purchased click powers
+
+ACHIEVEMENTS Master List
+
+TODO
+- Buy/sell factories
+- Modal Windows
+X Hover popups
+X Upgrades
+X Autodrop
+- Background Sim
+
+3/10/17
+
+Brainstorming
+- Should factories go in physical slots above the inventory?
+    - Gut feeling: no. Complicates the progression unnecessarily
+- Sound effects can be very slight tones with some variation, which mix well at high quantities
+- When a gem is sold, replace it with a rising/fading "+1" to show its sell price
+
+BUGFIXES
+- Disable drop button while auto dropping
+- Gems can automatically spawn in the walls and get bumped out
+
+Buffs
+- +50% production rate for 20 seconds
+- 2x gems produced by clicking for 15 seconds
+- OR: all clicks produce big gems for 15 seconds
+- Legendary: +1000% production
+- Legendary: click & hold
+
+3/13/17
+
+TODO
+- Achievements
+    - Panel
+    - Upgrades
+- Settings
+    - Export/import
+- Bought upgrades section (or put in settings like cookie clicker?)
+- Buy 1/10/max
+- Inventory size upgrades
+- Buffs
+- Prestige
+
+3/14/2017
+Code Design
+- What if every gem was connected to a factory which produces it and a clickpower?
+
+Gameplay design
+- Prices structured such that either click power or factories (or upgrades?) can be the primary driver of progress
+- Every gem a power spike: reduce time to next upgrade
+- When designing gameplay, the important factor is RELATIVE cost
+    - Time or clicks it takes until upgrade (% of $PS/$PC)
+    - Power spikes reset the relative cost
+    - Longer times between power spikes as game progresses, and bigger spikes
+    - Eventually cap out and prestige
+    - Smaller spikes sprinled in like candy via upgrades
+
+Stats
+- Total money earned
+- Total money spent
+- Gems dropped
+    - Each type (total income - % max income)
+- Gems lost
+- Highest cash on hand
+- Highest single inventory value
+- Upgrades purchased
+- Generators purchased
+- Buffs collected ($ added)
+    - Each type
+- Time played (active)
+- Time played (this session)
+- Time played (offline)
+- $ earned offline vs $ earned active
+- Prestiges/New Game+/Resets
+- graphs???
+
+3/15/17
+
+Gameplay design
+- Should I write a simulator script which exports to excel?
+- How tightly can I link this in with actual game logic?
+    - In actual game, income is generated only by physical simulation
+    - So you would have to rewrite this part to only simulate
+
+Number formatting
+$9
+$99
+$999
+$9.99k
+$99.9k
+$999k
+$9.99M
+$99.9M
+$999M
+$9.99B
+$99.9B
+$999B
+
+k, M, B, T, Q, Qi, Sx,
+
+Bug: Dragging mouse off of drop button leaves it open
+
+Brainstorming:
+- Might want to disable collision after a certain volume of gems are flowing
+    - Maybe once auto-drop is enabled (collision doesn't really matter too much at that point)
+- Early game needs to be much slower! 
+    - High click rate compared to other games, so prices need to be higher
+    - Make click powers a necessary & useful gateway in progression
+    - Unlock click power -> purchase 10-20x+ previous tier generators -> can now afford next tier generators
+    - Early game is when the physics will shine
+- Early game mechanics:
+    - Inventory size
+    - Manual dropping
+    - Learn the progression: tier N click power -> tier N-1 generators -> tier N generators -> tier N+1 click power
+    - Buffs
+- Maybe don't even introduce generators for the first few gem tiers, or make them lag behind by 1 tier
+    - Can't make them lag that much, it's too big a gap.
+    - Just start them out niiice and slow. A mix of slow and expensive
+    - Make early game focus on inventory management
+    - As soon as inv mgmt becomes a pain, remove it completely
+
+- Tier below autodrop, use spacebar to drop??
+Game progression:
+    1. inventory upgrade
+    2. quartz factory (1-5)
+    3. inventory upgrade/topaz CP
+    4. topaz factory (1-3)
+    5. quartz factory (10-20)
+    6. inventory upgrade 
+    7. tier 1 autodrop
+    8. topaz factory (5-10)
+    9. intro 2 buffs
+    10. amethyst CP
+    11. inv upgrade (final, if not already)
+    12. amethyst factories
+    13. better autodrop
+    14. lots and lots of factories
+    15. either 100% autodrop or spacebar autodrop
+    16. more buffs
+    17. more amethyst
+    18. sapphire CP
+    19. early factory upgrades -- unique powers or upgrades or straight passive multipliers
+
+Unique Effects
+- "Critical" gems/% chance of 2x size 2x value gems
+- Gem rockets downwards (particle effects/unique visual)
+- Coins?
+- Numeric only
+    - Sell price
+    - Quantity
+    - Prod rate
+
+Buffs (cont. from earlier)
+- +50% production rate for 20 seconds
+- 2x gems produced by clicking for 15 seconds
+- OR: all clicks produce big gems for 15 seconds
+- Legendary: +1000% production
+- Legendary: click & hold
+- Time warp: 2x speed for 10s
+
+3/1/17
+
+TODO
+- Buy modes (1/10/100/max)
+- Sell animation (floating numbers)
+- Inventory size
+- Gray out unaffordable upgrades
+
+Inv size code
+- Express everything in terms of spawnable width/height + wall radius
+
+Exploit: you can click on the bottom of the dropgate to spawn gems which are ejected straight downwards through the wall, selling immediately

@@ -1,4 +1,20 @@
-#render_container, #ui {
+.clear {
+	clear:both;
+}
+
+/*#container::after{
+	content: " ";
+	display: block; 
+	height: 0; 
+	clear: both;
+}*/
+
+.section, #buttons {
+	float:left;
+	clear:both;
+}
+
+#container, #render_container, #ui {
 	float:left;
 }
 
@@ -12,11 +28,20 @@
 	left:100px;*/
 }
 
+#render {
+	text-align:center;
+}
+
+#render canvas {
+	display:inline-block;
+}
+
 #money {
 	font-size:30px;
 	background-color:#89ff97;
 	padding:10px;
 	text-align: center;
+	min-width:150px;
 }
 
 #predicted_money {
