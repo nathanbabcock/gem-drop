@@ -7,8 +7,10 @@ var ui = {
 	factories: document.getElementById("factories"),
 	upgrades: document.getElementById("upgrades"),
 	drop: document.getElementById("drop"),
+	money: document.getElementById("money"),
 	actual_money: document.getElementById("actual_money"),
 	predicted_money: document.getElementById("predicted_money"),
+	vfx: document.getElementById("vfx")
 }; 
 
 //////////////

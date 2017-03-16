@@ -532,10 +532,29 @@ Buffs (cont. from earlier)
 TODO
 - Buy modes (1/10/100/max)
 - Sell animation (floating numbers)
-- Inventory size
+X Inventory size
 - Gray out unaffordable upgrades
+- CSS layout (postpone)
 
 Inv size code
 - Express everything in terms of spawnable width/height + wall radius
 
 Exploit: you can click on the bottom of the dropgate to spawn gems which are ejected straight downwards through the wall, selling immediately
+- Check for wall collision on click spawning (just use Bounds.contains()?)
+
+Shapes
+- Quartz: (stretched?) hexagon
+- Topaz: 
+- Amethyst: 
+- Sapphire: octagon
+- Emerald: 
+- Ruby: circle
+- Diamond: diamond
+- Rainbow
+
+- Remaining: star, heart, triangle, square, teardrop, kite, rectangle
+
+TODO (other)
+- taxes
+- amazon order
+- schedule meeting w/ jorge?

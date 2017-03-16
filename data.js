@@ -24,7 +24,7 @@ function Gem(options){
 			getCostFactor: function() { return this.baseCostFactor; },
 			baseCost: null,
 			getCost: function(owned = this.owned){ return this.baseCost * Math.pow(this.getCostFactor(), owned); },
-			baseRate: 1,
+			baseRate: 0.5,
 			getRate: function(){ return this.baseRate; },
 			//getDescription: function() { return "" },
 			//getName:function() { return this.super.name + " Factory"; }
