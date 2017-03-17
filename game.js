@@ -10,21 +10,30 @@ var ui = {
 	money: document.getElementById("money"),
 	actual_money: document.getElementById("actual_money"),
 	predicted_money: document.getElementById("predicted_money"),
-	vfx: document.getElementById("vfx")
+	vfx: document.getElementById("vfx"),
+	buy: document.getElementById("buy"),
+	sell: document.getElementById("sell"),
+	buy_1: document.getElementById("buy_1"),
+	buy_10: document.getElementById("buy_10"),
+	buy_100: document.getElementById("buy_100"),
+	buy_max: document.getElementById("buy_max")
 }; 
+
+var BuyMode = {
+	BUY:0,
+	SELL:1,
+	mode: 0,
+	quantity: 1
+};
 
 //////////////
 
 var auto_drop = {
 	open:false,
 	timer:0,
+	rate:-1,
 	getOpenDuration:function(){
 		return 2;
-	},
-	getRate:function(){
-		if(Upgrades[0].owned)
-			return Upgrades[0].rate;
-		return -1;
 	}
 };
 
@@ -198,26 +207,77 @@ function updateClickPower(gem){
 		clickpower.ui.costs.innerText = "Costs " + formatMoney(clickpower.getCost());
 	else
 		clickpower.ui.costs.innerText = "";
+
+	if(!clickpower.owned && clickpower.getCost() > money)
+		clickpower.ui.anchor.className = "popup_anchor disabled";
+	else
+		clickpower.ui.anchor.className = "popup_anchor";
 }
 
 function updateFactory(gem){
 	//factory.ui.name.innerText = 
 	var factory = gem.factory;
 	factory.ui.rate.innerText = factory.getRate() + " per second";
-	factory.ui.price.innerText = formatMoney(factory.getCost());
+	var purchase = calculatePurchase(gem);
+	factory.ui.price.innerText = (BuyMode.mode === BuyMode.BUY ? "Buy " : "Sell ") + purchase.quantity +" for " + formatMoney(purchase.cost);
 	factory.ui.owned.innerText = factory.owned + " owned";
+
+	if(BuyMode.mode == BuyMode.BUY){
+		if(purchase.cost > money || purchase.quantity === 0)
+			factory.ui.anchor.className = "popup_anchor disabled";
+		else
+			factory.ui.anchor.className = "popup_anchor";
+	} else {
+		if(purchase.quantity === 0)
+			factory.ui.anchor.className = "popup_anchor disabled";
+		else
+			factory.ui.anchor.className = "popup_anchor";
+	}
 }
+
 
 function updateUpgrade(upgrade){
 	if(!upgrade.owned)
-		upgrade.ui.costs.innerText = "Costs " + formatMoney(upgrade.getPrice());
+		upgrade.ui.costs.innerText = "Costs " + formatMoney(upgrade.getCost());
 	else
 		upgrade.ui.costs.innerText = "";
+
+	if(!upgrade.owned && upgrade.getCost() > money)
+		upgrade.ui.anchor.className = "popup_anchor disabled";
+	else
+		upgrade.ui.anchor.className = "popup_anchor";
+}
+
+
+function log(b, n) {
+    return Math.log(n) / Math.log(b);
+}
+
+// Calculates the cost of a factory purchase for the given gem according to BUY MODE
+function calculatePurchase(gem){
+	var r = gem.factory.getCostFactor(),
+		b = gem.factory.baseCost,
+		k = gem.factory.owned,
+		c = money,
+		n = 0;
+	if(BuyMode.mode === BuyMode.BUY){
+		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
+		if(BuyMode.quantity === "max")
+			n = Math.max(max_quantity, 1);
+		else
+			n = BuyMode.quantity;
+	} else {
+		if(BuyMode.quantity === "max")
+			n = gem.factory.owned;
+		else
+			n = Math.min(gem.factory.owned, BuyMode.quantity);
+		k = gem.factory.owned - n;
+	}
+	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n))/(1 - r));
+	return { cost: cost, quantity: n };
 }
 
 function init(){
-	updateMoney();
-
 	// Clickpowers and Factories
 	Gems.forEach(function(gem){
 		ui.click_powers.appendChild(getClickPowerHMTL(gem));
@@ -228,6 +288,42 @@ function init(){
 	Upgrades.forEach(function(upgrade){
 		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
 	});
+
+	// Buy Mode
+	ui.buy.onclick = function() { setBuyMode(BuyMode.BUY, ui.buy); };
+	ui.sell.onclick = function() { setBuyMode(BuyMode.SELL, ui.sell); };
+	ui.buy_1.onclick = function() { setBuyQuantity(1, ui.buy_1); };
+	ui.buy_10.onclick = function() { setBuyQuantity(10, ui.buy_10); };
+	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
+	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
+
+	updateMoney();
+}
+
+function setBuyMode(mode, elem){
+	BuyMode.mode = mode;
+	[ui.buy, ui.sell].forEach(function(elem){
+		elem.className = "";
+	});
+	elem.className = "active";
+	Gems.forEach(function(gem){	updateFactory(gem); });
+	// if(mode === BuyMode.BUY)
+	// 	ui.buy.className = "active";
+	// else
+	// 	ui.sell.className = "active";
+}
+
+function setBuyQuantity(quant, elem){
+	BuyMode.quantity = quant;
+	[ui.buy_1, ui.buy_10, ui.buy_100, ui.buy_max].forEach(function(elem){
+		elem.className = "";
+	});
+	elem.className = "active";
+	Gems.forEach(function(gem){ updateFactory(gem); });
+	// switch(quant){
+	// 	case 1:
+	// 		ui.buy_1.className = "active";
+	// }
 }
 
 // function formatRate(num){
@@ -236,31 +332,35 @@ function init(){
 
 function buyFactory(gem){
 	var factory = gem.factory;
-	if(factory.getCost() > money)
-		return false;
-	money -= factory.getCost();
-	factory.owned++;
-	updateFactory(gem);
-	updateMoney();
+	var purchase = calculatePurchase(gem);
+
+	if(BuyMode.mode === BuyMode.BUY){
+		if(purchase.cost > money)
+			return false;
+		factory.owned += purchase.quantity;
+		updateMoney(-purchase.cost);
+		//updateFactory(gem);
+	} else {
+		factory.owned -= purchase.quantity;
+		updateMoney(purchase.cost);
+	}
 }
 
 function buyClickPower(gem){
 	var clickpower = gem.clickpower;
 	if(clickpower.owned || clickpower.getCost() > money)
 		return false;
-	money -= clickpower.getCost();
+	updateMoney(-clickpower.getCost());
 	clickpower.owned++;
 	updateClickPower(gem);
-	updateMoney();
 }
 
 function buyUpgrade(upgrade){
-	if(upgrade.owned || upgrade.getPrice() > money)
+	if(upgrade.owned || upgrade.getCost() > money)
 		return false;
-	money -= upgrade.getPrice();
+	updateMoney(-upgrade.getCost());
 	upgrade.owned = true;
 	updateUpgrade(upgrade);
-	updateMoney();
 	if(upgrade.onPurchase !== undefined)
 		upgrade.onPurchase();
 }
@@ -305,14 +405,24 @@ var Inventory = {
 	}
 }
 
-function updateMoney(){
+function updateMoney(amount = 0){
+	money += amount;
 	ui.actual_money.innerText = formatMoney();
 	ui.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";
+	Gems.forEach(function(gem){
+		if(!gem.clickpower.owned)
+			updateClickPower(gem);
+		updateFactory(gem);
+	});
+	Upgrades.forEach(function(upgrade){
+		if(!upgrade.owned)
+			updateUpgrade(upgrade);
+	});
+	return money;
 }
 
 function sellGem(gem){
-	money += gem.getValue();
-	updateMoney();
+	updateMoney(gem.getValue());
 }
 
 function getTotalRate(){
@@ -363,11 +473,26 @@ function genGems_probabilistic(delta){
 }
 
 function cheat(){
-	money += 1000000000;
-	// money+=100;
-	updateMoney();
-	//Gems[1].factory.owned = 1000;
+	updateMoney(10000);
+	// money += 1000000000;
+	// updateMoney();
+	// updateFactory(Gems[1]);
+	
+
+/*	// Skip to amethyst
+	Upgrades[0].owned = Upgrades[1].owned = true;
+	Gems[2].clickpower.owned = true;
+	Gems[0].factory.owned = 14;
+	Gems[1].factory.owned = 3;
+	updateFactory(Gems[0]);
 	updateFactory(Gems[1]);
+	updateUpgrade(Upgrades[0]);
+	updateUpgrade(Upgrades[1]);
+	Upgrades[1].onPurchase();
+	updateClickPower(Gems[2]);
+	Upgrades[2].owned = true;
+	Upgrades[2].onPurchase();
+	Upgrades[3].owned = true;*/
 }
 
 init();

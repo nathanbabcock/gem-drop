@@ -265,7 +265,7 @@ function showFloatingNumber(canvasX, canvasY, num){
 
     // Do d3-style proportional scaling
     var scaledsize = ((Math.log(num) - value.min) / (value.max - value.min) ) * (fontsize.max - fontsize.min) + fontsize.min;
-    console.log(scaledsize);
+    //console.log(scaledsize);
     float.style.fontSize = scaledsize;
 
     // Bold big numbers
@@ -316,14 +316,13 @@ Events.on(engine, 'tick', function(event) {
 	genGems(delta);
 
 	// Auto drop
-	var rate = auto_drop.getRate();
-	if(auto_drop.getRate() > 0){
+	if(auto_drop.rate > 0){
 		auto_drop.timer -= delta;
 		if(auto_drop.timer <= 0){
 			if(auto_drop.open){
 				closeDrop();
 				auto_drop.open = false;
-				auto_drop.timer = rate;
+				auto_drop.timer = auto_drop.rate;
 			} else {
 				openDrop();
 				auto_drop.open = true;
@@ -380,17 +379,17 @@ ui.drop.onmouseup = function(){
 }
 
 function debug(){
-	body = Bodies.circle(100, 10, 20, {
-		collisionFilter: BODY_FILTER,
-		render: {
-			fillStyle: "white",
-			strokeStyle: "grey"
-		}
-	});
-	body.gem = gems[0];
-	//World.add(engine.world, body);
-	for(var i = 0; i < 60 * 10; i++){
-		Engine.update(engine, 1000 / 60);
-	}
+	// body = Bodies.circle(100, 10, 20, {
+	// 	collisionFilter: BODY_FILTER,
+	// 	render: {
+	// 		fillStyle: "white",
+	// 		strokeStyle: "grey"
+	// 	}
+	// });
+	// body.gem = gems[0];
+	// //World.add(engine.world, body);
+	// for(var i = 0; i < 60 * 10; i++){
+	// 	Engine.update(engine, 1000 / 60);
+	// }
 	// engine.update(10);
 }

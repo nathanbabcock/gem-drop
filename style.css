@@ -7,6 +7,8 @@
 	    -ms-user-select: none; /* Internet Explorer/Edge */
 	        user-select: none; /* Non-prefixed version, currently
 	                              supported by Chrome and Opera */
+
+	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 .clear {
@@ -23,6 +25,10 @@
 .section, #buttons {
 	float:left;
 	clear:both;
+}
+
+#render_container {
+	visibility: hidden;
 }
 
 #container, #render_container, #ui {
@@ -90,6 +96,8 @@
 
 	transition: margin-top 0.1s, opacity 0.1s, visibility 0.1s;
 
+	box-shadow:0px 0px 8px #727272;
+
 	width: 120px;
     top: 100%;
     margin-top:25px;
@@ -115,7 +123,59 @@
 	opacity: 1;
 }
 
+.popup_container .disabled {
+	border: 1px solid #c1c1c1;
+	color: #c1c1c1;
+}
+
 .floatingnum {
 	opacity:0.75;
 	transition: opacity 1s, visibility 1s, top 1s;
+}
+
+.section_name {
+	background-color:#000;
+	color:white;
+	width:500px;
+	padding:10px;
+	display:inline-block;
+}
+
+/* BUY MODE */
+
+#factories .section_name strong {
+	float:left;
+	margin-top:2px;
+}
+
+#buymode {
+	float:right;
+}
+
+#buymode_quantity {
+	margin-left:20px;
+}
+
+#buymode_mode, #buymode_quantity {
+	float:left;
+	background-color: #000;
+}
+
+#buymode span:hover {
+	background-color:#282828;
+}
+
+#buymode span, #buymode .active:hover {
+	padding:3px 5px 3px 5px;
+	color:#c1c1c1;
+	display:inline-block;
+	font-size:15px;
+	border-radius:3px;
+	cursor:hand;
+}
+
+#buymode .active, #buymode .active:hover {
+	background-color:#424242;
+	color:white;
+	font-weight:bold;
 }

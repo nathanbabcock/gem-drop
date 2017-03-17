@@ -531,16 +531,16 @@ Buffs (cont. from earlier)
 
 TODO
 - Buy modes (1/10/100/max)
-- Sell animation (floating numbers)
-X Inventory size
 - Gray out unaffordable upgrades
-- CSS layout (postpone)
+X Sell animation (floating numbers)
+X Inventory size
+X CSS layout (postpone)
 
 Inv size code
-- Express everything in terms of spawnable width/height + wall radius
+X Express everything in terms of spawnable width/height + wall radius
 
 Exploit: you can click on the bottom of the dropgate to spawn gems which are ejected straight downwards through the wall, selling immediately
-- Check for wall collision on click spawning (just use Bounds.contains()?)
+X Check for wall collision on click spawning (just use Bounds.contains()?)
 
 Shapes
 - Quartz: (stretched?) hexagon
@@ -550,11 +550,42 @@ Shapes
 - Emerald: 
 - Ruby: circle
 - Diamond: diamond
-- Rainbow
+- Rainbow: semicircle?
 
 - Remaining: star, heart, triangle, square, teardrop, kite, rectangle
 
 TODO (other)
-- taxes
-- amazon order
-- schedule meeting w/ jorge?
+X taxes
+X amazon order
+X schedule meeting w/ jorge?
+
+3/17/17
+
+TODO
+- Buy and sell modes
+- Auto-drop progression (do @ home)
+- Buffs (do @ home)
+- Plan background &/or offline algo?
+
+Brainstorming
+- Auto-drop should start at rate fast enough to clear all gems (with some breathing room), 
+    and then as more factories are bought it should get a little out of control, until the
+    next upgrade arrive just in time (10s-5s-0s). So when factory quantity doubles, the next
+    auto-drop should hit (25-50% of gems were overflowing at that point)
+- When do buffs come in? Right after auto-drop T1? (so focus transitions from dropping inv to clicking buffs)
+    - Maybe exact same price as auto-drop T1, forcing a priority
+- Buff-related upgrades
+    - Unlock simple buffs
+    - Unlock more powerful buffs
+    - Buffs fall slowly (@ 100% auto-drop)
+    - Auto-collect buffs (late game)
+- Other milestones
+    - Point out offline mode, maybe a little before 100% auto-drop
+
+Buy Modes
+- Should selling be at an 80% rate?
+- Buy max/sell max mode requires updating all factories every $ that comes in
+    - Recalculate the max and update the popup
+- encapsulate $ changes in a method (no more money += x)
+- !!! What happens when you SELL 10 when owning only 8? Sell 8? Or deny sale?
+- Are buy modes an important mechanic? Or should it be removed?
