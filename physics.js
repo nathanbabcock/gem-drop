@@ -47,7 +47,8 @@ var MOUSE_FILTER = {
 	};
 
 // run the engine
-Engine.run(engine);
+// var runner = Engine.run(engine);
+var runner = Runner.run(engine);
 
 // run the renderer
 Render.run(render);
@@ -295,6 +296,8 @@ function showFloatingNumber(canvasX, canvasY, num){
 
 var lastTime = 0;
 Events.on(engine, 'tick', function(event) {
+	// console.log("tick");
+
 	// Remove gems
 	world.bodies.forEach(function(body){
 		if(body.gem !== undefined){
@@ -313,7 +316,10 @@ Events.on(engine, 'tick', function(event) {
 	// Spawn gems
 	var delta = (event.timestamp - lastTime) / 1000;
 	lastTime = event.timestamp;
-	genGems(delta);
+	if(delta < BackgroundMode.threshhold)
+		genGems(delta);
+	else
+		console.warn("Dropped frames, delta = " + delta);
 
 	// Auto drop
 	if(auto_drop.rate > 0){
@@ -377,6 +383,56 @@ ui.drop.onmousedown = function(){
 ui.drop.onmouseup = function(){
 	closeDrop();
 }
+
+var BackgroundMode = {
+	gem_radius: 20,
+	interval: 16,
+	threshhold: 250,
+	lastTime: undefined,
+	update: function() {
+		var now = new Date().getTime();
+		if(lastTime === undefined)
+			return this.lastTime = now;
+		var delta = now - this.lastTime;
+		this.lastTime = now;
+
+		if(delta >= this.threshhold) {
+			console.log("doing background sim update");
+			BackgroundMode.simulate(delta);
+		} else {
+			// do nothing; physics loop is running
+			//console.log("doing normal update");
+		}
+	},
+	timeout: null,//setInterval(function(){ BackgroundMode.update(); }, this.interval),
+	simulate: function(delta){
+		var engine_delta = 16.66;
+		var iterations = delta / engine_delta;
+		console.log(delta + "ms passed: updating engine x"+iterations);
+		if(iterations >= 61){
+			console.warn("Too many iterations to simulate; capping at 60");
+			iterations = 60;
+		}
+		for(var i = 0; i < iterations; i++){
+			Engine.update(engine);
+		}
+		// var a = world.gravity.y * world.gravity.scale;
+		// var t = delta;
+		// var v_i = 0;
+		// var delta_x_max = 0.5 * a * Math.pow(t, 2) + v_i * t;
+		// var timesteps = delta_x_max / (this.gem_radius * 2);
+		// var new_delta = delta / timesteps;
+		// console.log(delta_x_max + " " + timesteps);
+
+		// // Snap all gems to grid
+		// for(var i = 0; i < timesteps; i++){
+		// 	// Spawn new ones
+		// 	// Open dropgate if necessary
+		// 	// Move all of them
+		// 	// Sell bottom ones
+		// }
+	}
+};
 
 function debug(){
 	// body = Bodies.circle(100, 10, 20, {

@@ -473,7 +473,11 @@ function genGems_probabilistic(delta){
 }
 
 function cheat(){
-	updateMoney(10000);
+	Upgrades[2].onPurchase();
+	Upgrades[3].onPurchase();
+	Gems[0].factory.owned = 20;
+
+	//updateMoney(10000);
 	// money += 1000000000;
 	// updateMoney();
 	// updateFactory(Gems[1]);

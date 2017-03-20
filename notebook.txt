@@ -296,7 +296,7 @@ Fragments
 - For ALL GEMS there exists:
     1) A click power?
     2) A factory?
-    - Yeah, probably. More than often. So handle the edge case if it comes up (rainbow/upgrade gems)
+    - Yeah, probably. More often that not. So handle the edge case if it comes up (rainbow/upgrade gems)
 - "Click Power, "Factories", and "Upgrades" vs. "Click Upgrades", "Factories", "Passives"
 - How does auto stuff work? Is it in the render loop? Somewhere else? It's weird...
     - Render loop stops when page backgrounded. Ignore this for now
@@ -562,7 +562,7 @@ X schedule meeting w/ jorge?
 3/17/17
 
 TODO
-- Buy and sell modes
+x Buy and sell modes
 - Auto-drop progression (do @ home)
 - Buffs (do @ home)
 - Plan background &/or offline algo?
@@ -589,3 +589,122 @@ Buy Modes
 - encapsulate $ changes in a method (no more money += x)
 - !!! What happens when you SELL 10 when owning only 8? Sell 8? Or deny sale?
 - Are buy modes an important mechanic? Or should it be removed?
+
+Background Sim
+- Algorithm
+    - Snap all gems in inv to a grid
+    - Simulate movement tetris-style
+- Weaknesses
+    - How often will awkward towers form? Will it tend to look unnatural?
+    - What if instead it evenly distributed gems on the grid to the lowest possible spot,
+        filling the grid uniformly
+    - 99% of the time, the gems will settle uniformly, in roughly a packed grid with no gaps
+    - So why not just simulate that immediately?
+    - Accurate background physics sim is IRRELEVANT, the only relevant thing is that the gems
+        appear in the inventory, spawn the right amount, sell the right amount, AND have as
+        smooth as possible a transition back to physics sim
+    - Again, BACKGROUND SIM => PHYSICS SIM transition is the key
+- Misc
+    - Needs to be a timeout loop SEPAPARATE from physics loop
+    - Checks delta, delta > defined interval => do a sim update
+- Modified Algorithm
+    - Snap all gems in inv to a grid (incl those in air)
+    - Loop through x timesteps; each step:
+        - Open the gate, if necessary
+        - Spawn new gems, if necessary
+            - New gems are always spawned above the lowest open square
+                - Does this take into account gems still falling?
+        - Auto-collect buffs, if necessary
+        - Step gems downwards, straight vertically
+- Next problem
+    - Ok now what if you are spawning more than one gem per grid square, in a given timestep
+        - Either it is before collision is disabled, in which case... ??
+        - OR after collision is disabled, just ignore the grid and manually calculate the delta for each gem
+            - If it falls below the bottom, it sold
+- Final algo
+    - Pre-noclip?
+        - Snap all gems to grid
+        - Iterate timesteps:
+            - Spawn new
+            - Open/close gate
+            - Step them downwards
+            - Sell if offscreen
+    - Post-noclip
+        - Manually calculate delta pos for each gem
+        - Also spawn according to delta and than translate
+        - Sell if offscreen
+- New idea for pre-noclip which is a hybrid of tetris-iteration and post-noclip calculation
+    - Draw a polygon, or bounding box, or grid representing the "ground" aka surface of all gems
+        aka lowest point a gem can fall to for any given x val (raycast)
+    - Ok how about this: gems falling in the air don't matter very much. What matters is: gems spawn, gems settle, gems drop
+    - Nah but i still think cause of the complexity of periodic autodrop you have to iterate
+        - I mean tetris isnt really even that bad is it?
+- Notes
+    - Grid size is based on gem size, and iterations is tied to grid size. So we're looking at 20-30 iterations?
+        - Is that cool? Cause then its 20-30 timesteps * 100+ gems, in the background, every second
+            - OH NO CAN A PROCESSOR HANDLE 2000 REQUESTS PER SECOND?????!?!?!?!!
+
+Offline Sim
+- Just numbers, no physics :)
+- Should offline sim be unlockable only?
+    - Meh its not that much more work to add auto-drop support, it only caps out the rate a certain amount
+
+3/20/17
+
+Background Sim Specifics
+- How is the timestep/number of timesteps per second chosen?
+    - Should be based on the maximum change in position of any gem divided by gem diameter (grid size)
+- Need a function to translate grid(row, col) to physical(x, y)
+    - Spacing should start relative to the BOTTOM, so there is as little gap as possible there
+
+Rethink BG again:
+- What if we just took care of a couple situations independently:
+    - Gems which are dropped (no sim necessary, just estimate it)
+    - Gems which are settled (need to be packed as well as possible at the bottom)
+    - Gems which are falling (should have correct velocity and position)
+- So the problem reduces to these subproblems:
+    - Estimate number of gems dropped (EASY)
+        - Find auto_drop window
+        - Estimate gems spawned within the window
+    - Estimate number of gems settled (EASY)
+        - This is just all gems after the auto_drop window
+        - Pack them in a grid at the bottom
+    - Estimate number of gems falling
+        - This is all gems after the auto_drop window but before they had a chance to hit bottom
+        - Estimate time to hit bottom with kinematics
+        - Spawn them according to normal rules, and then translate with kinematics (don't forget to update velocity)
+- Should this be unified with offline gen?
+    - Difference: Accounting for mid-fall gems when sim ends
+    - Difference: Multiple instances of auto-drop in the same interval
+- Background AND offline sim algo
+    - Phase 1: auto-drop
+        - Calculate number dropped by first auto-drop (interval may be different)
+        - Calculate number dropped by all successive auto-drops
+            - Take into account inventory size
+    - Phase 2: settled
+        - Calculate time window AFTER last auto_drop where gems still have time to reach ground
+        - Distribute evenly in grid
+    - Phase 3: falling
+        - For all remaining gems, spawn and translate
+- Problem: how long does it take to reach ground, when ground is changing (adapt with each iteration?)
+    - What about for gems that are still falling?
+    - Do I just calculate Phase 1 and then simulate Phase 2 & 3?
+    - Wait is it really that hard? For the first <x>, the window is <y>. For the next <z>, the windows is ...
+        - Because it grows in a grid, and is distributed evenly, you can know the exact time for each row to settle.
+            So you also know which ones won't settle
+- Detailed algorithm:
+    - First autodrop
+        - Determine time till next auto_drop CLOSE
+        - Determine last possible spawn time where gem will still drop
+        - Calculate the gems which will spawn during that interval
+        - Update time to right after the window ends
+    - Intermediate autodrops
+        - Determine number of COMPLETE autodrop periods which will elapse
+        - Calculate the rate during each period, according to the inv max and spawn rates
+        - Sell
+        - Update time to right after the window ends
+
+Javascript Game Loops
+- requestAnimationFrame (browser handles refresh rate, throttled to 0-1/second inactive)
+- setInterval (throttled to 1000ms interval when tab inactive)
+- webWorkers (the holy grail)
