@@ -1,4 +1,5 @@
 var DEFAULT_COST_FACTOR = 1.15;
+var DEFAULT_GEM_RADIUS = 20;
 
 //////////////
 
@@ -48,6 +49,11 @@ function applyOptions(object, options){
 }
 
 //////////////////
+
+var Settings = {
+	enable_save: false,
+	offline_gains: true
+}
 
 var Gems = [
 	new Gem({
@@ -133,6 +139,16 @@ var Gems = [
 	})
 ];
 
+// Grab quick references for debug/convenience
+Gems.quartz = Gems[0];
+Gems.topaz = Gems[1];
+Gems.amethyst = Gems[2];
+Gems.sapphire = Gems[3];
+Gems.emerald = Gems[4];
+Gems.ruby = Gems[5];
+Gems.diamond = Gems[6];
+Gems.rainbow = Gems[7];
+
 var UPGRADE_CATEGORY = {
 	AUTO_DROP: 0,
 	INVENTORY_SIZE: 1
@@ -146,8 +162,9 @@ var Upgrades = [
 		getCost: function() { return this.baseCost; },
 		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
 		onPurchase: function(){
-			Inventory.build(Inventory.sizes[1]);
+			Inventory.build();
 		},
+		size: { width: 100, height: 300 },
 		owned: false
 	},
 	{
@@ -157,8 +174,9 @@ var Upgrades = [
 		getCost: function() { return this.baseCost; },
 		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
 		onPurchase: function(){
-			Inventory.build(Inventory.sizes[2]);
+			Inventory.build();
 		},
+		size: { width: 200, height: 350 },
 		owned: false
 	},
 	{
@@ -168,8 +186,9 @@ var Upgrades = [
 		getCost: function() { return this.baseCost; },
 		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
 		onPurchase: function(){
-			Inventory.build(Inventory.sizes[3]);
+			Inventory.build();
 		},
+		size: { width: 300, height: 500},
 		owned: false
 	},
 	{

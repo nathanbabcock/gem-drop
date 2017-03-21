@@ -92,14 +92,21 @@ var Runner = {};
             runner = Runner.create();
         }
 
-        // TODO nuke this abomination
-        var worker = Runner.worker = new Worker(URL.createObjectURL(new Blob(["("+worker_function.toString()+")()"], {type: 'text/javascript'})));
-        worker.addEventListener('message', function(e) {
-            if(runner.enabled)
-                Runner.tick(runner, engine, Common.now());
-          //console.log('Worker said: ', e.data);
-        }, false);
-        worker.postMessage(null);
+        if(typeof Worker === "undefined"){
+            setInterval(function() {
+                if(runner.enabled)
+                    Runner.tick(runner, engine, Common.now());
+            }, 1000 / 60);
+        } else {
+            // TODO nuke this abomination
+            var worker = Runner.worker = new Worker(URL.createObjectURL(new Blob(["("+worker_function.toString()+")()"], {type: 'text/javascript'})));
+            worker.addEventListener('message', function(e) {
+                if(runner.enabled)
+                    Runner.tick(runner, engine, Common.now());
+              //console.log('Worker said: ', e.data);
+            }, false);
+            worker.postMessage(null);
+        }
 
 
         // (function render(time){

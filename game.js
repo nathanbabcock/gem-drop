@@ -278,6 +278,9 @@ function calculatePurchase(gem){
 }
 
 function init(){
+	if(Settings.enable_save)
+		loadGame();
+
 	// Clickpowers and Factories
 	Gems.forEach(function(gem){
 		ui.click_powers.appendChild(getClickPowerHMTL(gem));
@@ -344,6 +347,7 @@ function buyFactory(gem){
 		factory.owned -= purchase.quantity;
 		updateMoney(purchase.cost);
 	}
+	return true;
 }
 
 function buyClickPower(gem){
@@ -353,6 +357,7 @@ function buyClickPower(gem){
 	updateMoney(-clickpower.getCost());
 	clickpower.owned++;
 	updateClickPower(gem);
+	return true;
 }
 
 function buyUpgrade(upgrade){
@@ -363,6 +368,7 @@ function buyUpgrade(upgrade){
 	updateUpgrade(upgrade);
 	if(upgrade.onPurchase !== undefined)
 		upgrade.onPurchase();
+	return true;
 }
 
 function formatMoney(num = money){
@@ -402,6 +408,9 @@ function doClick(){
 var Inventory = {
 	getValue: function() {
 		return 0;
+	},
+	build: function() {
+		return false;
 	}
 }
 
@@ -473,7 +482,9 @@ function genGems_probabilistic(delta){
 }
 
 function cheat(){
+	Upgrades[2].owned = true;
 	Upgrades[2].onPurchase();
+	Upgrades[3].owned = true;
 	Upgrades[3].onPurchase();
 	Gems[0].factory.owned = 20;
 
@@ -499,4 +510,116 @@ function cheat(){
 	Upgrades[3].owned = true;*/
 }
 
-init();
+function saveGame(){
+	var save = {
+		gems: [],
+		upgrades: []
+	};
+
+	// Gather all gamestate elements
+	save.time = new Date().getTime();
+	save.money = money;
+	Gems.forEach(function(gem){
+		save.gems.push({
+			factory: gem.factory.owned,
+			clickpower: gem.clickpower.owned
+		});
+	});
+	Upgrades.forEach(function(upgrade){
+		save.upgrades.push(upgrade.owned);
+	});
+	save.auto_drop = auto_drop.rate;
+
+	localStorage.setItem("save", JSON.stringify(save));
+	//console.log("Game saved");
+}
+
+function loadGame(){
+	// Get save from localStorage
+	var gameString = localStorage.getItem("save");
+	if(gameString === null){
+		console.log("No save game found");
+		return false;
+	}
+	var save = JSON.parse(gameString);
+	console.log(save);
+	
+	// Copy over the gamestate
+	money = save.money;
+	Gems.forEach(function(gem, index){
+		gem.clickpower.owned = save.gems[index].clickpower;
+		gem.factory.owned = save.gems[index].factory;
+	});
+	Upgrades.forEach(function(upgrade, index){
+		upgrade.owned = save.upgrades[index];
+	});
+	auto_drop.rate = save.auto_drop;
+	Inventory.build();
+
+	var delta = new Date().getTime() - save.time;
+	var offline_income = simulate(delta / 1000);
+	if(Settings.offline_gains)
+		money += offline_income;
+
+	// Done
+	console.log("Game loaded succesfully");
+	return true;
+}
+
+function simulate(delta){
+	// delta should be time in SECONDS
+	console.log("Offline time: "+delta+"s");
+
+	var inv_size = Inventory.getSize();
+	var inv_cap = (inv_size.width * inv_size.height) / (DEFAULT_GEM_RADIUS * DEFAULT_GEM_RADIUS * 4);
+	console.log("Inventory capacity: " + inv_cap + " gems");
+
+
+	var max_rate;
+	if(auto_drop.rate === -1)
+		max_rate = inv_cap / delta;
+	else
+		max_rate = inv_cap / auto_drop.rate;
+	console.log("Max rate: " + max_rate + " gems/sec");
+
+	var rate = [];
+	var total_rate = 0;
+	Gems.forEach(function(gem){
+		var spawned = gem.factory.getRate() * gem.factory.owned;
+		rate.push(spawned);
+		total_rate += spawned;
+	});
+	console.log("Uncapped rate: "+total_rate+" gems/sec");
+
+	var cap_ratio = 1;
+	if(total_rate > max_rate){
+		cap_ratio = max_rate/total_rate;
+		total_rate = max_rate;
+	}
+	console.log("Cap ratio: "+cap_ratio);
+
+	var income = 0;
+	rate.forEach(function(rate, index){
+		income += rate * Gems[index].getValue();
+	});
+	console.log("Uncapped income: "+formatMoney(income)+"/s");
+
+	income *= cap_ratio;
+	console.log("Capped income: "+formatMoney(income)+"/s");
+
+	var total_income = Math.round(income * delta);
+	console.log("Total income: "+formatMoney(total_income));
+
+	return total_income;
+}
+
+function formatTime(ms){
+	return (ms / 1000) + "s";
+}
+
+function resetGame(){
+	localStorage.clear();
+	console.log("Game save deleted");
+}
+
+document.body.onload = init;

@@ -66,12 +66,18 @@ var Inventory = {
 			strokeStyle: "gray"
 		}
 	},
-	sizes: [
-		{ width: 50, height: 250 },
-		{ width: 100, height: 300 },
-		{ width: 200, height: 350 },
-		{ width: 300, height: 500}
-	],
+	getSize: function() {
+		// TODO shorthand like this? Array must be ordered descending according to size/priority
+		// Upgrades.InvSize.forEach(function(upgrade){
+		// });
+		if(Upgrades[2].owned)
+			return Upgrades[2].size;
+		else if(Upgrades[1].owned)
+			return Upgrades[1].size;
+		else if(Upgrades[0].owned)
+			return Upgrades[0].size;
+		else return { width: 50, height: 250 };
+	},
 
 	// body references
 	left: undefined,
@@ -79,7 +85,9 @@ var Inventory = {
 	ground: undefined,
 
 	// methods
-	build: function(size) {
+	build: function() {
+		var size = this.getSize();
+
 		// Remove old
 		[this.left, this.right, this.ground].forEach(function(body){
 			if(body !== undefined)
@@ -113,8 +121,7 @@ var Inventory = {
 
 // add all of the bodies to the world
 // World.add(engine.world, [ground, left, right]);
-
-Inventory.build(Inventory.sizes[0]);
+Inventory.build();
 
 
 // add mouse control
@@ -161,7 +168,7 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
 
 function spawnGem(pos, gem){
 	var body;
-	var DEFAULT_RADIUS = 20;
+	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
 	switch(gem.name){
 		case "Quartz":
 			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
@@ -296,8 +303,6 @@ function showFloatingNumber(canvasX, canvasY, num){
 
 var lastTime = 0;
 Events.on(engine, 'tick', function(event) {
-	// console.log("tick");
-
 	// Remove gems
 	world.bodies.forEach(function(body){
 		if(body.gem !== undefined){
@@ -336,6 +341,10 @@ Events.on(engine, 'tick', function(event) {
 			}
 		}	
 	}
+
+	// Save game
+	if(Settings.enable_save)
+		saveGame();
 });
 
 function getSpawnRect(){

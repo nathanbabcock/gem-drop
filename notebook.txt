@@ -206,7 +206,7 @@ You fill up a "ball pit" on the left, one per click, and then empty it to sell a
     - Gold coins (stack slowly at bottom, in a different layer than other treasure)
     - Random special drops
     - Upgrade bubble drops (click on to claim)
-    - Rainbox gems: very low chance to spawn very valuable sparkly gem
+    - Rainbow gems: very low chance to spawn very valuable sparkly gem
 - Upgrades
     - Click related
         - Increase tier
@@ -708,3 +708,49 @@ Javascript Game Loops
 - requestAnimationFrame (browser handles refresh rate, throttled to 0-1/second inactive)
 - setInterval (throttled to 1000ms interval when tab inactive)
 - webWorkers (the holy grail)
+
+TODO ideas
+- The profiler shows most of the processing time is in rendering. Can we disable rendering during background mode?
+    - Either detect focus change...
+    - Or use a setInterval loop to detect backgrounding
+X legacy gameloop support with setInterval
+
+What's next
+- Graphics
+    - Gems
+    - Factories
+    - Click powers
+    - Upgrades
+    - Achievements
+- Offline mode and persistence
+- Achievements
+- Settings
+    - Disable fx
+    - Export/import save
+- Buffs
+- Full autodrop with noclip
+- Sound!
+- Particle fx
+    - Gem shine
+    - Tweak floating nums
+    - Floating num on factory purchase?
+- Prestige
+- Stay in scope
+- Release
+
+RELEASE GOAL: APRIL 3 (~4 weeks total dev time)
+
+3/21/17
+
+Gamestate elements
+- Time
+- Money
+- Upgrades
+    - Need to handle onPurchase changes somehow
+- Factories
+- Click powers
+- Prestige
+- Settings (save separately?)
+
+Should game objects like Gems and Upgrades be keyed by ID?
+- Forwards compatibility for saves, etc
