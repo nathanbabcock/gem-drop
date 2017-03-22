@@ -182,7 +182,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "gray",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -191,7 +191,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "orange",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -200,7 +200,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "purple",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -209,7 +209,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "blue",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -218,7 +218,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "green",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -227,7 +227,7 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "red",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
@@ -236,16 +236,16 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "lightblue",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			break;
 		case "Rainbow":
-			body = Bodies.polygon(pos.x, pos.y, 4, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 7, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "pink",
-					strokeStyle: "none"
+					strokeStyle: "transparent"
 				}
 			});
 			Body.scale(body, 0, 1);

@@ -716,17 +716,19 @@ TODO ideas
 X legacy gameloop support with setInterval
 
 What's next
-- Graphics
-    - Gems
+X Graphics
+    X Gems
+    - Buffs
     - Factories
     - Click powers
     - Upgrades
     - Achievements
-- Offline mode and persistence
-- Achievements
+X Offline mode and persistence
+- Achievements & stats
 - Settings
     - Disable fx
     - Export/import save
+    - Reset game (are you sure...?)
 - Buffs
 - Full autodrop with noclip
 - Sound!
@@ -751,6 +753,92 @@ Gamestate elements
 - Click powers
 - Prestige
 - Settings (save separately?)
+- Inventory size/shape
+- Auto-drop setting
+
 
 Should game objects like Gems and Upgrades be keyed by ID?
 - Forwards compatibility for saves, etc
+- Right now they are only keyed by order (array index)
+    - Forwards-compatibility is still mostly possible, just never change the array order...
+    - Probably more of a problem in dev than in prod
+
+Offline sim
+- Calc max sell rate (auto drop rate + inv size vs gem radius)
+
+3/22/17
+
+Can a video game montage be art?
+- On the one hand, it is even further removed than video games
+    - That is, if video games couldn't be art, could montages still be?
+- But in another sense they are closer to film (a definitely legitimate genre)
+- The argument should be independent of whether video games can be art
+- What does the making process look like?
+    - Hours of practice
+    - Curation of the best highlights
+        - What is "the best"?
+            - Community standards
+            - Personal style
+    - Other elements
+        - Editing
+        - Music
+- Can a video essay be art?
+- Motivation
+    - Ego
+    - Beauty
+    - Not for money
+- Is it more like a performance?
+
+Achievements
+- Make 1/100/1k/10k gems from clicking
+- Buy an upgrade
+- Max out the inventory
+- Max out the auto-drop
+- 1/50/100 <gem> factories
+- 1k/1M/1B/1T/1Q earned
+- X earned offline
+- 1 of every CP
+- 1 of every Factory
+- Collect 1/10/50/100/1k/1M buffs
+- Own 500/1k total factories
+- Purchase 10/20/30/all upgrades
+- Prestige 1x/10x/100x
+- Prestige with 1M/1B/1Q $$
+- Script Kiddie: something requiring the console
+- All achievements collected
+
+
+Achievements
+- What if achievements came in the form of a trophy dropped in the inventory...
+    - How quickly does the inventory become irrelevant tho
+    - But still tho
+    - Click an achievement to claim it, otherwise it is claimed automatically when it drops
+- Should achievements have awards? (money)
+    - Probably, if they go in the inventory with the other physical thingies
+- Should achievements unlock upgrades?
+    - Are upgrades unlocked by money threshold? Other upgrades?
+- Should diff achievements have diff graphics?
+    - tiers
+    - gem related
+    - upgrade related
+- Click to claim vs only drop?
+    - is clicking an achievement trophy satisfying? prolly...
+- Little trophy count somewhere?
+
+Upgrades
+- Buffs are x% more potent
+
+Buffs
+- Tier 1
+    - +50% sell price for 20s
+    - 2x spawn rate for 10s
+    - Clicking spawns double gems for 15s
+- Legendary
+    - Click and hold to spawn gems
+
+Buff Shapes:
+- Yellow Star
+- Pink Heart
+- Cursor Shaped???
+- Dollar sign shaped??
+- Teardrop shaped

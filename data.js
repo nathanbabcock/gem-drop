@@ -204,3 +204,51 @@ var Upgrades = [
 		}
 	}
 ];
+
+var Buffs = [
+	{
+		name: "Star",
+		description: "+50% sell price for 15 seconds",
+		baseDuration: 15,
+		getDuration: function(){ return this.baseDuration; },
+		basePower: 1.5,
+		getPower: function(){ return this.getPower; },
+		timeLeft: 0,
+		baseChance: 0.3, // % of all buff spawns which will be this one
+	},
+	{
+		name: "Heart",
+		description: "+200% factory production for 10 seconds",
+		baseDuration: 10,
+		getDuration: function(){ return this.baseDuration; },
+		basePower: 2.0,
+		getPower: function(){ return this.getPower; },
+		timeLeft: 0,
+		baseChance: 0.3, // % of all buff spawns which will be this one
+	},
+	{
+		name: "Cursor",
+		description: "Spawn twice as many gems by clicking for 5 seconds",
+		baseDuration: 5,
+		getDuration: function(){ return this.baseDuration; },
+		basePower: 2.0,
+		getPower: function(){ return this.getPower; },
+		timeLeft: 0,
+		baseChance: 0.3, // % of all buff spawns which will be this one
+	},
+	{
+		name: "Teardrop",
+		description: "Hold down the mouse button to continuously spawn gems for 10 seconds",
+		baseDuration: 10,
+		getDuration: function(){ return this.baseDuration; },
+		timeLeft: 0,
+		baseChance: 0.1, // % of all buff spawns which will be this one
+	}
+];
+Buffs.baseRate = 60;
+Buffs.getRate = function(){ return Buffs.baseRate; };
+
+// var Stats = {
+// 	total_money: 0,
+// 	offline_money: 0,
+// }
