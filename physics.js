@@ -171,47 +171,54 @@ function spawnGem(pos, gem){
 	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
 	switch(gem.name){
 		case "Quartz":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			// body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			// 	collisionFilter: BODY_FILTER,
+			// 	render: {
+			// 		fillStyle: "white",
+			// 		strokeStyle: "grey"
+			// 	}
+			// });
+			body = Bodies.polygon(pos.x, pos.y, 3, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
-					fillStyle: "white",
-					strokeStyle: "grey"
+					fillStyle: "gray",
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Topaz":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 6, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "orange",
-					strokeStyle: "black"
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Amethyst":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 5, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "purple",
-					strokeStyle: "black"
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Sapphire":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 8, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "blue",
-					strokeStyle: "black"
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Emerald":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 4, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "green",
-					strokeStyle: "black"
+					strokeStyle: "none"
 				}
 			});
 			break;
@@ -220,27 +227,28 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "red",
-					strokeStyle: "black"
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Diamond":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 5, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
-					fillStyle: "white",
-					strokeStyle: "gold"
+					fillStyle: "lightblue",
+					strokeStyle: "none"
 				}
 			});
 			break;
 		case "Rainbow":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.polygon(pos.x, pos.y, 4, DEFAULT_RADIUS, {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "pink",
-					strokeStyle: "red"
+					strokeStyle: "none"
 				}
 			});
+			Body.scale(body, 0, 1);
 			break;
 		default:
 			console.log("Unknown gem of type " + gem.name);

@@ -278,6 +278,8 @@ function calculatePurchase(gem){
 }
 
 function init(){
+	money = 10000000000;
+
 	if(Settings.enable_save)
 		loadGame();
 
