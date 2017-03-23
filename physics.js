@@ -11,7 +11,9 @@ var Engine = Matter.Engine,
     MouseConstraint = Matter.MouseConstraint,
     Mouse = Matter.Mouse,
     World = Matter.World,
-    Bodies = Matter.Bodies;
+    Bodies = Matter.Bodies,
+    Query = Matter.Query,
+    Vector = Matter.Vector;
 
 // create engine
 var engine = Engine.create(),
@@ -25,7 +27,7 @@ var render = Render.create({
         width: Math.min(document.documentElement.clientWidth, 300),
         height: Math.min(document.documentElement.clientHeight, 500),
         background: '#fff',
-        wireframes: true
+        wireframes: false
     }
 });
 
@@ -142,24 +144,46 @@ render.mouse = mouse;
 
 World.add(world, mouseConstraint);
 
+Vector.dist = function(v1, v2){
+	return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
+}
+
 // an example of using mouse events on a mouse
 Events.on(mouseConstraint, 'mousedown', function(event) {
     var mousePosition = event.mouse.position;
-    // console.log('mousedown at ' + mousePosition.x + ' ' + mousePosition.y);
-    //var gem = Bodies.circle(mousePosition.x, mousePosition.y, 10, { collisionFilter: BODY_FILTER });
-    //gem.gameType = GEM;
-    //World.add(engine.world, gem);
+    
+    // Walls block clicks
     var skip = false;
     [Inventory.left, Inventory.right, Inventory.ground].forEach(function(body){
     	if(Bounds.contains(body.bounds, mousePosition)){
     		//console.log("ignoring a click on the bounds");
     		skip = true;
     		return false;
-    	}
-    		
+    	}	
     });
-    if(skip || mousePosition.y >= render.canvas.height - Inventory.bottom_margin) return;
+    
+    // Handle buff clicks
+    // TODO maybe refactor this whole bit to just use Query.point?
+    Query.point(world.bodies, mousePosition).forEach(function(body){
+    	if(body.buff){
+    		clickBuff(body.buff);
 
+			// TODO should these lines be in clickBuff? Should clickBuff be in physics.js?
+			// Apply impulse to other bodies
+			world.bodies.forEach(function(otherBody){
+				if(otherBody === body) return false;
+				if(Vector.dist(mousePosition, otherBody.position) <= 100)
+					Body.applyForce(otherBody, mousePosition, .0001); // TODO FIXME
+			});
+    		Composite.remove(world, body);
+    		skip = true;
+    		return false;
+    	}
+    });
+
+	if(skip || mousePosition.y >= render.canvas.height - Inventory.bottom_margin) return;
+
+    // Spawn gems
     doClick().forEach(function(e){
     	spawnGem(mousePosition, e);
     });
@@ -256,7 +280,6 @@ function spawnGem(pos, gem){
 					strokeStyle: "transparent"
 				}
 			});
-			Body.scale(body, 0, 1);
 			break;
 		default:
 			console.log("Unknown gem of type " + gem.name);
@@ -265,6 +288,54 @@ function spawnGem(pos, gem){
 	body.gem = gem;
 	World.add(engine.world, body);
 	updateMoney();
+}
+
+function spawnBuff(pos, buff){
+	var body;
+	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
+	switch(buff.name){
+		case "Star":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "yellow",
+					strokeStyle: "transparent"
+				}
+			});
+			break;
+		case "Heart":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "pink",
+					strokeStyle: "transparent"
+				}
+			});
+			break;
+		case "Cursor":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "white",
+					strokeStyle: "black"
+				}
+			});
+			break;
+		case "Teardrop":
+			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+				collisionFilter: BODY_FILTER,
+				render: {
+					fillStyle: "lightblue",
+					strokeStyle: "transparent"
+				}
+			});
+			break;
+		default:
+			console.log("Unknown buff of type " + buff.name);
+			return false;
+	}
+	body.buff = buff;
+	World.add(engine.world, body);
 }
 
 function showFloatingNumber(canvasX, canvasY, num){
@@ -321,14 +392,19 @@ var lastTime = 0;
 Events.on(engine, 'tick', function(event) {
 	// Remove gems
 	world.bodies.forEach(function(body){
-		if(body.gem !== undefined){
-			if(body.position.y > render.canvas.height && body.position.x <= render.canvas.width){
-				//console.log("gem sold at "+body.position.x+","+body.position.y);
-				Composite.remove(world, body);
+		if(body.position.y > render.canvas.height && body.position.x <= render.canvas.width){
+			//console.log("gem sold at "+body.position.x+","+body.position.y);
+			Composite.remove(world, body);
+			if(body.gem){
 				showFloatingNumber(body.position.x, body.position.y, body.gem.getValue());
 				sellGem(body.gem);
-			} else if(body.position.y < 0) {
-				Composite.remove(world, body);
+			}
+			if(body.buff && false){
+				clickBuff(body.buff);
+			}
+		} else if(body.position.y < 0) {
+			Composite.remove(world, body);
+			if(body.gem){
 				Stats.wasted++;
 				checkAll(Achievements.wasted);
 				updateMoney();
@@ -339,10 +415,12 @@ Events.on(engine, 'tick', function(event) {
 	// Spawn gems
 	var delta = (event.timestamp - lastTime) / 1000;
 	lastTime = event.timestamp;
-	if(delta < BackgroundMode.threshhold)
-		genGems(delta);
-	else
-		console.warn("Dropped frames, delta = " + delta);
+	//if(delta < BackgroundMode.threshhold)
+	genGems(delta);
+	genBuffs(delta);
+	// else
+	// 	console.warn("Dropped frames, delta = " + delta);
+
 
 	// Auto drop
 	if(auto_drop.rate > 0){
@@ -359,6 +437,15 @@ Events.on(engine, 'tick', function(event) {
 			}
 		}	
 	}
+
+	// Buff timers
+	Buffs.forEach(function(buff){
+		if(buff.timeLeft < 0)
+			buff.timeLeft = 0;
+		if(buff.timeLeft === 0)
+			return false;
+		buff.timeLeft -= delta;
+	});
 
 	// Save game
 	if(Settings.enable_save)
@@ -387,10 +474,41 @@ function genGems(delta){
 			y: getRandomInt(spawnRect.y1, spawnRect.y2)
 		};
 		//console.log(pos);
-		Stats.factory_gems++;
-		checkAll(Achievements.gems);
+		// Stats.factory_gems++;
+		// checkAll(Achievements.gems);
 		spawnGem(pos, g);
 	});
+}
+
+function genBuffs(delta){
+	// First roll to see if we spawn a buff this frame
+	if(getRandomFloat(0, 1) > delta / Buffs.getRate())
+		return false;
+
+	// Then roll for the type
+	var sum = 0,
+		sums = [],
+		buff;
+	Buffs.forEach(function(buff){
+		sums.push(sum + buff.getChance());
+		sum += buff.getChance();
+	});
+	var roll = getRandomInt(0, sum);
+	for(var i = 0; i < sums.length; i++){
+		if(roll <= sums[i]){
+			buff = Buffs[i];
+			break;
+		}
+	}
+	//console.log("Spawning a "+buff.name);
+
+	// Spawn the buff
+	var spawnRect = getSpawnRect();
+	var pos = {
+		x: getRandomInt(spawnRect.x1, spawnRect.x2),
+		y: getRandomInt(spawnRect.y1, spawnRect.y2)
+	};
+	spawnBuff(pos, buff);
 }
 
 function openDrop(){
@@ -478,5 +596,3 @@ function debug(){
 	// }
 	// engine.update(10);
 }
-
-world.gravity.y = 0;

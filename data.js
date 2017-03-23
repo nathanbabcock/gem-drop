@@ -216,7 +216,8 @@ var Buffs = [
 		basePower: 1.5,
 		getPower: function(){ return this.getPower; },
 		timeLeft: 0,
-		baseChance: 0.3, // % of all buff spawns which will be this one
+		baseChance: 3, // % of all buff spawns which will be this one
+		getChance: function(){ return this.baseChance; },
 	},
 	{
 		name: "Heart",
@@ -226,7 +227,8 @@ var Buffs = [
 		basePower: 2.0,
 		getPower: function(){ return this.getPower; },
 		timeLeft: 0,
-		baseChance: 0.3, // % of all buff spawns which will be this one
+		baseChance: 3, // % of all buff spawns which will be this one
+		getChance: function(){ return this.baseChance; },
 	},
 	{
 		name: "Cursor",
@@ -236,7 +238,8 @@ var Buffs = [
 		basePower: 2.0,
 		getPower: function(){ return this.getPower; },
 		timeLeft: 0,
-		baseChance: 0.3, // % of all buff spawns which will be this one
+		baseChance: 3, // % of all buff spawns which will be this one
+		getChance: function(){ return this.baseChance; },
 	},
 	{
 		name: "Teardrop",
@@ -244,14 +247,20 @@ var Buffs = [
 		baseDuration: 10,
 		getDuration: function(){ return this.baseDuration; },
 		timeLeft: 0,
-		baseChance: 0.1, // % of all buff spawns which will be this one
+		baseChance: 1, // % of all buff spawns which will be this one
+		getChance: function(){ return this.baseChance; },
 	}
 ];
-Buffs.baseRate = 60;
+Buffs.baseRate = 1;
 Buffs.getRate = function(){ return Buffs.baseRate; };
+Buffs.star = Buffs[0];
+Buffs.heart = Buffs[1];
+Buffs.cursor = Buffs[2];
+Buffs.teardrop = Buffs[3];
 
 var Stats = {
 	money: 0,
+	gems: 0,
 	clickpower_gems: 0,
 	factory_gems: 0,
 	upgrades: 0,
@@ -395,11 +404,11 @@ Achievements.buffs = [
 
 // Total gems
 Achievements.gems = [
-	new Achievement("Gem Dropper", "Drop 100 gems", 1, function(){ return Stats.clickpower_gems + Stats.factory_gems >= 100; }),
-	new Achievement("Bejewelled", "Drop 1k gems", 1, function(){ return Stats.clickpower_gems + Stats.factory_gems >= 1e3; }),
-	new Achievement("Gem Dropper III", "Drop 10k gems", 1, function(){ return Stats.clickpower_gems + Stats.factory_gems >= 10e3; }), // TODO
-	new Achievement("Gem Dropper IV", "Drop 100k gems", 1, function(){ return Stats.clickpower_gems + Stats.factory_gems >= 100e3; }), // TODO
-	new Achievement("Outrageous", "Drop 1M gems", 1, function(){ return Stats.clickpower_gems + Stats.factory_gems >= 1e6; }, { redtext: "Truly, truly, TRULY outrageous."}),
+	new Achievement("Gem Dropper", "Drop 100 gems", 1, function(){ return Stats.gems >= 100; }),
+	new Achievement("Bejewelled", "Drop 1k gems", 1, function(){ return Stats.gems >= 1e3; }),
+	new Achievement("Gem Dropper III", "Drop 10k gems", 1, function(){ return Stats.gems >= 10e3; }), // TODO
+	new Achievement("Gem Dropper IV", "Drop 100k gems", 1, function(){ return Stats.gems >= 100e3; }), // TODO
+	new Achievement("Outrageous", "Drop 1M gems", 1, function(){ return Stats.gems >= 1e6; }, { redtext: "Truly, truly, TRULY outrageous."}),
 ];
 
 // Total money

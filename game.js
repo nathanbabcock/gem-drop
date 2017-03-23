@@ -454,6 +454,14 @@ function updateMoney(amount = 0){
 
 function sellGem(gem){
 	updateMoney(gem.getValue());
+	Stats.gems++;
+	checkAll(Achievements.gems);
+}
+
+function clickBuff(buff){
+	buff.timeLeft += buff.getDuration();
+	Stats.buffs++;
+	checkAll(Achievements.buffs);
 }
 
 function getTotalRate(){
