@@ -254,7 +254,7 @@ function log(b, n) {
 }
 
 // Calculates the cost of a factory purchase for the given gem according to BUY MODE
-function calculatePurchase(gem){
+function calculatePurchase(gem, quantity = BuyMode.quantity){
 	var r = gem.factory.getCostFactor(),
 		b = gem.factory.baseCost,
 		k = gem.factory.owned,
@@ -262,15 +262,15 @@ function calculatePurchase(gem){
 		n = 0;
 	if(BuyMode.mode === BuyMode.BUY){
 		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
-		if(BuyMode.quantity === "max")
+		if(quantity === "max")
 			n = Math.max(max_quantity, 1);
 		else
-			n = BuyMode.quantity;
+			n = quantity;
 	} else {
-		if(BuyMode.quantity === "max")
+		if(quantity === "max")
 			n = gem.factory.owned;
 		else
-			n = Math.min(gem.factory.owned, BuyMode.quantity);
+			n = Math.min(gem.factory.owned, quantity);
 		k = gem.factory.owned - n;
 	}
 	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n))/(1 - r));
@@ -344,10 +344,17 @@ function buyFactory(gem){
 			return false;
 		factory.owned += purchase.quantity;
 		updateMoney(-purchase.cost);
+
+		Stats.factories++;
+		checkAll(Achievements.factory.byGem(gem));
+		checkAll(Achievements.factory.each);
+		checkAll(Achievements.factory.total);
 		//updateFactory(gem);
 	} else {
 		factory.owned -= purchase.quantity;
 		updateMoney(purchase.cost);
+		Stats.sold += purchase.quantity;
+		Achievements.misc.sell.check();
 	}
 	return true;
 }
@@ -358,6 +365,9 @@ function buyClickPower(gem){
 		return false;
 	updateMoney(-clickpower.getCost());
 	clickpower.owned++;
+	Stats.clickpowers++;	
+	Achievements.clickpower.byGem(gem).check();
+	Achievements.clickpower.total.check();
 	updateClickPower(gem);
 	return true;
 }
@@ -370,6 +380,8 @@ function buyUpgrade(upgrade){
 	updateUpgrade(upgrade);
 	if(upgrade.onPurchase !== undefined)
 		upgrade.onPurchase();
+	Stats.upgrades++;
+	checkAll(Achievements.upgrades);
 	return true;
 }
 
@@ -403,6 +415,9 @@ function doClick(){
 	var gemsToMake = [];
 	for(var i = 0; i < bestGem.clickpower.getRate(); i++)
 		gemsToMake.push(bestGem);
+	Stats.clickpower_gems += gemsToMake.length;
+	checkAll(Achievements.clickpower_gems);
+	checkAll(Achievements.gems);
 	return gemsToMake;
 }
 
@@ -417,6 +432,11 @@ var Inventory = {
 }
 
 function updateMoney(amount = 0){
+	if(amount > 0){
+		Stats.money += amount;
+		checkAll(Achievements.money);
+	}
+
 	money += amount;
 	ui.actual_money.innerText = formatMoney();
 	ui.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";

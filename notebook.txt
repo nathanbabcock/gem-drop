@@ -804,9 +804,9 @@ Achievements
 - Purchase 10/20/30/all upgrades
 - Prestige 1x/10x/100x
 - Prestige with 1M/1B/1Q $$
+- Make 1k/100k/1M/1B in one second
 - Script Kiddie: something requiring the console
 - All achievements collected
-
 
 Achievements
 - What if achievements came in the form of a trophy dropped in the inventory...
@@ -842,3 +842,27 @@ Buff Shapes:
 - Cursor Shaped???
 - Dollar sign shaped??
 - Teardrop shaped
+
+What are the prestige gems called?
+- Cosmic Gems
+- Hyper Gems
+- Ultra Gems
+- Meta Gems
+- Prestige Gems
+- Ultimate Gems
+
+3/23/17
+
+Trophy Clicker
+- Ridiculous amounts of achievements, and the power spikes come from working towards and fulfilling the requirements
+    of high-tier achievements
+- How does it become automated?
+- Doesn't this just devolve into Gem Drop with 1 gem type with variable value?
+- Give me an example of the low tier achievements which keep coming in
+- "Generate a trophy" -> "Generate 2 trophy" -> ... (instantly receive infinite trophies)
+- I think I'm gonna leave this for now and maybe come back to it. Not a replacement for Gem Drop and probably doesn't
+    involve physics mechanics
+
+Upgrade Ideas
+- Achievement value increase
+- Buff spawn rate increase

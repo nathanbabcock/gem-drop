@@ -160,8 +160,7 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
     });
     if(skip || mousePosition.y >= render.canvas.height - Inventory.bottom_margin) return;
 
-    var gemsToAdd = doClick();
-    gemsToAdd.forEach(function(e){
+    doClick().forEach(function(e){
     	spawnGem(mousePosition, e);
     });
 });
@@ -183,15 +182,14 @@ function spawnGem(pos, gem){
 			// 	}
 			// });
 			body = Bodies.polygon(pos.x, pos.y, 3, DEFAULT_RADIUS, {
-				angle: 0,//0.5 * Math.PI,//Math.toRadians(30),
 				collisionFilter: BODY_FILTER,
 				render: {
-					// fillStyle: "gray",
-					sprite: {
-                        texture: 'img/quartz.png',
-                        xScale: 40 / 148,
-                        yScale: 40 / 128
-                    },
+					fillStyle: "gray",
+					// sprite: {
+     //                    texture: 'img/quartz.png',
+     //                    xScale: 40 / 148,
+     //                    yScale: 40 / 128
+     //                },
 					strokeStyle: "transparent"
 				}
 			});
@@ -331,6 +329,8 @@ Events.on(engine, 'tick', function(event) {
 				sellGem(body.gem);
 			} else if(body.position.y < 0) {
 				Composite.remove(world, body);
+				Stats.wasted++;
+				checkAll(Achievements.wasted);
 				updateMoney();
 			}
 		}
@@ -387,6 +387,8 @@ function genGems(delta){
 			y: getRandomInt(spawnRect.y1, spawnRect.y2)
 		};
 		//console.log(pos);
+		Stats.factory_gems++;
+		checkAll(Achievements.gems);
 		spawnGem(pos, g);
 	});
 }
