@@ -25,7 +25,7 @@ var render = Render.create({
         width: Math.min(document.documentElement.clientWidth, 300),
         height: Math.min(document.documentElement.clientHeight, 500),
         background: '#fff',
-        wireframes: false,
+        wireframes: true
     }
 });
 
@@ -166,6 +166,10 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
     });
 });
 
+Math.toRadians = function(deg){
+	return (Math.PI / 180) / deg;
+};
+
 function spawnGem(pos, gem){
 	var body;
 	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
@@ -179,9 +183,15 @@ function spawnGem(pos, gem){
 			// 	}
 			// });
 			body = Bodies.polygon(pos.x, pos.y, 3, DEFAULT_RADIUS, {
+				angle: 0,//0.5 * Math.PI,//Math.toRadians(30),
 				collisionFilter: BODY_FILTER,
 				render: {
-					fillStyle: "gray",
+					// fillStyle: "gray",
+					sprite: {
+                        texture: 'img/quartz.png',
+                        xScale: 40 / 148,
+                        yScale: 40 / 128
+                    },
 					strokeStyle: "transparent"
 				}
 			});
@@ -466,3 +476,5 @@ function debug(){
 	// }
 	// engine.update(10);
 }
+
+world.gravity.y = 0;
