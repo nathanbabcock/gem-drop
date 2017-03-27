@@ -13,6 +13,10 @@
 	/*display:none;*/
 }
 
+/*#render, #upgrades, #click_powers, #factories, #buttons, #money {
+	display:none;
+}*/
+
 .clear {
 	clear:both;
 }
@@ -38,7 +42,7 @@
 }
 
 #ui {
-	padding:10px;
+	padding:0 10px;
 }
 
 #drop	 {
@@ -74,20 +78,25 @@
 .section_name {
 	background-color:#000;
 	color:white;
-	width:500px;
+	min-width:500px;
 	padding:10px;
 	display:inline-block;
+	margin-top:5px;
+	margin-bottom:5;
 }
 
 /* POPUPS */
 .popup_container {
 	position: relative;
-	display: inline-block;
-	margin: 10px;
+	display:inline-block;
+	float:left;
 }
 
 .popup_anchor {
 	float:left;
+	margin:5px;
+/*	margin-right: 10px;
+	margin-top:10px;*/
 	border:1px solid black;
 	padding: 10px;
 	cursor:hand;
@@ -183,6 +192,10 @@
 	font-weight:bold;
 }
 
+#buttons {
+	margin-top:10px;
+}
+
 #buttons button {
 	background-color:#282828;
 	color:white;
@@ -206,3 +219,60 @@
 #buttons button:focus {
 	outline: none;
 }
+
+.progressbar_outer {
+	width: 150px;
+	height:7px;
+	border-radius:7px;
+	background-color: black;
+	padding:3px;
+	float:left;
+	margin-left:10px;
+	margin-top:15px;
+}
+.progressbar_inner {
+	width:50%;
+	/*transition: width 1s;*/
+	height:100%;
+	border-radius:7px;
+	background-color: white;
+}
+
+.timeleft {
+	float:left;
+	font-weight: bold;
+	padding:10 10px;
+	opacity: 0;
+	transition:opacity 0.15s;
+}
+
+.progressbar_container {
+	float:left;
+/*	position: absolute;
+	top: 50%;
+	transform: 			translateY(-50%);*/
+}
+
+.progressbar_container:hover .timeleft {
+	opacity: 1;
+}
+
+.buff_container {
+	clear:both;
+}
+/*.timeleft {
+	float:left;
+	font-weight: bold;
+	opacity:0;
+	transition:opacity 0.1s;
+	padding:10px;
+}
+
+.popup_container:hover .timeleft {
+	opacity: 1;
+}*/
+
+
+/*#buffs .popup_container .popup, #buffs .popup_container .popup::after {
+	left:45px;
+}*/
