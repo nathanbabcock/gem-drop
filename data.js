@@ -9,13 +9,18 @@ function Gem(options){
 	var gem = {
 		name: null,
 		baseValue: null,
-		getValue: function() { return this.baseValue; },
+		getValue: function() {
+			var mult = 1.0;
+			if(Buffs.star.timeLeft > 0)
+				mult *= Buffs.star.getPower();
+			return this.baseValue * mult;
+		},
 		clickpower: {
 			owned: false,
 			baseCost: null,
 			getCost: function(){ return this.baseCost; },
 			baseRate: 1,
-			getRate: function(){ return this.baseRate; },
+			getRate: function(){ return this.baseRate; }
 			//getDescription: function() { return "" },
 			//getName:function() { return this.super.name; }
 		},
@@ -214,7 +219,7 @@ var Buffs = [
 		baseDuration: 15,
 		getDuration: function(){ return this.baseDuration; },
 		basePower: 1.5,
-		getPower: function(){ return this.getPower; },
+		getPower: function(){ return this.basePower; },
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
@@ -225,7 +230,7 @@ var Buffs = [
 		baseDuration: 10,
 		getDuration: function(){ return this.baseDuration; },
 		basePower: 2.0,
-		getPower: function(){ return this.getPower; },
+		getPower: function(){ return this.basePower; },
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
@@ -236,7 +241,7 @@ var Buffs = [
 		baseDuration: 5,
 		getDuration: function(){ return this.baseDuration; },
 		basePower: 2.0,
-		getPower: function(){ return this.getPower; },
+		getPower: function(){ return this.basePower; },
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },

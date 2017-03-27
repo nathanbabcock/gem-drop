@@ -16,7 +16,8 @@ var ui = {
 	buy_1: document.getElementById("buy_1"),
 	buy_10: document.getElementById("buy_10"),
 	buy_100: document.getElementById("buy_100"),
-	buy_max: document.getElementById("buy_max")
+	buy_max: document.getElementById("buy_max"),
+	buffs: document.getElementById("buffs")
 }; 
 
 var BuyMode = {
@@ -462,6 +463,11 @@ function clickBuff(buff){
 	buff.timeLeft += buff.getDuration();
 	Stats.buffs++;
 	checkAll(Achievements.buffs);
+	updateMoney();
+}
+
+function updateBuffs(){
+
 }
 
 function getTotalRate(){
