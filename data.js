@@ -251,7 +251,7 @@ var Buffs = [
 		getChance: function(){ return this.baseChance; },
 	}
 ];
-Buffs.baseRate = 1;
+Buffs.baseRate = Infinity;
 Buffs.getRate = function(){ return Buffs.baseRate; };
 Buffs.star = Buffs[0];
 Buffs.heart = Buffs[1];

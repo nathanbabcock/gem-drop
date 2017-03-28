@@ -198,59 +198,93 @@ function spawnGem(pos, gem){
 	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
 	switch(gem.name){
 		case "Quartz":
-			// body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
-			// 	collisionFilter: BODY_FILTER,
-			// 	render: {
-			// 		fillStyle: "white",
-			// 		strokeStyle: "grey"
-			// 	}
-			// });
-			body = Bodies.polygon(pos.x, pos.y, 3, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+				{x: 0, y:40},
+				{x:46, y:40},
+				{x:23, y: 1}
+			], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "gray",
-					// sprite: {
-     //                    texture: 'img/quartz.png',
-     //                    xScale: 40 / 148,
-     //                    yScale: 40 / 128
-     //                },
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: "img/quartz-small.png"
+                    },
 				}
 			});
 			break;
 		case "Topaz":
-			body = Bodies.polygon(pos.x, pos.y, 6, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 0, y:37},
+					{x:15, y:50},
+					{x:30, y:37},
+					{x:30, y:12},
+					{x:15, y: 0},
+					{x: 0, y:12}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "orange",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: "img/topaz-small.png"
+                    },
 				}
 			});
 			break;
 		case "Amethyst":
-			body = Bodies.polygon(pos.x, pos.y, 5, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 8, y:38},
+					{x:32, y:38},
+					{x:40, y:15},
+					{x:20, y: 0},
+					{x: 0, y:15}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "purple",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/amethyst-small.png'
+                    },
 				}
 			});
 			break;
 		case "Sapphire":
-			body = Bodies.polygon(pos.x, pos.y, 8, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 8, y:35},
+					{x:22, y:40},
+					{x:35, y:32},
+					{x:39, y:17},
+					{x:32, y: 4},
+					{x:17, y: 0},
+					{x: 4, y: 7},
+					{x: 0, y: 22}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "blue",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/sapphire-small.png'
+                    },
 				}
 			});
 			break;
 		case "Emerald":
-			body = Bodies.polygon(pos.x, pos.y, 4, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 0, y:40},
+					{x:40, y:40},
+					{x:40, y: 0},
+					{x: 0, y: 0}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "green",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/emerald-small.png'
+                    },
 				}
 			});
 			break;
@@ -259,25 +293,48 @@ function spawnGem(pos, gem){
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "red",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/ruby-small.png'
+                    },
 				}
 			});
 			break;
 		case "Diamond":
-			body = Bodies.polygon(pos.x, pos.y, 5, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x:25, y:40},
+					{x:50, y:13},
+					{x:37, y: 0},
+					{x:12, y: 0},
+					{x:0,  y:13}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "lightblue",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/diamond-small.png'
+                    },
 				}
 			});
 			break;
 		case "Rainbow":
-			body = Bodies.polygon(pos.x, pos.y, 7, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x:10, y:39},
+					{x:28, y:39},
+					{x:40, y:25},
+					{x:35, y: 7},
+					{x:20, y: 0},
+					{x: 4, y: 7},
+					{x: 0, y:25}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "pink",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+                        texture: 'img/rainbow-small.png'
+                    },
 				}
 			});
 			break;
