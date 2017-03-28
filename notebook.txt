@@ -896,18 +896,21 @@ X Offline mode and persistence
 
 UPGRADES Master List
 - Inventory Tier 1-3: Bigger Inventory
+- Fallen gems are recovered for 50% sell price
+- [100, 400, 800, 1600]% increased offline production
 - Auto-Drop Tier 1-3: Automatically drop gems every 10/5/0 seconds
 - Critical Gems Tier 1-4: Any time a gem spawns, 1%/10%/50%/100% chance for it to spawn as a large gem
     (double size and sell price)
 - Buff Spawn Tier 1-4: Buffs randomly spawn (1x, 2x, 3x as often)
 - [2x, 5x, 10x] sell price for {gem}
-- x% increased offline production
-- Fallen gems are recovered for 50% sell price
 - Buffs are automatically collected
-- Global sell price
 - Global spawn rate
-- Global quantity
 - Every click uses all purchased click powers
+
+Unique gem upgrade modifiers
+- Spawn rate
+- Sell price
+- Chance to spawn 2
 
 3/24/17
 
@@ -935,6 +938,48 @@ What can modify stuff
 I'm going to encode all the logic into the specific functions appropriate, rather than maintaining a list of buffs which must be updated by those buffs
 That is, it is the responsibility of the getValue(), getRate(), etc functions to compute their stuff on the fly
 Does it make more semantic sense for the buffs to push and update? Now logic surrounding buffs is disconnected
-Maybe its not ideal but it is the quickest and easiest implementation, and it does not need to scale very large (5-10 modifiers total)
+Maybe it's not ideal but it is the quickest and easiest implementation, and it does not need to scale very large (5-10 modifiers total)
 
 3/28/17
+
+Tasks
+- Implement various upgrades
+- Add buffs (and big gems) to offline sim
+- Achievement dropping
+- Export/import
+
+UPGRADES Master List
+- Inventory Tier 1-3: Bigger Inventory [ [+], [++], [+++] ]
+- Fallen gems are recovered for 50% sell price [TRASH CAN + DOLLAR SIGN]
+- [100, 400, 800, 1600]% increased offline production [COMPUTER + [I, II, III]]
+- Auto-Drop Tier 1-3: Automatically drop gems every 10/5/0 seconds [DOWN ARROW]
+- Critical Gems Tier 1-4: Any time a gem spawns, 1%/10%/50%/100% chance for it to spawn as a large gem
+    (double size and sell price)
+- Buff Spawn Tier 1-4: Buffs randomly spawn (1x, 2x, 3x as often)
+- [2x, 5x, 10x] sell price for {gem} [{gem icon} + [I, II, III]]
+- Buffs are automatically collected
+- Global spawn rate
+
+Tasks master list
+- Implement increased offline prod (trivial)
+- Implement auto-drop tiers (trivial)
+- Implement crit gems (easy)
+- Implement buff tiers (trivial)
+- Implement sell price upgrades (trivial)
+- Buff autocollect (trivial)
+- Global spawn rate (trivial)
+- Achievement dropping (easy)
+- Export/import (easy)
+- Settings menu (30min)
+- Stats screen (15min)
+- Achievements screen (1hr)
+- Implement gem sprites (almost done)
+- Make buff & trophy sprites (2hr)
+- Clickpower sprites (easy)
+- Factory sprites (easy)
+- Upgrade sprites (???)
+- GAME BALANCE (??????????)
+- Achievement sell values
+- UI polish (???)
+- Basic sound (2+ hr)
+

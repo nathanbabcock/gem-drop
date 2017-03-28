@@ -331,7 +331,7 @@ Achievements.clickpower = {
 	amethyst: new Achievement("Amethyst Amateur", "Buy the amethyst clickpower", cp_ach_val(Gems.amethyst), function(){ return Gems.amethyst.clickpower.owned; }),
 	sapphire: new Achievement("The Blues", "Buy the sapphire clickpower", cp_ach_val(Gems.sapphire), function(){ return Gems.sapphire.clickpower.owned; }),
 	emerald: new Achievement("Green Thumb", "Buy the emerald clickpower", cp_ach_val(Gems.emerald), function(){ return Gems.emerald.clickpower.owned; }),
-	ruby: new Achievement("Ruby Clicker", "Buy the ruby clickpower", cp_ach_val(Gems.ruby), function(){ return Gems.ruby.clickpower.owned; }), // TODO
+	ruby: new Achievement("Red Handed", "Buy the ruby clickpower", cp_ach_val(Gems.ruby), function(){ return Gems.ruby.clickpower.owned; }),
 	diamond: new Achievement("DIAMONDS!", "Buy the diamond clickpower", cp_ach_val(Gems.diamond), function(){ return Gems.diamond.clickpower.owned; }),
 	rainbow: new Achievement("Jazz Hands", "Buy the rainbow clickpower", cp_ach_val(Gems.rainbow), function(){ return Gems.rainbow.clickpower.owned; }),
 	total: new Achievement("7-Fingered Man", "Buy all 7 clickpowers", cp_ach_val(Gems.rainbow) / 2, function(){ return Stats.clickpowers >= Gems.length; }, {redtext: "You killed my father. Prepare to die."}),
@@ -413,7 +413,7 @@ Achievements.buffs = [
 	new Achievement("Buff AF", "Collected 50 buffs", 0, function(){ return Stats.buffs >= 50; }), // TODO
 	new Achievement("Do you even lift?", "Collected 100 buffs", 0, function(){ return Stats.buffs >= 100; }), // TODO
 	new Achievement("Sick gains", "Collected 1k buffs", 0, function(){ return Stats.buffs >= 1000; }), // TODO
-	new Achievement("Gym rat", "Collected 10k buffs", 0, function(){ return Stats.buffs >= 10000; }), // TODO
+	new Achievement("Gym rat", "Collected 10k buffs", 0, function(){ return Stats.buffs >= 10000; }, { redtext : "Or is it gem rat?"}), // TODO
 	new Achievement("Schwarzenegger", "Collected 100k buffs", 0, function(){ return Stats.buffs >= 100000; }), // TODO
 ];
 
@@ -436,10 +436,10 @@ Achievements.money = [
 
 // Meta-Achievement
 Achievements.meta = [
-	new Achievement("Meta-Achievement", "Unlock 15 achievements", 0, function(){ return Stats.achievements >= 15; }),
-	new Achievement("Meta-Achievement", "Unlock 30 achievements", 0, function(){ return Stats.achievements >= 30; }),
-	new Achievement("Meta-Achievement", "Unlock 45 achievements", 0, function(){ return Stats.achievements >= 45; }),
-	new Achievement("Meta-Achievement", "Unlock 60 achievements", 0, function(){ return Stats.achievements >= 60; }),
+	new Achievement("Meta-Achievement I", "Unlock 15 achievements", 0, function(){ return Stats.achievements >= 15; }),
+	new Achievement("Meta-Achievement II", "Unlock 30 achievements", 0, function(){ return Stats.achievements >= 30; }),
+	new Achievement("Meta-Achievement III", "Unlock 45 achievements", 0, function(){ return Stats.achievements >= 45; }),
+	new Achievement("Meta-Achievement IV", "Unlock 60 achievements", 0, function(){ return Stats.achievements >= 60; }),
 	new Achievement("Meta-Meta-Achievement", "Unlock 4 meta-achievements", 0, function(){ return false; }),
 	new Achievement("Overachiever", "Unlock every achievement", 0, function(){ return Stats.achievements >= Stats.achievements.length - 1; }, {redtext: "(except this one)"}),
 ];
@@ -477,7 +477,7 @@ Achievements.misc = {
 	inventory: new Achievement("So much space for activities", "Max out the inventory", 0, function(){ return false; }), // TODO
 	autodrop: new Achievement("Open the Floodgates", "Upgrade to 100% autodrop", 0, function(){ return false; }), // TODO
 	sell: new Achievement("Reimbursement", "Sell a factory", 100, function(){ return Stats.sold >= 1; }),
-	hack: new Achievement("Script kiddie", "", -99, function(){ return true; }, {redtext: "alternatively: Introduction to the Developer Console"}),
+	hack: new Achievement("Script kiddie", "Prove your computer hacking skills", -999, function(){ return true; }, {redtext: "Girls only want guys with good skills."}),
 };
 
 function checkAll(list){
