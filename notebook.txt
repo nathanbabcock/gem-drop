@@ -905,6 +905,7 @@ UPGRADES Master List
 - [2x, 5x, 10x] sell price for {gem}
 - Buffs are automatically collected
 - Global spawn rate
+<<<<<<< HEAD
 - Every click uses all purchased click powers
 
 Unique gem upgrade modifiers
@@ -983,3 +984,8 @@ Tasks master list
 - UI polish (???)
 - Basic sound (2+ hr)
 
+Game Balance Notes
+- inv 3 comes too quick after amethyst
+- early game factories should have much slower rate (?)
+     - upgrade rate later
+- buffs between amethyst & sapphire??
