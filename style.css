@@ -13,7 +13,7 @@
 	/*display:none;*/
 }
 
-#render, #upgrades, #click_powers, #factories, #buttons, #money {
+#render, #money {
 	display:none;
 }
 
