@@ -908,3 +908,9 @@ UPGRADES Master List
 - Global spawn rate
 - Global quantity
 - Every click uses all purchased click powers
+
+Game Balance Notes
+- inv 3 comes too quick after amethyst
+- early game factories should have much slower rate (?)
+     - upgrade rate later
+- buffs between amethyst & sapphire??
