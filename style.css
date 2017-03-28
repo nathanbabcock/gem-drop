@@ -13,9 +13,9 @@
 	/*display:none;*/
 }
 
-/*#render, #upgrades, #click_powers, #factories, #buttons, #money {
+#render, #upgrades, #click_powers, #factories, #buttons, #money {
 	display:none;
-}*/
+}
 
 .clear {
 	clear:both;

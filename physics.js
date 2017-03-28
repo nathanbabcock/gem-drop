@@ -449,11 +449,13 @@ Events.on(engine, 'tick', function(event) {
 	Buffs.forEach(function(buff){
 		if(buff.timeLeft < 0){
 			buff.timeLeft = 0;
+			updateBuff(buff);
 			updateMoney();
 		}
 		if(buff.timeLeft === 0)
 			return false;
 		buff.timeLeft -= delta;
+		updateBuff(buff);
 	});
 
 	// Save game

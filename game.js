@@ -199,6 +199,38 @@ function getUpgradeHTML(upgrade){
 	return refs.container;
 }
 
+function getBuffHTML(buff){
+	var refs = buff.ui = {};
+	var container = refs.container = document.createElement("div");
+	container.className = "buff_container";
+	container.innerHTML = `
+		 				<div class="buff popup_container">
+							<div class="popup_anchor">asdf</div>
+							<div class="popup">
+								<strong class="name">asdf</strong>
+								<div class="description">+10 butts for 3.5 seconds</div>
+							</div>
+						</div>
+						<div class="progressbar_container">
+							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
+							<div class="timeleft">3s</div>
+						</div>`;
+	refs.anchor = container.querySelector(".popup_anchor");
+	refs.name = container.querySelector(".name");
+	refs.description = container.querySelector(".description");
+	refs.progressbar = container.querySelector(".progressbar_inner");
+	refs.timeleft = container.querySelector(".timeleft");
+	updateBuff(buff);
+	return container;
+}
+
+function updateBuff(buff){
+	buff.ui.anchor.innerHTML = buff.ui.name.innerHTML = buff.name;
+	buff.ui.description.innerHTML = buff.description;
+	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
+	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
+}
+
 function updateClickPower(gem){
 	//factory.ui.name.innerText = 
 	var clickpower = gem.clickpower;
@@ -293,6 +325,11 @@ function init(){
 	// Upgrades
 	Upgrades.forEach(function(upgrade){
 		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
+	});
+
+	// Buffs
+	Buffs.forEach(function(buff){
+		ui.buffs.appendChild(getBuffHTML(buff))
 	});
 
 	// Buy Mode
@@ -460,9 +497,10 @@ function sellGem(gem){
 }
 
 function clickBuff(buff){
-	buff.timeLeft += buff.getDuration();
+	buff.timeLeft = buff.getDuration();
 	Stats.buffs++;
 	checkAll(Achievements.buffs);
+	updateBuff(buff);
 	updateMoney();
 }
 
@@ -650,7 +688,7 @@ function simulate(delta){
 }
 
 function formatTime(ms){
-	return (ms / 1000) + "s";
+	return Math.ceil(ms / 1000) + "s";
 }
 
 function resetGame(){
