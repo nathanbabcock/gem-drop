@@ -259,6 +259,11 @@
 
 .buff_container {
 	clear:both;
+	display:none;
+}
+
+#buffs {
+	display:none;
 }
 /*.timeleft {
 	float:left;

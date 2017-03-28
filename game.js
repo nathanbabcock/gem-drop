@@ -225,6 +225,19 @@ function getBuffHTML(buff){
 }
 
 function updateBuff(buff){
+	if(buff.timeLeft <= 0){
+		buff.ui.container.style.display = "none";
+		var anyBuff = false;
+		Buffs.forEach(function(buff){
+			if(buff.timeLeft > 0)
+				anyBuff = true;
+		});
+		if(!anyBuff) ui.buffs.style.display = "none";
+	}
+	else {
+		ui.buffs.style.display = "block";
+		buff.ui.container.style.display = "block";
+	}
 	buff.ui.anchor.innerHTML = buff.ui.name.innerHTML = buff.name;
 	buff.ui.description.innerHTML = buff.description;
 	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
