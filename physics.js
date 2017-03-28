@@ -144,9 +144,9 @@ render.mouse = mouse;
 
 World.add(world, mouseConstraint);
 
-Vector.dist = function(v1, v2){
-	return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
-}
+// Vector.dist = function(v1, v2){
+// 	return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
+// }
 
 // an example of using mouse events on a mouse
 Events.on(mouseConstraint, 'mousedown', function(event) {
@@ -166,14 +166,21 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
     // TODO maybe refactor this whole bit to just use Query.point?
     Query.point(world.bodies, mousePosition).forEach(function(body){
     	if(body.buff){
+    		console.log("buff clicked");
     		clickBuff(body.buff);
 
 			// TODO should these lines be in clickBuff? Should clickBuff be in physics.js?
 			// Apply impulse to other bodies
 			world.bodies.forEach(function(otherBody){
 				if(otherBody === body) return false;
-				if(Vector.dist(mousePosition, otherBody.position) <= 100)
-					Body.applyForce(otherBody, mousePosition, .0001); // TODO FIXME
+				if([Inventory.left, Inventory.right, Inventory.ground].includes(otherBody)) return false;
+				//if(otherBody === Inventory.left || otherBody === Inventory.right || otherBody === Inventory.ground) return false;
+				var vector = {x: otherBody.position.x - mousePosition.x, y:otherBody.position.y - mousePosition.y};
+				if(Vector.magnitude(vector) <= 100){
+					Body.setVelocity(otherBody, Vector.mult(Vector.normalise(vector), 10));
+				}
+
+					//Body.applyForce(otherBody, mousePosition, {x: 0, y: 1}); // TODO FIXME
 			});
     		Composite.remove(world, body);
     		skip = true;
@@ -497,11 +504,15 @@ Events.on(engine, 'tick', function(event) {
 
 	// Buff timers
 	Buffs.forEach(function(buff){
-		if(buff.timeLeft < 0)
+		if(buff.timeLeft < 0){
 			buff.timeLeft = 0;
+			updateBuff(buff);
+			updateMoney();
+		}
 		if(buff.timeLeft === 0)
 			return false;
 		buff.timeLeft -= delta;
+		updateBuff(buff);
 	});
 
 	// Save game

@@ -1,7 +1,10 @@
-// Game globals
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GAME.JS
+// Nathan babcock
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var money = 0;
 
-// UI refs
 var ui = {
 	click_powers: document.getElementById("click_powers"),
 	factories: document.getElementById("factories"),
@@ -16,7 +19,8 @@ var ui = {
 	buy_1: document.getElementById("buy_1"),
 	buy_10: document.getElementById("buy_10"),
 	buy_100: document.getElementById("buy_100"),
-	buy_max: document.getElementById("buy_max")
+	buy_max: document.getElementById("buy_max"),
+	buffs: document.getElementById("buffs")
 }; 
 
 var BuyMode = {
@@ -26,7 +30,15 @@ var BuyMode = {
 	quantity: 1
 };
 
-//////////////
+// TODO this gets immediately overwritten when physics.js loads
+var Inventory = {
+	getValue: function() {
+		return 0;
+	},
+	build: function() {
+		return false;
+	}
+}
 
 var auto_drop = {
 	open:false,
@@ -37,60 +49,38 @@ var auto_drop = {
 	}
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CREATE UI
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function getClickPowerHMTL(gem){
-/*	<div class="gem_click_power popup_container">
-		<div class="popup_anchor">Quartz</span>
+	var clickpower = gem.clickpower,
+		refs = clickpower.ui = {},
+		container = refs.container;
+	container = document.createElement("div");
+	container.className = "gem_click_power popup_container";
+	container.innerHTML = `
+		<div class="popup_anchor">Quartz</div>
 		<div class="popup">
 			<strong class="name">Quartz</strong>
 			<div class="rate">+1 per click</div>
 			<div class="price">$1 each</div>
-		</div>
-	</div>*/
-	var clickpower = gem.clickpower;
+			<div class="costs">Costs $10</div>
+		</div>`;
 
-	var refs = clickpower.ui = {};
-	refs.container = document.createElement("div");
-	refs.container.className = "gem_click_power popup_container";
-
-	// Anchor
-	refs.anchor = document.createElement("div");
-	refs.anchor.className = "popup_anchor";
-	refs.anchor.innerText = gem.name;
-	refs.container.appendChild(refs.anchor);
-
-	// Popup
-	refs.popup = document.createElement("div");
-	refs.popup.className = "popup";
-	refs.container.appendChild(refs.popup);
-
-	// Name
-	refs.name = document.createElement("strong");
-	refs.name.className = "name";
-	refs.name.innerText = gem.name;
-	refs.popup.appendChild(refs.name);
-
-	// Rate
-	refs.rate = document.createElement("div");
-	refs.rate.className = "rate";
-	// refs.rate.innerText = "+" + clickpower.getRate() + " per click";
-	refs.popup.appendChild(refs.rate);
-
-	// Price
-	refs.price = document.createElement("div");
-	refs.price.className = "price";
-	// refs.price.innerText = "$" + clickpower.gem.getPrice() + " each";
-	refs.popup.appendChild(refs.price);
-
-	// Costs
-	refs.costs = document.createElement("div");
-	refs.costs.className = "costs";
-	refs.popup.appendChild(refs.costs);
+	refs.anchor = container.querySelector(".popup_anchor");
+	refs.popup = container.querySelector(".popup");
+	refs.name = container.querySelector(".name");
+	refs.rate = container.querySelector(".rate");
+	refs.price = container.querySelector(".price");
+	refs.costs = container.querySelector(".costs");
 
 	// Onclick
 	refs.anchor.onclick = function() { buyClickPower(gem); };
+	refs.anchor.innerText = gem.name;
 
 	updateClickPower(gem);
-	return refs.container;
+	return container;
 }
 
 function getFactoryHTML(gem){
@@ -104,99 +94,90 @@ function getFactoryHTML(gem){
 		</div>
 	</div>*/
 
-	var factory = gem.factory;
+	var factory = gem.factory,
+		refs = factory.ui = {},
+		container = refs.container = document.createElement("div");
+	container.className = "factory popup_container";
+	container.innerHTML = `
+		<div class="popup_anchor">Quartz</div>
+		<div class="popup">
+			<strong class="name">Quartz Factory</strong>
+			<div class="rate">+1 per second</div>
+			<div class="price">Costs $18</div>
+			<div class="owned">0 owned</div>
+		</div>`;
 
-	var refs = factory.ui = {};
-	refs.container = document.createElement("div");
-	refs.container.className = "factory popup_container";
+	refs.anchor = container.querySelector(".popup_anchor");
+	refs.popup = container.querySelector(".popup");
+	refs.name = container.querySelector(".name");
+	refs.rate = container.querySelector(".rate");
+	refs.price = container.querySelector(".price");
+	refs.owned = container.querySelector(".owned");
 
-	// Anchor
-	refs.anchor = document.createElement("div");
-	refs.anchor.className = "popup_anchor";
-	refs.anchor.innerText = gem.name + " Factory";
-	refs.container.appendChild(refs.anchor);
-
-	// Popup
-	refs.popup = document.createElement("div");
-	refs.popup.className = "popup";
-	refs.container.appendChild(refs.popup);
-
-	// Name
-	refs.name = document.createElement("strong");
-	refs.name.className = "name";
-	refs.name.innerText = gem.name + " Factory";
-	refs.popup.appendChild(refs.name);
-
-	// Rate
-	refs.rate = document.createElement("div");
-	refs.rate.className = "rate";
-	refs.popup.appendChild(refs.rate);
-
-	// Price
-	refs.price = document.createElement("div");
-	refs.price.className = "price";
-	refs.popup.appendChild(refs.price);
-
-	// Owned
-	refs.owned = document.createElement("div");
-	refs.owned.className = "owned";
-	refs.popup.appendChild(refs.owned);
-
-	// Onclick
 	refs.anchor.onclick = function() { buyFactory(gem); };
+	refs.anchor.innerText = gem.name;
 
 	updateFactory(gem);
-	return refs.container;
+	return container;
 }
 
 function getUpgradeHTML(upgrade){
-/*	<div class="upgrade popup_container">
-		<div class="popup_anchor">asdf</span>
+	var refs = upgrade.ui = {},
+		container = refs.container = document.createElement("div");
+	container.className = "upgrade popup_container";
+	container.innerHTML = `
+		<div class="popup_anchor">asdf</div>
 		<div class="popup">
 			<strong class="name">asdf</strong>
 			<div class="description">blah blah blah</div>
 			<div class="price">Costs $18</div>
-		</div>
-	</div>*/
+		</div>`;
 
-	var refs = upgrade.ui = {};
-	refs.container = document.createElement("div");
-	refs.container.className = "upgrade popup_container";
+	refs.anchor = container.querySelector(".popup_anchor");
+	refs.popup = container.querySelector(".popup");
+	refs.name = container.querySelector(".name");
+	refs.description = container.querySelector(".description");
+	refs.costs = container.querySelector(".price");
 
-	// Anchor
-	refs.anchor = document.createElement("div");
-	refs.anchor.className = "popup_anchor";
-	refs.anchor.innerText = upgrade.name;
-	refs.container.appendChild(refs.anchor);
-
-	// Popup
-	refs.popup = document.createElement("div");
-	refs.popup.className = "popup";
-	refs.container.appendChild(refs.popup);
-
-	// Name
-	refs.name = document.createElement("strong");
-	refs.name.className = "name";
-	refs.name.innerText = upgrade.name;
-	refs.popup.appendChild(refs.name);
-
-	// Description
-	refs.description = document.createElement("div");
-	refs.description.className = "description";
-	refs.description.innerText = upgrade.description;
-	refs.popup.appendChild(refs.description);
-
-	// Price
-	refs.costs = document.createElement("div");
-	refs.costs.className = "costs";
-	refs.popup.appendChild(refs.costs);
-
-	// Onclick
 	refs.anchor.onclick = function() { buyUpgrade(upgrade); };
+	refs.anchor.innerText = refs.name.innerText = upgrade.name;
+	refs.description.innerText = upgrade.description;
+	refs.costs.innerText = upgrade.getCost();
 
 	updateUpgrade(upgrade);
-	return refs.container;
+	return container;
 }
+
+function getBuffHTML(buff){
+	var refs = buff.ui = {},
+		container = refs.container = document.createElement("div");
+	container.className = "buff_container";
+	container.innerHTML = `
+		 				<div class="buff popup_container">
+							<div class="popup_anchor">asdf</div>
+							<div class="popup">
+								<strong class="name">asdf</strong>
+								<div class="description">+10 butts for 3.5 seconds</div>
+							</div>
+						</div>
+						<div class="progressbar_container">
+							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
+							<div class="timeleft">3s</div>
+						</div>`;
+	refs.anchor = container.querySelector(".popup_anchor");
+	refs.name = container.querySelector(".name");
+	refs.description = container.querySelector(".description");
+	refs.progressbar = container.querySelector(".progressbar_inner");
+	refs.timeleft = container.querySelector(".timeleft");
+
+	refs.anchor.innerText = buff.name;
+	updateBuff(buff);
+	return container;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UPDATE UI
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function updateClickPower(gem){
 	//factory.ui.name.innerText = 
@@ -248,10 +229,29 @@ function updateUpgrade(upgrade){
 		upgrade.ui.anchor.className = "popup_anchor";
 }
 
-
-function log(b, n) {
-    return Math.log(n) / Math.log(b);
+function updateBuff(buff){
+	if(buff.timeLeft <= 0){
+		buff.ui.container.style.display = "none";
+		var anyBuff = false;
+		Buffs.forEach(function(buff){
+			if(buff.timeLeft > 0)
+				anyBuff = true;
+		});
+		if(!anyBuff) ui.buffs.style.display = "none";
+	}
+	else {
+		ui.buffs.style.display = "block";
+		buff.ui.container.style.display = "block";
+	}
+	buff.ui.name.innerHTML = buff.name;
+	buff.ui.description.innerHTML = buff.description;
+	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
+	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUY/SELL/SPAWN
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Calculates the cost of a factory purchase for the given gem according to BUY MODE
 function calculatePurchase(gem, quantity = BuyMode.quantity){
@@ -275,34 +275,6 @@ function calculatePurchase(gem, quantity = BuyMode.quantity){
 	}
 	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n))/(1 - r));
 	return { cost: cost, quantity: n };
-}
-
-function init(){
-	money = 10000000000;
-
-	if(Settings.enable_save)
-		loadGame();
-
-	// Clickpowers and Factories
-	Gems.forEach(function(gem){
-		ui.click_powers.appendChild(getClickPowerHMTL(gem));
-		ui.factories.appendChild(getFactoryHTML(gem));
-	})
-
-	// Upgrades
-	Upgrades.forEach(function(upgrade){
-		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
-	});
-
-	// Buy Mode
-	ui.buy.onclick = function() { setBuyMode(BuyMode.BUY, ui.buy); };
-	ui.sell.onclick = function() { setBuyMode(BuyMode.SELL, ui.sell); };
-	ui.buy_1.onclick = function() { setBuyQuantity(1, ui.buy_1); };
-	ui.buy_10.onclick = function() { setBuyQuantity(10, ui.buy_10); };
-	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
-	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
-
-	updateMoney();
 }
 
 function setBuyMode(mode, elem){
@@ -335,6 +307,19 @@ function setBuyQuantity(quant, elem){
 // 	return num + " per second";
 // }
 
+function buyClickPower(gem){
+	var clickpower = gem.clickpower;
+	if(clickpower.owned || clickpower.getCost() > money)
+		return false;
+	updateMoney(-clickpower.getCost());
+	clickpower.owned++;
+	Stats.clickpowers++;	
+	Achievements.clickpower.byGem(gem).check();
+	Achievements.clickpower.total.check();
+	updateClickPower(gem);
+	return true;
+}
+
 function buyFactory(gem){
 	var factory = gem.factory;
 	var purchase = calculatePurchase(gem);
@@ -359,19 +344,6 @@ function buyFactory(gem){
 	return true;
 }
 
-function buyClickPower(gem){
-	var clickpower = gem.clickpower;
-	if(clickpower.owned || clickpower.getCost() > money)
-		return false;
-	updateMoney(-clickpower.getCost());
-	clickpower.owned++;
-	Stats.clickpowers++;	
-	Achievements.clickpower.byGem(gem).check();
-	Achievements.clickpower.total.check();
-	updateClickPower(gem);
-	return true;
-}
-
 function buyUpgrade(upgrade){
 	if(upgrade.owned || upgrade.getCost() > money)
 		return false;
@@ -383,27 +355,6 @@ function buyUpgrade(upgrade){
 	Stats.upgrades++;
 	checkAll(Achievements.upgrades);
 	return true;
-}
-
-function formatMoney(num = money){
-	var thirdpower = 0;
-	while(num >= 1000){
-		num /= 1000;
-		thirdpower++;
-	}
-
-	var suffix = ["", "k", "M", "B", "T", "Q"];
-
-	var formatted ="";
-	if(thirdpower === 0 || num >= 100)
-		formatted = Math.floor(num);
-	else if (num >= 10) {
-		formatted = Math.floor(num * 10) / 10;
-	} else {
-		formatted = Math.floor(num * 100) / 100;
-	}
-	formatted += suffix[thirdpower];
-	return "$" + formatted;
 }
 
 function doClick(){
@@ -419,16 +370,6 @@ function doClick(){
 	checkAll(Achievements.clickpower_gems);
 	checkAll(Achievements.gems);
 	return gemsToMake;
-}
-
-// TODO this gets immediately overwritten when physics.js loads
-var Inventory = {
-	getValue: function() {
-		return 0;
-	},
-	build: function() {
-		return false;
-	}
 }
 
 function updateMoney(amount = 0){
@@ -459,19 +400,11 @@ function sellGem(gem){
 }
 
 function clickBuff(buff){
-	buff.timeLeft += buff.getDuration();
+	buff.timeLeft = buff.getDuration();
 	Stats.buffs++;
 	checkAll(Achievements.buffs);
-}
-
-function getTotalRate(){
-	var rate = 0;
-	for(var i = 0; i < factories.length; i++){
-		var factory = factories[i];
-		if(!factory.owned) continue;
-		rate += factory.getRate() * factory.owned;
-	}
-	return rate;
+	updateBuff(buff);
+	updateMoney();
 }
 
 function genGems_deterministic(delta){
@@ -511,34 +444,9 @@ function genGems_probabilistic(delta){
 	return toSpawn;
 }
 
-function cheat(){
-	Upgrades[2].owned = true;
-	Upgrades[2].onPurchase();
-	Upgrades[3].owned = true;
-	Upgrades[3].onPurchase();
-	Gems[0].factory.owned = 20;
-
-	//updateMoney(10000);
-	// money += 1000000000;
-	// updateMoney();
-	// updateFactory(Gems[1]);
-	
-
-/*	// Skip to amethyst
-	Upgrades[0].owned = Upgrades[1].owned = true;
-	Gems[2].clickpower.owned = true;
-	Gems[0].factory.owned = 14;
-	Gems[1].factory.owned = 3;
-	updateFactory(Gems[0]);
-	updateFactory(Gems[1]);
-	updateUpgrade(Upgrades[0]);
-	updateUpgrade(Upgrades[1]);
-	Upgrades[1].onPurchase();
-	updateClickPower(Gems[2]);
-	Upgrades[2].owned = true;
-	Upgrades[2].onPurchase();
-	Upgrades[3].owned = true;*/
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LOAD/SAVE/SIM/EXPORT
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function saveGame(){
 	var save = {
@@ -596,6 +504,11 @@ function loadGame(){
 	return true;
 }
 
+function resetGame(){
+	localStorage.clear();
+	console.log("Game save deleted");
+}
+
 function simulate(delta){
 	// delta should be time in SECONDS
 	console.log("Offline time: "+delta+"s");
@@ -643,13 +556,113 @@ function simulate(delta){
 	return total_income;
 }
 
-function formatTime(ms){
-	return (ms / 1000) + "s";
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UTILITIES
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function formatMoney(num = money){
+	var thirdpower = 0;
+	while(num >= 1000){
+		num /= 1000;
+		thirdpower++;
+	}
+
+	var suffix = ["", "k", "M", "B", "T", "Q"];
+
+	var formatted ="";
+	if(thirdpower === 0 || num >= 100)
+		formatted = Math.floor(num);
+	else if (num >= 10) {
+		formatted = Math.floor(num * 10) / 10;
+	} else {
+		formatted = Math.floor(num * 100) / 100;
+	}
+	formatted += suffix[thirdpower];
+	return "$" + formatted;
 }
 
-function resetGame(){
-	localStorage.clear();
-	console.log("Game save deleted");
+function formatTime(ms){
+	return Math.ceil(ms / 1000) + "s";
+}
+
+function log(b, n) {
+    return Math.log(n) / Math.log(b);
+}
+
+function getTotalRate(){
+	var rate = 0;
+	for(var i = 0; i < factories.length; i++){
+		var factory = factories[i];
+		if(!factory.owned) continue;
+		rate += factory.getRate() * factory.owned;
+	}
+	return rate;
+}
+
+function cheat(){
+	Upgrades[2].owned = true;
+	Upgrades[2].onPurchase();
+	Upgrades[3].owned = true;
+	Upgrades[3].onPurchase();
+	Gems[0].factory.owned = 20;
+
+	//updateMoney(10000);
+	// money += 1000000000;
+	// updateMoney();
+	// updateFactory(Gems[1]);
+	
+
+/*	// Skip to amethyst
+	Upgrades[0].owned = Upgrades[1].owned = true;
+	Gems[2].clickpower.owned = true;
+	Gems[0].factory.owned = 14;
+	Gems[1].factory.owned = 3;
+	updateFactory(Gems[0]);
+	updateFactory(Gems[1]);
+	updateUpgrade(Upgrades[0]);
+	updateUpgrade(Upgrades[1]);
+	Upgrades[1].onPurchase();
+	updateClickPower(Gems[2]);
+	Upgrades[2].owned = true;
+	Upgrades[2].onPurchase();
+	Upgrades[3].owned = true;*/
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INIT
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function init(){
+	money = 10000000000;
+
+	if(Settings.enable_save)
+		loadGame();
+
+	// Clickpowers and Factories
+	Gems.forEach(function(gem){
+		ui.click_powers.appendChild(getClickPowerHMTL(gem));
+		ui.factories.appendChild(getFactoryHTML(gem));
+	})
+
+	// Upgrades
+	Upgrades.forEach(function(upgrade){
+		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
+	});
+
+	// Buffs
+	Buffs.forEach(function(buff){
+		ui.buffs.appendChild(getBuffHTML(buff))
+	});
+
+	// Buy Mode
+	ui.buy.onclick = function() { setBuyMode(BuyMode.BUY, ui.buy); };
+	ui.sell.onclick = function() { setBuyMode(BuyMode.SELL, ui.sell); };
+	ui.buy_1.onclick = function() { setBuyQuantity(1, ui.buy_1); };
+	ui.buy_10.onclick = function() { setBuyQuantity(10, ui.buy_10); };
+	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
+	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
+
+	updateMoney();
 }
 
 document.body.onload = init;
