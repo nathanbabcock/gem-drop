@@ -20,7 +20,12 @@ function Gem(options){
 			baseCost: null,
 			getCost: function(){ return this.baseCost; },
 			baseRate: 1,
-			getRate: function(){ return this.baseRate; }
+			getRate: function(){
+				var mult = 1.0;
+				if(Buffs.cursor.timeleft > 0)
+					mult *= Buffs.cursor.getPower();
+				return this.baseRate * mult;
+			}
 			//getDescription: function() { return "" },
 			//getName:function() { return this.super.name; }
 		},
@@ -31,7 +36,12 @@ function Gem(options){
 			baseCost: null,
 			getCost: function(owned = this.owned){ return this.baseCost * Math.pow(this.getCostFactor(), owned); },
 			baseRate: 0.5,
-			getRate: function(){ return this.baseRate; },
+			getRate: function(){
+				var mult = 1.0;
+				if(Buffs.heart.timeleft > 0)
+					mult *= Buffs.heart.getPower();
+				return this.baseRate * mult;
+			},
 			//getDescription: function() { return "" },
 			//getName:function() { return this.super.name + " Factory"; }
 		}

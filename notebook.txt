@@ -869,7 +869,7 @@ Upgrade Ideas
 
 What's left
 X Graphics
-    X Gems
+    X Gems (90% implemented)
     - Buffs
     - Factories
     - Click powers
@@ -896,15 +896,45 @@ X Offline mode and persistence
 
 UPGRADES Master List
 - Inventory Tier 1-3: Bigger Inventory
-- Auto-Drop Tier 1-3: Automatically drop gems every 30/10/0 seconds
+- Auto-Drop Tier 1-3: Automatically drop gems every 10/5/0 seconds
 - Critical Gems Tier 1-4: Any time a gem spawns, 1%/10%/50%/100% chance for it to spawn as a large gem
     (double size and sell price)
 - Buff Spawn Tier 1-4: Buffs randomly spawn (1x, 2x, 3x as often)
 - [2x, 5x, 10x] sell price for {gem}
 - x% increased offline production
-- Fallen gems are recovered for (20%/50%/100%) sell price
+- Fallen gems are recovered for 50% sell price
 - Buffs are automatically collected
 - Global sell price
 - Global spawn rate
 - Global quantity
 - Every click uses all purchased click powers
+
+3/24/17
+
+What I can do now
+- Some settings
+
+What has to wait for game balance
+- Upgrades
+- Prestige
+
+What I must do at home
+- Graphics
+- VFX
+- Achievements/stats UI
+- Finish buffs
+- Sound
+
+What can modify stuff
+- Upgrades
+- Buffs
+- Prestige
+
+3/27/17
+
+I'm going to encode all the logic into the specific functions appropriate, rather than maintaining a list of buffs which must be updated by those buffs
+That is, it is the responsibility of the getValue(), getRate(), etc functions to compute their stuff on the fly
+Does it make more semantic sense for the buffs to push and update? Now logic surrounding buffs is disconnected
+Maybe its not ideal but it is the quickest and easiest implementation, and it does not need to scale very large (5-10 modifiers total)
+
+3/28/17

@@ -10,7 +10,7 @@
 
 	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
-	/*display:none;*/
+	display:none;
 }
 
 #render, #money {
