@@ -67,7 +67,9 @@ function applyOptions(object, options){
 
 var Settings = {
 	enable_save: false,
-	offline_gains: true
+	offline_gains: true,
+	render_sprites: false,
+	render_floatingnums: false
 }
 
 var Gems = [

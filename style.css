@@ -10,7 +10,7 @@
 
 	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
-	display:none;
+	/*display:none;*/
 }
 
 /*#render, #money {
@@ -64,7 +64,7 @@
 	background-color:#89ff97;
 	padding:10px;
 	text-align: center;
-	min-width:150px;
+	min-width:250px;
 }
 
 #predicted_money {

@@ -962,7 +962,7 @@ UPGRADES Master List
 - Global spawn rate
 
 Tasks master list
-- Implement increased offline prod (trivial)
+- Implement offline bonus upgrades (trivial)
 - Implement auto-drop tiers (trivial)
 - Implement crit gems (easy)
 - Implement buff tiers (trivial)
@@ -989,3 +989,18 @@ Game Balance Notes
 - early game factories should have much slower rate (?)
      - upgrade rate later
 - buffs between amethyst & sapphire??
+
+3/29/17
+
+Slipping Viewport Bug
+- Dependent: Does NOT happen while window is not active (indicates a part of render loop)
+- Dependent: sprite rendering
+- Seems to accumulate or increase over time (floating point prob?)
+- Not affected by floatingnum
+- Direction is sometimes up and sometimes down
+    - Direction changed (from down to up) when I closed the gate
+- Independent: DOM resizing of money field
+- Eventually freezes UI
+- Independent: inventory size
+- Numer of gems: independent
+- Gem type: independent

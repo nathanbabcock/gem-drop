@@ -214,9 +214,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "gray",
 					strokeStyle: "transparent",
-					sprite: {
-                        texture: "img/quartz-small.png"
-                    },
+					// sprite: {
+     //                    texture: "img/quartz-small.png"
+     //                },
 				}
 			});
 			break;
@@ -233,9 +233,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "orange",
 					strokeStyle: "transparent",
-					sprite: {
-                        texture: "img/topaz-small.png"
-                    },
+					// sprite: {
+     //                    texture: "img/topaz-small.png"
+     //                },
 				}
 			});
 			break;
@@ -251,9 +251,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "purple",
 					strokeStyle: "transparent",
-					sprite: {
-                        texture: 'img/amethyst-small.png'
-                    },
+					// sprite: {
+     //                    texture: 'img/amethyst-small.png'
+     //                },
 				}
 			});
 			break;
@@ -403,6 +403,9 @@ function spawnBuff(pos, buff){
 }
 
 function showFloatingNumber(canvasX, canvasY, num){
+	if(!Settings.render_floatnums)
+		return false;
+
 	var rect = render.canvas.getBoundingClientRect();
 	var x = canvasX + rect.left;
 	var y = canvasY - rect.top;
