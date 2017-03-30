@@ -560,6 +560,10 @@ Events.on(engine, 'tick', function(event) {
 	if(!showing)
 		clearHover();
 
+	// if(ui.stats.isOpen)
+	// 	updateStats();
+	// TODO this freezes the game loop
+
 	// Save game
 	if(Settings.enable_save)
 		saveGame();

@@ -1021,11 +1021,12 @@ Brainstorm
     - Price the upgrade correctly so it is easily achievable
 - 
 
-TODO
-- New systems to save/load/simulate
-    - Buffs
-    - Gem value mult
-    - Crit gems
+
+New systems to save/load/simulate
+- Buffs
+- Gem value mult
+- Crit gems
+- statistics
 
 Tasks Master List
 - Upgrades
@@ -1079,7 +1080,7 @@ Path of least resistance:
 
 Current UI Bugs
 - Tooltips and scrolling overflow are incompatible
-- Z-index of popup anchors higher than modals
+X Z-index of popup anchors higher than modals
 
 Javascript tooltips
 - Given an anchor element and a popup element,

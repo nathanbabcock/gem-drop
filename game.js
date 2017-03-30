@@ -23,7 +23,23 @@ var ui = {
 	buffs: document.getElementById("buffs"),
 	inv_hover: document.getElementById("inv_hover"),
 	achievement_popups: document.getElementById("achievement_popups"),
-	achievements: document.getElementById("achievements")
+	achievements: document.getElementById("achievements"),
+	stats: {
+		modal: document.getElementById("stats"),
+		modal_inner: document.getElementById("stats").querySelector("modal_inner"),
+		gems: document.getElementById("stats_gems"),
+		money: document.getElementById("stats_money"),
+		clickpower_gems: document.getElementById("stats_clickpower_gems"),
+		wasted: document.getElementById("stats_wasted"),
+		upgrades: document.getElementById("stats_upgrades"),
+		clickpowers: document.getElementById("stats_clickpowers"),
+		factories: document.getElementById("stats_factories"),
+		achievements: document.getElementById("stats_achievements"),
+		prestige: document.getElementById("stats_prestige"),
+		time: document.getElementById("stats_time"),
+		prestige_time: document.getElementById("stats_prestige_time"),
+		isOpen: false
+	}
 }; 
 
 var BuyMode = {
@@ -316,6 +332,19 @@ function updateAchievement(achievement, element){
 	element.achievement = achievement;
 
 	return false;
+}
+
+function updateStats(){
+	ui.stats.money.innerText = formatMoney();
+	ui.stats.gems.innerText = Stats.gems;
+	ui.stats.clickpower_gems.innerText = Stats.clickpower_gems;
+	ui.stats.upgrades.innerText = Stats.upgrades;
+	ui.stats.clickpowers.innerText = Stats.clickpowers;
+	ui.stats.factories.innerText = Stats.factories;
+	ui.stats.prestige.innerText = Stats.prestige;
+	ui.stats.time.innerText = formatTime(new Date().getTime() - Stats.start_date);
+	ui.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
+	ui.stats.wasted.innerText = Stats.wasted;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -706,16 +735,23 @@ function cheat(){
 	Upgrades[3].owned = true;*/
 }
 
+function openAchievements(){
+	ui.achievements.style.display = "block";
+}
+
+function openStats(){
+	ui.stats.modal.style.display = "block";
+	ui.stats.timeout = setInterval(updateStats, 1000);
+	ui.stats.isOpen = true;
+}
+
+function openSettings(){
+	ui.settings.style.display = "block";
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INIT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function initModal(modal){
-	var close = modal.querySelector(".close");
-	close.onclick=function(){
-		modal.style.display = "none";
-	}
-}
 
 function init(){
 	money = 10000000000;
@@ -741,7 +777,7 @@ function init(){
 
 	// Achievements
 	Achievements.all.forEach(function(achievement){
-		ui.achievements.appendChild(getAchievementIconHTML(achievement));
+		ui.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
 	});
 
 	// Buy Mode
@@ -752,8 +788,17 @@ function init(){
 	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
 	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
 
-	// Modals
-	initModal(ui.achievements);
+	// Achievements menu itme
+	ui.achievements.querySelector(".close").onclick=function(){
+		ui.achievements.style.display = "none";
+	}
+
+	// Stats menu item
+	ui.stats.modal.querySelector(".close").onclick=function(){
+		ui.stats.modal.style.display = "none";
+		clearInterval(ui.stats.timeout);
+		ui.stats.isOpen = false;
+	}
 	// initModal(ui.stats);
 	// initModal(ui.settings);
 
