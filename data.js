@@ -217,7 +217,7 @@ var Upgrades = [
 		rate: 10,
 		owned: false,
 		onPurchase: function(){
-			auto_drop.rate = this.rate;
+			AutoDrop.rate = this.rate;
 		}
 	},
 	{
@@ -229,7 +229,7 @@ var Upgrades = [
 		rate: 5,
 		owned: false,
 		onPurchase: function(){
-			auto_drop.rate = this.rate;
+			AutoDrop.rate = this.rate;
 		}
 	},
 	{
@@ -241,7 +241,7 @@ var Upgrades = [
 		rate: 0,
 		owned: false,
 		onPurchase: function(){
-			auto_drop.rate = this.rate;
+			AutoDrop.rate = this.rate;
 		}
 	},
 	{
@@ -589,7 +589,7 @@ Achievements.misc = {
 	inventory: new Achievement("So much space for activities", "Max out the inventory", 0, function(){ return false; }), // TODO
 	autodrop: new Achievement("Open the Floodgates", "Upgrade to 100% autodrop", 0, function(){ return false; }), // TODO
 	sell: new Achievement("Reimbursement", "Sell a factory", 100, function(){ return Stats.sold >= 1; }),
-	hack: new Achievement("Script kiddie", "Prove your computer hacking skills", -999, function(){ return true; }, {redtext: "Girls only want guys with good skills."}),
+	hack: new Achievement("Script kiddie", "", -999, function(){ return true; }, {redtext: "Alternatively: Introduction to the Developer Console."}),
 };
 
 function checkAll(list){

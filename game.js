@@ -21,7 +21,8 @@ var ui = {
 	buy_100: document.getElementById("buy_100"),
 	buy_max: document.getElementById("buy_max"),
 	buffs: document.getElementById("buffs"),
-	inv_hover: document.getElementById("inv_hover")
+	inv_hover: document.getElementById("inv_hover"),
+	achievement_popups: document.getElementById("achievement_popups")
 }; 
 
 var BuyMode = {
@@ -181,7 +182,24 @@ function getBuffHTML(buff){
 	return container;
 }
 
-//function getAchievementHTML
+function getAchievementHTML(achievement){
+	var container = document.createElement("div");
+	container.className = "achievement";
+	container.innerHTML = `
+		<img class="icon" src="">
+		<div class="text">
+			<strong class="name">Hello World</strong>
+			<span class="description">Popup text goes here</span>
+			<small class="redtext">Secret red text</small>
+		</div>
+		<div class="value">$500</div>
+		<div class="clear"></div>`;
+	container.onclick = function(){
+		container.parentNode.removeChild(container);
+	};
+	updateAchievement(achievement, container);
+	return container;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UPDATE UI
@@ -258,6 +276,30 @@ function updateBuff(buff){
 }
 
 function updateAchievement(achievement, element){
+/*	<div class="achievement" id="inv_hover">
+		<img class="icon" src="">
+		<div class="text">
+			<strong class="name">Hello World</strong>
+			<span class="description">Popup text goes here</span>
+			<small class="redtext">Secret red text</small>
+		</div>
+		<div class="value">$500</div>
+		<div class="clear"></div>
+	</div>*/
+
+	// element.querySelector(".icon").src = achievement.icon;
+	element.querySelector(".name").innerText = achievement.name;
+	element.querySelector(".description").innerText = achievement.description;
+	element.querySelector(".value").innerText = formatMoney(achievement.getValue());
+	var redtext = element.querySelector(".redtext");
+	if(achievement.redtext){
+		redtext.style.display = "block";
+		redtext.innerText = achievement.redtext;
+	} else {
+		redtext.style.display = "none";
+	}
+	element.achievement = achievement;
+
 	return false;
 }
 
@@ -417,6 +459,13 @@ function clickBuff(buff){
 	checkAll(Achievements.buffs);
 	updateBuff(buff);
 	updateMoney();
+}
+
+function getAchievement(achievement){
+	if(ui.achievement_popups.children.length >= 5)
+		ui.achievement_popups.removeChild(ui.achievement_popups.children[0]);
+	ui.achievement_popups.appendChild(getAchievementHTML(achievement));
+	updateMoney(achievement.getValue());
 }
 
 function genGems_deterministic(delta){

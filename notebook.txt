@@ -1039,7 +1039,7 @@ Tasks Master List
 - UI
     X Buffs display
     - Achievements screen (1hr)
-    - Achievement popups
+    X Achievement popups
     - Stats screen (15min)
     - Settings menu (30min)
     - UI tweaks
@@ -1060,3 +1060,9 @@ Tasks Master List
     - Factory initial rates
     - etc
 
+3/30/17
+
+Tabs/Content Sections
+- Purchases (Clickpowers, Factories, Upgrades)
+- Upgrades
+- Achievements

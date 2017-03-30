@@ -267,7 +267,7 @@
 }
 
 #achievement_popups {
-	position:absolute;
+	position:fixed;
 	bottom:0;
 	left:0;
 	height: auto;
@@ -282,6 +282,7 @@
 	margin-bottom:10px;
 	width: 400px;
 	opacity:0.8;
+	cursor:hand;
 }
 
 .achievement .icon {

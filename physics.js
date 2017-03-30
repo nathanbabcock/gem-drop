@@ -490,8 +490,7 @@ Events.on(engine, 'tick', function(event) {
 				clickBuff(body.buff);
 			} else if (body.achievement) {
 				showFloatingNumber(body.position.x, body.position.y, body.achievement.getValue());
-				// showAchievementPopup();
-				updateMoney(body.achievement.getValue());
+				getAchievement(body.achievement);
 			}
 		} else if(body.position.y < 0) {
 			Composite.remove(world, body);
@@ -502,8 +501,7 @@ Events.on(engine, 'tick', function(event) {
 			} else if (body.buff && Buffs.autocollect){
 			} else if (body.achievement){
 				showFloatingNumber(body.position.x, body.position.y, body.achievement.getValue());
-				// showAchievementPopup();
-				updateMoney(body.achievement.getValue());
+				getAchievement(body.achievement);
 			}
 		}
 	});
