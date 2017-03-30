@@ -13,10 +13,10 @@
 	/*display:none;*/
 }
 
-/*#render, #money {
+/*#render {
 	display:none;
-}
-*/
+}*/
+
 .clear {
 	clear:both;
 }
@@ -88,7 +88,7 @@
 /* POPUPS */
 .popup_container {
 	position: relative;
-	display:inline-block;
+	display:block;
 	float:left;
 }
 
@@ -265,6 +265,73 @@
 #buffs {
 	display:none;
 }
+
+#achievement_popups {
+	position:absolute;
+	bottom:0;
+	left:0;
+	height: auto;
+}
+
+.achievement {
+/*	height: 100px;*/
+	background-color:black;
+	padding:10px;
+	color:white;
+	margin-left:10px;
+	margin-bottom:10px;
+	width: 400px;
+	opacity:0.8;
+}
+
+.achievement .icon {
+	float:left;
+	width:64px;
+	height:64px;
+}
+
+.achievement .text {
+	float:left;
+	margin-left:10px;
+}
+
+.achievement .description {
+	display:block;
+}
+
+.achievement .redtext {
+	color:red;
+	font-size:12px;
+	display:block;
+}
+
+.achievement .value {
+	float:right;
+	font-size:30px;
+	color:green;
+	font-weight:bold;
+}
+
+#inv_hover {
+	margin-top:-25px;
+	margin-left:25px;
+	position:absolute;
+	display:none;
+	pointer-events:none;
+}
+
+#inv_hover::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+    border-opacity:0.8;
+}
+
 /*.timeleft {
 	float:left;
 	font-weight: bold;

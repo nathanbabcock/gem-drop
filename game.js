@@ -20,7 +20,8 @@ var ui = {
 	buy_10: document.getElementById("buy_10"),
 	buy_100: document.getElementById("buy_100"),
 	buy_max: document.getElementById("buy_max"),
-	buffs: document.getElementById("buffs")
+	buffs: document.getElementById("buffs"),
+	inv_hover: document.getElementById("inv_hover")
 }; 
 
 var BuyMode = {
@@ -180,6 +181,8 @@ function getBuffHTML(buff){
 	return container;
 }
 
+//function getAchievementHTML
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UPDATE UI
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +255,10 @@ function updateBuff(buff){
 	buff.ui.description.innerHTML = buff.description;
 	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
 	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
+}
+
+function updateAchievement(achievement, element){
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

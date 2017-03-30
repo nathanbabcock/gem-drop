@@ -550,10 +550,39 @@ Events.on(engine, 'tick', function(event) {
 		updateBuff(buff);
 	});
 
+	// Achievement hover
+	var showing = false;
+	world.bodies.forEach(function(body){
+		if(!body.achievement) return false;
+		if(Bounds.contains(body.bounds, render.mouse.position)){
+			showing = true;
+			hoverAchievement(body.achievement, render.mouse.position);
+		}
+	});
+	if(!showing)
+		clearHover();
+
 	// Save game
 	if(Settings.enable_save)
 		saveGame();
 });
+
+function hoverAchievement(achievement, pos){
+	var rect = render.canvas.getBoundingClientRect(),
+		x = pos.x + rect.left;
+		y = pos.y - rect.top;
+
+	ui.inv_hover.style.left = x + "px";
+	ui.inv_hover.style.top = y + "px";
+	if(ui.inv_hover.achievement !== achievement)
+		updateAchievement(achievement, ui.inv_hover);
+	ui.inv_hover.style.display = "block";
+}
+
+function clearHover(){
+	ui.inv_hover.style.display = "none";
+	ui.inv_hover.achievement = null;
+}
 
 function getSpawnRect(){
 	return { x1: Inventory.wall_radius, y1: 0, x2: render.canvas.width, y2: 50 };
