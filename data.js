@@ -1,16 +1,19 @@
 var DEFAULT_COST_FACTOR = 1.15;
 var DEFAULT_GEM_RADIUS = 20;
 
-//////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GEMS (CLICKPOWERS & FACTORIES)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Gem constructor
 function Gem(options){
 	// Initialize gem defaults
 	var gem = {
 		name: null,
+		bonus: 1.0,
 		baseValue: null,
 		getValue: function() {
-			var mult = 1.0;
+			var mult = this.bonus;
 			if(Buffs.star.timeLeft > 0)
 				mult *= Buffs.star.getPower();
 			return this.baseValue * mult;
@@ -61,15 +64,6 @@ function applyOptions(object, options){
 			object[property] = applyOptions(object[property], options[property]);
 	}
 	return object;
-}
-
-//////////////////
-
-var Settings = {
-	enable_save: false,
-	offline_gains: true,
-	render_sprites: false,
-	render_floatingnums: false
 }
 
 var Gems = [
@@ -166,6 +160,10 @@ Gems.ruby = Gems[5];
 Gems.diamond = Gems[6];
 Gems.rainbow = Gems[7];
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UPGRADES
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var UPGRADE_CATEGORY = {
 	AUTO_DROP: 0,
 	INVENTORY_SIZE: 1
@@ -221,8 +219,109 @@ var Upgrades = [
 		onPurchase: function(){
 			auto_drop.rate = this.rate;
 		}
-	}
+	},
+	{
+		name: "Auto Drop v2",
+		description: "Automatically drops gems every 5 seconds.",
+		baseCost:50000,
+		getCost: function() { return this.baseCost; },
+		category: UPGRADE_CATEGORY.AUTO_DROP,
+		rate: 5,
+		owned: false,
+		onPurchase: function(){
+			auto_drop.rate = this.rate;
+		}
+	},
+	{
+		name: "Auto Drop v3",
+		description: "Keep the gate open permanently.",
+		baseCost:250000,
+		getCost: function() { return this.baseCost; },
+		category: UPGRADE_CATEGORY.AUTO_DROP,
+		rate: 0,
+		owned: false,
+		onPurchase: function(){
+			auto_drop.rate = this.rate;
+		}
+	},
+	{
+		name: "Buffs",
+		description: "Buffs randomly spawn (about once every 60 seconds). Click on a buff to collect it.",
+		baseCost:6000,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		rate: 60,
+		owned: false,
+		onPurchase: function(){
+			Buffs.baseRate = this.rate;
+		}
+	},
+	{
+		name: "More Buffs",
+		description: "Buffs spawn more often (about once every 30 seconds).",
+		baseCost:30000,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		rate: 30,
+		owned: false,
+		onPurchase: function(){
+			Buffs.baseRate = this.rate;
+		}
+	},
+	{
+		name: "Buff Autocollect",
+		description: "Buffs are automatically collected when they are dropped.",
+		baseCost:1e6,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		owned: false,
+		onPurchase: function(){
+			Buffs.autocollect = true;
+		}
+	},
 ];
+
+Gems.forEach(function(gem){
+	Upgrades.push({
+		name: gem.name+" Value",
+		description: gem.name+" sell price doubled",
+		baseCost:200 * gem.baseValue,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		owned: false,
+		onPurchase: function(){
+			gem.bonus = 2;
+		}
+	});
+
+	Upgrades.push({
+		name: gem.name+" Value II",
+		description: gem.name+" doubled again (4x total)",
+		baseCost:500 * gem.baseValue,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		owned: false,
+		onPurchase: function(){
+			gem.bonus = 4;
+		}
+	});
+
+	Upgrades.push({
+		name: gem.name+" Value III",
+		description: gem.name+" doubled again (8x total)",
+		baseCost:1000 * gem.baseValue,
+		getCost: function() { return this.baseCost; },
+		category: undefined,
+		owned: false,
+		onPurchase: function(){
+			gem.bonus = 8;
+		}
+	});
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUFFS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Buffs = [
 	{
@@ -270,10 +369,16 @@ var Buffs = [
 ];
 Buffs.baseRate = Infinity;
 Buffs.getRate = function(){ return Buffs.baseRate; };
+Buffs.autocollect = false;
 Buffs.star = Buffs[0];
 Buffs.heart = Buffs[1];
 Buffs.cursor = Buffs[2];
 Buffs.teardrop = Buffs[3];
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// STATS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Stats = {
 	money: 0,
@@ -290,6 +395,10 @@ var Stats = {
 	wasted: 0
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACHIEVEMENTS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var Achievements = {all: []};
 
 function Achievement(name, description, value, condition, options={}){
@@ -303,7 +412,8 @@ function Achievement(name, description, value, condition, options={}){
 			if(this.owned || !this.condition()) return false;
 			this.owned = true;
 			Stats.achievements++;
-			updateMoney(this.getValue());
+			spawnTrophy(this);
+			//updateMoney(this.getValue());
 			console.log("Unlocked achievement: "+this.name);
 			console.log(">"+this.description);
 			checkAll(Achievements.meta);
@@ -489,3 +599,14 @@ function checkAll(list){
 // Offline money
 // Settings (export save, toggle fx/sound, etc)
 // Have 3 buffs active at once
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SETTINGS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var Settings = {
+	enable_save: false,
+	offline_gains: true,
+	render_sprites: false,
+	render_floatingnums: false
+}

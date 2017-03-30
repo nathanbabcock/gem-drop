@@ -40,14 +40,19 @@ var Inventory = {
 	}
 }
 
-var auto_drop = {
+var AutoDrop = {
 	open:false,
 	timer:0,
 	rate:-1,
+	manuallyOpen:false,
 	getOpenDuration:function(){
 		return 2;
 	}
 };
+
+var OfflineMode = {
+	bonus:1 // multiplier to offline gains
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CREATE UI
@@ -466,7 +471,7 @@ function saveGame(){
 	Upgrades.forEach(function(upgrade){
 		save.upgrades.push(upgrade.owned);
 	});
-	save.auto_drop = auto_drop.rate;
+	save.AutoDrop = AutoDrop.rate;
 
 	localStorage.setItem("save", JSON.stringify(save));
 	//console.log("Game saved");
@@ -491,7 +496,7 @@ function loadGame(){
 	Upgrades.forEach(function(upgrade, index){
 		upgrade.owned = save.upgrades[index];
 	});
-	auto_drop.rate = save.auto_drop;
+	AutoDrop.rate = save.AutoDrop;
 	Inventory.build();
 
 	var delta = new Date().getTime() - save.time;
@@ -519,10 +524,12 @@ function simulate(delta){
 
 
 	var max_rate;
-	if(auto_drop.rate === -1)
+	if(AutoDrop.rate === -1)
 		max_rate = inv_cap / delta;
+	else if(AutoDrop.rate === -1)
+		max_rate = inv_cap;
 	else
-		max_rate = inv_cap / auto_drop.rate;
+		max_rate = inv_cap / AutoDrop.rate;
 	console.log("Max rate: " + max_rate + " gems/sec");
 
 	var rate = [];

@@ -962,26 +962,27 @@ UPGRADES Master List
 - Global spawn rate
 
 Tasks master list
-- Implement offline bonus upgrades (trivial)
-- Implement auto-drop tiers (trivial)
-- Implement crit gems (easy)
-- Implement buff tiers (trivial)
-- Implement sell price upgrades (trivial)
-- Buff autocollect (trivial)
-- Global spawn rate (trivial)
-- Achievement dropping (easy)
-- Export/import (easy)
-- Settings menu (30min)
-- Stats screen (15min)
+X Upgrade: auto-drop tiers (trivial)
+X Upgrade: buff tiers (trivial)
+X Upgrade: sell price upgrades (trivial)
+- Upgrade: offline bonus upgrades (trivial)
+- Upgrade: crit gems (easy)
+X Upgrade: Buff autocollect (trivial)
+- Upgrade: Global spawn rate (trivial)
+X Achievement dropping (easy)
 - Achievements screen (1hr)
-- Implement gem sprites (almost done)
+- Stats screen (15min)
+- Settings menu (30min)
+- Load/save/sim update
+- Export/import (easy)
+X Implement gem sprites (almost done)
 - Make buff & trophy sprites (2hr)
 - Clickpower sprites (easy)
 - Factory sprites (easy)
 - Upgrade sprites (???)
 - GAME BALANCE (??????????)
 - Achievement sell values
-- UI polish (???)
+- UI tweaks
 - Basic sound (2+ hr)
 
 Game Balance Notes
@@ -989,18 +990,73 @@ Game Balance Notes
 - early game factories should have much slower rate (?)
      - upgrade rate later
 - buffs between amethyst & sapphire??
+- Early game should be very active, high emphasis on physics, etc
+    - Introduces the spirit and flavor of the game before it is too late when autodrop and
+        noclip kick in.
 
 3/29/17
 
 Slipping Viewport Bug
-- Dependent: Does NOT happen while window is not active (indicates a part of render loop)
-- Dependent: sprite rendering
-- Seems to accumulate or increase over time (floating point prob?)
-- Not affected by floatingnum
-- Direction is sometimes up and sometimes down
-    - Direction changed (from down to up) when I closed the gate
-- Independent: DOM resizing of money field
-- Eventually freezes UI
-- Independent: inventory size
-- Numer of gems: independent
-- Gem type: independent
+- Observation
+    - Dependent: Does NOT happen while window is not active (indicates a part of render loop)
+    - Dependent: sprite rendering
+    - Seems to accumulate or increase over time (floating point prob?)
+    - Not affected by floatingnum
+    - Direction is sometimes up and sometimes down
+        - Direction changed (from down to up) when I closed the gate
+    - Independent: DOM resizing of money field
+    - Eventually freezes UI
+    - Independent: inventory size
+    - Numer of gems: independent
+    - Gem type: independent
+- Hypothesis
+    - Floating point error in context transform functions specific to sprite rendering
+- Test
+    - Custom renderer using context.save() and context.restore()
+- Result
+    - Fixed, hell yeah
+
+Brainstorm
+- Buffs may need to spawn more slowly after autodrop t2
+    - Price the upgrade correctly so it is easily achievable
+- 
+
+TODO
+- New systems to save/load/simulate
+    - Buffs
+    - Gem value mult
+    - Crit gems
+
+Tasks Master List
+- Upgrades
+    X auto-drop tiers (trivial)
+    X buff tiers (trivial)
+    X sell price upgrades (trivial)
+    - offline bonus upgrades (trivial)
+    - crit gems (easy)
+    X Buff autocollect (trivial)
+    - Global spawn rate (trivial)
+- UI
+    X Buffs display
+    - Achievements screen (1hr)
+    - Achievement popups
+    - Stats screen (15min)
+    - Settings menu (30min)
+    - UI tweaks
+- Other
+    X Achievement dropping (easy)
+    - Load/save/sim update
+    - Export/import (easy)
+    - Basic sound (2+ hr)
+- Graphics
+    X Implement gem sprites (almost done)
+    - Make buff & trophy sprites (2hr)
+    - Clickpower sprites (easy)
+    - Factory sprites (easy)
+    - Upgrade sprites (???)
+- Game Balance
+    - Achievement sell values
+    - Upgrade prices
+    - Factory initial rates
+    - etc
+

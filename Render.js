@@ -632,6 +632,7 @@ var Render = {};
                     // c.rotate(-part.angle);
                     // c.translate(-part.position.x, -part.position.y); 
                     c.restore(); // just save/restore instead
+                    // TODO if this is too slow, go back to inverse transforms BUT use .toFixed() to avoid the floating point shenanigans
                 } else {
                     // part polygon
                     if (part.circleRadius) {

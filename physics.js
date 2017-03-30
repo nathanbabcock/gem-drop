@@ -112,8 +112,10 @@ var Inventory = {
 	getValue: function() {
 		var val = 0;
 		world.bodies.forEach(function(body){
-			if(body.gem !== undefined){
+			if(body.gem){
 				val += body.gem.getValue();
+			} else if (body.achievement) {
+				val += body.achievement.getValue();
 			}
 		});
 		return val;
@@ -402,6 +404,25 @@ function spawnBuff(pos, buff){
 	World.add(engine.world, body);
 }
 
+function spawnTrophy(achievement){
+	var body;
+	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
+	var spawnRect = getSpawnRect();
+	var pos = {
+		x: getRandomInt(spawnRect.x1, spawnRect.x2),
+		y: getRandomInt(spawnRect.y1, spawnRect.y2)
+	};
+	body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+		collisionFilter: BODY_FILTER,
+		render: {
+			fillStyle: "yellow",
+			strokeStyle: "transparent"
+		}
+	});
+	body.achievement = achievement;
+	World.add(engine.world, body);
+}
+
 function showFloatingNumber(canvasX, canvasY, num){
 	if(!Settings.render_floatnums)
 		return false;
@@ -465,9 +486,12 @@ Events.on(engine, 'tick', function(event) {
 			if(body.gem){
 				showFloatingNumber(body.position.x, body.position.y, body.gem.getValue());
 				sellGem(body.gem);
-			}
-			if(body.buff && false){
+			} else if(body.buff && Buffs.autocollect){
 				clickBuff(body.buff);
+			} else if (body.achievement) {
+				showFloatingNumber(body.position.x, body.position.y, body.achievement.getValue());
+				// showAchievementPopup();
+				updateMoney(body.achievement.getValue());
 			}
 		} else if(body.position.y < 0) {
 			Composite.remove(world, body);
@@ -475,6 +499,11 @@ Events.on(engine, 'tick', function(event) {
 				Stats.wasted++;
 				checkAll(Achievements.wasted);
 				updateMoney();
+			} else if (body.buff && Buffs.autocollect){
+			} else if (body.achievement){
+				showFloatingNumber(body.position.x, body.position.y, body.achievement.getValue());
+				// showAchievementPopup();
+				updateMoney(body.achievement.getValue());
 			}
 		}
 	});
@@ -490,17 +519,20 @@ Events.on(engine, 'tick', function(event) {
 
 
 	// Auto drop
-	if(auto_drop.rate > 0){
-		auto_drop.timer -= delta;
-		if(auto_drop.timer <= 0){
-			if(auto_drop.open){
+	if(AutoDrop.rate === 0){
+		if(!AutoDrop.open)
+			openDrop();
+	} else if(AutoDrop.rate > 0){
+		AutoDrop.timer -= delta;
+		if(AutoDrop.timer <= 0){
+			if(AutoDrop.open){
 				closeDrop();
-				auto_drop.open = false;
-				auto_drop.timer = auto_drop.rate;
+				AutoDrop.open = false;
+				AutoDrop.timer = AutoDrop.rate;
 			} else {
 				openDrop();
-				auto_drop.open = true;
-				auto_drop.timer = auto_drop.getOpenDuration();
+				AutoDrop.open = true;
+				AutoDrop.timer = AutoDrop.getOpenDuration();
 			}
 		}	
 	}
@@ -596,10 +628,13 @@ function closeDrop(){
 
 // Drop
 ui.drop.onmousedown = function(){
+	AutoDrop.manuallyOpen = true;
 	openDrop();
 }
 ui.drop.onmouseup = function(){
-	closeDrop();
+	AutoDrop.manuallyOpen = false;
+	if(AutoDrop.timer <= 0)
+		closeDrop();
 }
 
 var BackgroundMode = {
