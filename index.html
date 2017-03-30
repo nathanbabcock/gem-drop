@@ -33,10 +33,32 @@
 				<div class="clear"></div>
 			</div> -->
 		</div>
+		<div class="modal" id="achievements">
+			<h2>Achievements</h2>
+			<a href="javascript:void(0)" class="close">[close]</a>
+			<div class="achievement_icon popup_container">
+				<img class="icon popup_anchor" src="">
+				<div class="popup achievement">
+					<img class="icon" src="">
+					<div class="text">
+						<strong class="name">Hello World</strong>
+						<span class="description">Popup text goes here</span>
+						<small class="redtext">Secret red text</small>
+					</div>
+					<div class="value">$500</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
 		<div id="container">
 			<div id="render_container">
 				<div id="render"></div>
 				<div id="money"><span id="actual_money"></span><span id="predicted_money"></span></div>	
+				<div id="buttons">
+					<button id="drop">Drop</button>
+					<button onclick="cheat()">Cheat</button>
+					<button onclick="debug()">Debug</button>
+				</div>
 			</div>
 			<div id="ui">
 				<div id="click_powers" class="section">
@@ -117,12 +139,6 @@
 							<div class="timeleft">3s</div>
 						</div>
 					</div> -->
-				</div>
-
-				<div id="buttons">
-					<button id="drop">Drop</button>
-					<button onclick="cheat()">Cheat</button>
-					<button onclick="debug()">Debug</button>
 				</div>
 			</div>
 			<div class="clear"></div>

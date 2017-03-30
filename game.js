@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GAME.JS
-// Nathan babcock
+// Nathan Babcock
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var money = 0;
@@ -22,7 +22,8 @@ var ui = {
 	buy_max: document.getElementById("buy_max"),
 	buffs: document.getElementById("buffs"),
 	inv_hover: document.getElementById("inv_hover"),
-	achievement_popups: document.getElementById("achievement_popups")
+	achievement_popups: document.getElementById("achievement_popups"),
+	achievements: document.getElementById("achievements")
 }; 
 
 var BuyMode = {
@@ -85,6 +86,7 @@ function getClickPowerHMTL(gem){
 	// Onclick
 	refs.anchor.onclick = function() { buyClickPower(gem); };
 	refs.anchor.innerText = gem.name;
+	refs.name.innerText = gem.name;
 
 	updateClickPower(gem);
 	return container;
@@ -123,6 +125,7 @@ function getFactoryHTML(gem){
 
 	refs.anchor.onclick = function() { buyFactory(gem); };
 	refs.anchor.innerText = gem.name;
+	refs.name.innerText = gem.name + " Factory";
 
 	updateFactory(gem);
 	return container;
@@ -198,6 +201,18 @@ function getAchievementHTML(achievement){
 		container.parentNode.removeChild(container);
 	};
 	updateAchievement(achievement, container);
+	return container;
+}
+
+function getAchievementIconHTML(achievement){
+	var refs = achievement.ui = {},
+		container = refs.container = document.createElement("div");
+	container.className = "achievement_icon popup_container";
+	container.innerHTML = `<img class="icon popup_anchor" src="">`;
+	var popup = getAchievementHTML(achievement);
+	updateAchievement(achievement, popup);
+	popup.className += " popup";
+	container.appendChild(popup);
 	return container;
 }
 
@@ -695,6 +710,13 @@ function cheat(){
 // INIT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function initModal(modal){
+	var close = modal.querySelector(".close");
+	close.onclick=function(){
+		modal.style.display = "none";
+	}
+}
+
 function init(){
 	money = 10000000000;
 
@@ -717,6 +739,11 @@ function init(){
 		ui.buffs.appendChild(getBuffHTML(buff))
 	});
 
+	// Achievements
+	Achievements.all.forEach(function(achievement){
+		ui.achievements.appendChild(getAchievementIconHTML(achievement));
+	});
+
 	// Buy Mode
 	ui.buy.onclick = function() { setBuyMode(BuyMode.BUY, ui.buy); };
 	ui.sell.onclick = function() { setBuyMode(BuyMode.SELL, ui.sell); };
@@ -724,6 +751,11 @@ function init(){
 	ui.buy_10.onclick = function() { setBuyQuantity(10, ui.buy_10); };
 	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
 	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
+
+	// Modals
+	initModal(ui.achievements);
+	// initModal(ui.stats);
+	// initModal(ui.settings);
 
 	updateMoney();
 }
