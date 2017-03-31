@@ -608,7 +608,7 @@ var Render = {};
                     c.globalAlpha = part.render.opacity;
                 }
 
-                if (part.render.sprite && part.render.sprite.texture && !options.wireframes) {
+                if (part.render.sprite && part.render.sprite.texture && !options.wireframes && (!Settings || Settings.render_sprites)) {
                     // part sprite
                     var sprite = part.render.sprite,
                         texture = _getTexture(render, sprite.texture);

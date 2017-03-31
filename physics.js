@@ -351,8 +351,6 @@ function spawnGem(pos, gem){
 			return false;
 	}
 	body.gem = gem;
-	if(!Settings.render_sprites)
-		body.render.sprite = undefined;
 	World.add(engine.world, body);
 	updateMoney();
 }

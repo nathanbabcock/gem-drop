@@ -384,9 +384,9 @@ function initSettings() {
 	UI.settings.sprites.onclick=function() {
 		if(!UI.settings.sprites.checked){
 			Settings.render_sprites = false;
-			world.bodies.forEach(function(body){
-				body.render.sprite = undefined;
-			});
+			// world.bodies.forEach(function(body){
+			// 	body.render.sprite = undefined;
+			// });
 		} else {
 			Settings.render_sprites = true;
 			// TODO this will not add sprites to gems already in inv
