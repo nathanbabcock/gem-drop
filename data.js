@@ -391,6 +391,7 @@ var Stats = {
 	achievements:0,
 	prestige: 0,
 	start_date: new Date().getTime(),
+	prestige_start_date: new Date().getTime(),
 	sold: 0,
 	wasted: 0
 };
@@ -468,7 +469,7 @@ Achievements.factory.amethyst = [
 	new Achievement("Purple Haze", "Buy 100 amethyst factories", 0, function(){ return Gems.amethyst.factory.owned >= 100; }),
 ];
 Achievements.factory.sapphire = [
-	new Achievement("Sapphire x1", "Buy a sapphire factory", 0, function(){ return Gems.sapphire.factory.owned >= 1; }), //TODO
+	new Achievement("Sapphire Supplier", "Buy a sapphire factory", 0, function(){ return Gems.sapphire.factory.owned >= 1; }),
 	new Achievement("Blue Skies", "Buy 50 sapphire factories", 0, function(){ return Gems.sapphire.factory.owned >= 50; }),
 	new Achievement("Sapphic Love", "Buy 100 sapphire factories", 0, function(){ return Gems.sapphire.factory.owned >= 100; }),
 ];
@@ -589,7 +590,7 @@ Achievements.misc = {
 	inventory: new Achievement("So much space for activities", "Max out the inventory", 0, function(){ return false; }), // TODO
 	autodrop: new Achievement("Open the Floodgates", "Upgrade to 100% autodrop", 0, function(){ return false; }), // TODO
 	sell: new Achievement("Reimbursement", "Sell a factory", 100, function(){ return Stats.sold >= 1; }),
-	hack: new Achievement("Script kiddie", "", -999, function(){ return true; }, {redtext: "Alternatively: Introduction to the Developer Console."}),
+	hack: new Achievement("Script kiddie", "", -1, function(){ return true; }, {redtext: "Alternatively: Introduction to the Developer Console."}),
 };
 
 function checkAll(list){

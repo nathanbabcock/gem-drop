@@ -127,7 +127,6 @@ var Inventory = {
 // World.add(engine.world, [ground, left, right]);
 Inventory.build();
 
-
 // add mouse control
 var mouse = Mouse.create(render.canvas),
     mouseConstraint = MouseConstraint.create(engine, {
@@ -216,9 +215,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "gray",
 					strokeStyle: "transparent",
-					// sprite: {
-     //                    texture: "img/quartz-small.png"
-     //                },
+					sprite: {
+                        texture: "img/quartz-small.png"
+                    },
 				}
 			});
 			break;
@@ -235,9 +234,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "orange",
 					strokeStyle: "transparent",
-					// sprite: {
-     //                    texture: "img/topaz-small.png"
-     //                },
+					sprite: {
+                        texture: "img/topaz-small.png"
+                    },
 				}
 			});
 			break;
@@ -253,9 +252,9 @@ function spawnGem(pos, gem){
 				render: {
 					fillStyle: "purple",
 					strokeStyle: "transparent",
-					// sprite: {
-     //                    texture: 'img/amethyst-small.png'
-     //                },
+					sprite: {
+                        texture: 'img/amethyst-small.png'
+                    },
 				}
 			});
 			break;
@@ -352,6 +351,8 @@ function spawnGem(pos, gem){
 			return false;
 	}
 	body.gem = gem;
+	if(!Settings.render_sprites)
+		body.render.sprite = undefined;
 	World.add(engine.world, body);
 	updateMoney();
 }
@@ -471,7 +472,7 @@ function showFloatingNumber(canvasX, canvasY, num){
 	}, 1);
 
 	setTimeout(function(){
-		   UI.vfx.removeChild(float);
+		UI.vfx.removeChild(float);
 	}, ANIM_DURATION);
     
 }

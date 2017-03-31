@@ -8,6 +8,7 @@
 		<script src="gameloop-worker.js"></script>
 		<script src="Runner.js"></script>
 		<script src="Render.js"></script>
+		<script src="Base64.js"></script>
 	</head>
 	<body>
 		<div id="vfx"></div>
@@ -73,6 +74,7 @@
 			<h2>Settings</h2>
 			<a href="javascript:void(0)" class="close">[close]</a>
 			<div class="modal_inner">
+				<strong>Render Sprites:</strong><input type="checkbox" checked id="sprites"><br>
 				<strong>Particle effects:</strong><input type="checkbox" checked id="settings_particles"><br>
 				<strong>Autosave:</strong><input type="checkbox" checked id="autosave"><span>Saves game in real time</span><br>
 				<strong>Save game:</strong><button id="save">Save</button><span id="lastsaved">Last saved less than a second ago</span><br>

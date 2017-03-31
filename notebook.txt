@@ -970,9 +970,9 @@ X Upgrade: sell price upgrades (trivial)
 X Upgrade: Buff autocollect (trivial)
 - Upgrade: Global spawn rate (trivial)
 X Achievement dropping (easy)
-- Achievements screen (1hr)
-- Stats screen (15min)
-- Settings menu (30min)
+X Achievements screen (1hr)
+X Stats screen (15min)
+/ Settings menu (30min)
 - Load/save/sim update
 - Export/import (easy)
 X Implement gem sprites (almost done)
@@ -1041,15 +1041,15 @@ Tasks Master List
     X Buffs display
     X Achievements screen (1hr)
     X Achievement popups
-    - Stats screen (15min)
-    - Settings menu (30min)
+    X Stats screen (15min)
+    / Settings menu (30min)
     - Bought upgrades (20min)
     - UI tweaks
     - Tooltips rework (2hr)
 - Other
     X Achievement dropping (easy)
     - Load/save/sim update
-    - Export/import (easy)
+    X Export/import (easy)
     - Basic sound (2+ hr)
 - Graphics
     X Implement gem sprites (almost done)

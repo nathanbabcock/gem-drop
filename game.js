@@ -45,13 +45,17 @@ var UI = {
 		save: document.getElementById("save"),
 		lastsaved: document.getElementById("lastsaved"),
 		autosave: document.getElementById("autosave"),
-		particles: document.getElementById("settings_particles")
+		particles: document.getElementById("settings_particles"),
+		export: document.getElementById("export"),
+		import_field: document.getElementById("import_field"),
+		import_button: document.getElementById("import_button"),
+		sprites: document.getElementById("sprites")
 	}
-}; 
+};
 
 var BuyMode = {
-	BUY:0,
-	SELL:1,
+	BUY: 0,
+	SELL: 1,
 	mode: 0,
 	quantity: 1
 };
@@ -67,24 +71,24 @@ var Inventory = {
 }
 
 var AutoDrop = {
-	open:false,
-	timer:0,
-	rate:-1,
-	manuallyOpen:false,
-	getOpenDuration:function(){
+	open: false,
+	timer: 0,
+	rate: -1,
+	manuallyOpen: false,
+	getOpenDuration: function() {
 		return 2;
 	}
 };
 
 var OfflineMode = {
-	bonus:1 // multiplier to offline gains
+	bonus: 1 // multiplier to offline gains
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CREATE UI
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getClickPowerHMTL(gem){
+function getClickPowerHMTL(gem) {
 	var clickpower = gem.clickpower,
 		refs = clickpower.ui = {},
 		container = refs.container;
@@ -115,16 +119,16 @@ function getClickPowerHMTL(gem){
 	return container;
 }
 
-function getFactoryHTML(gem){
-/*	<div class="factory popup_container">
-		<div class="popup_anchor">Quartz</span>
-		<div class="popup">
-			<strong class="name">Quartz Factory</strong>
-			<div class="rate">+1 per second</div>
-			<div class="price">Costs $18</div>
-			<div class="owned">0 owned</div>
-		</div>
-	</div>*/
+function getFactoryHTML(gem) {
+	/*	<div class="factory popup_container">
+			<div class="popup_anchor">Quartz</span>
+			<div class="popup">
+				<strong class="name">Quartz Factory</strong>
+				<div class="rate">+1 per second</div>
+				<div class="price">Costs $18</div>
+				<div class="owned">0 owned</div>
+			</div>
+		</div>*/
 
 	var factory = gem.factory,
 		refs = factory.ui = {},
@@ -154,7 +158,7 @@ function getFactoryHTML(gem){
 	return container;
 }
 
-function getUpgradeHTML(upgrade){
+function getUpgradeHTML(upgrade) {
 	var refs = upgrade.ui = {},
 		container = refs.container = document.createElement("div");
 	container.className = "upgrade popup_container";
@@ -181,7 +185,7 @@ function getUpgradeHTML(upgrade){
 	return container;
 }
 
-function getBuffHTML(buff){
+function getBuffHTML(buff) {
 	var refs = buff.ui = {},
 		container = refs.container = document.createElement("div");
 	container.className = "buff_container";
@@ -208,7 +212,7 @@ function getBuffHTML(buff){
 	return container;
 }
 
-function getAchievementHTML(achievement){
+function getAchievementHTML(achievement) {
 	var container = document.createElement("div");
 	container.className = "achievement";
 	container.innerHTML = `
@@ -220,14 +224,14 @@ function getAchievementHTML(achievement){
 		</div>
 		<div class="value">$500</div>
 		<div class="clear"></div>`;
-	container.onclick = function(){
+	container.onclick = function() {
 		container.parentNode.removeChild(container);
 	};
 	updateAchievement(achievement, container);
 	return container;
 }
 
-function getAchievementIconHTML(achievement){
+function getAchievementIconHTML(achievement) {
 	var refs = achievement.ui = {},
 		container = refs.container = document.createElement("div");
 	container.className = "achievement_icon popup_container";
@@ -243,37 +247,37 @@ function getAchievementIconHTML(achievement){
 // UPDATE UI
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function updateClickPower(gem){
+function updateClickPower(gem) {
 	//factory.ui.name.innerText = 
 	var clickpower = gem.clickpower;
 	clickpower.ui.rate.innerText = "+" + clickpower.getRate() + " per click";
 	clickpower.ui.price.innerText = formatMoney(gem.getValue()) + " each";
-	if(!clickpower.owned)
+	if (!clickpower.owned)
 		clickpower.ui.costs.innerText = "Costs " + formatMoney(clickpower.getCost());
 	else
 		clickpower.ui.costs.innerText = "";
 
-	if(!clickpower.owned && clickpower.getCost() > money)
+	if (!clickpower.owned && clickpower.getCost() > money)
 		clickpower.ui.anchor.className = "popup_anchor disabled";
 	else
 		clickpower.ui.anchor.className = "popup_anchor";
 }
 
-function updateFactory(gem){
+function updateFactory(gem) {
 	//factory.ui.name.innerText = 
 	var factory = gem.factory;
 	factory.ui.rate.innerText = factory.getRate() + " per second";
 	var purchase = calculatePurchase(gem);
-	factory.ui.price.innerText = (BuyMode.mode === BuyMode.BUY ? "Buy " : "Sell ") + purchase.quantity +" for " + formatMoney(purchase.cost);
+	factory.ui.price.innerText = (BuyMode.mode === BuyMode.BUY ? "Buy " : "Sell ") + purchase.quantity + " for " + formatMoney(purchase.cost);
 	factory.ui.owned.innerText = factory.owned + " owned";
 
-	if(BuyMode.mode == BuyMode.BUY){
-		if(purchase.cost > money || purchase.quantity === 0)
+	if (BuyMode.mode == BuyMode.BUY) {
+		if (purchase.cost > money || purchase.quantity === 0)
 			factory.ui.anchor.className = "popup_anchor disabled";
 		else
 			factory.ui.anchor.className = "popup_anchor";
 	} else {
-		if(purchase.quantity === 0)
+		if (purchase.quantity === 0)
 			factory.ui.anchor.className = "popup_anchor disabled";
 		else
 			factory.ui.anchor.className = "popup_anchor";
@@ -281,29 +285,28 @@ function updateFactory(gem){
 }
 
 
-function updateUpgrade(upgrade){
-	if(!upgrade.owned)
+function updateUpgrade(upgrade) {
+	if (!upgrade.owned)
 		upgrade.ui.costs.innerText = "Costs " + formatMoney(upgrade.getCost());
 	else
 		upgrade.ui.costs.innerText = "";
 
-	if(!upgrade.owned && upgrade.getCost() > money)
+	if (!upgrade.owned && upgrade.getCost() > money)
 		upgrade.ui.anchor.className = "popup_anchor disabled";
 	else
 		upgrade.ui.anchor.className = "popup_anchor";
 }
 
-function updateBuff(buff){
-	if(buff.timeLeft <= 0){
+function updateBuff(buff) {
+	if (buff.timeLeft <= 0) {
 		buff.ui.container.style.display = "none";
 		var anyBuff = false;
-		Buffs.forEach(function(buff){
-			if(buff.timeLeft > 0)
+		Buffs.forEach(function(buff) {
+			if (buff.timeLeft > 0)
 				anyBuff = true;
 		});
-		if(!anyBuff)	UI.buffs.style.display = "none";
-	}
-	else {
+		if (!anyBuff) UI.buffs.style.display = "none";
+	} else {
 		UI.buffs.style.display = "block";
 		buff.ui.container.style.display = "block";
 	}
@@ -313,24 +316,24 @@ function updateBuff(buff){
 	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
 }
 
-function updateAchievement(achievement, element){
-/*	<div class="achievement" id="inv_hover">
-		<img class="icon" src="">
-		<div class="text">
-			<strong class="name">Hello World</strong>
-			<span class="description">Popup text goes here</span>
-			<small class="redtext">Secret red text</small>
-		</div>
-		<div class="value">$500</div>
-		<div class="clear"></div>
-	</div>*/
+function updateAchievement(achievement, element) {
+	/*	<div class="achievement" id="inv_hover">
+			<img class="icon" src="">
+			<div class="text">
+				<strong class="name">Hello World</strong>
+				<span class="description">Popup text goes here</span>
+				<small class="redtext">Secret red text</small>
+			</div>
+			<div class="value">$500</div>
+			<div class="clear"></div>
+		</div>*/
 
 	// element.querySelector(".icon").src = achievement.icon;
 	element.querySelector(".name").innerText = achievement.name;
 	element.querySelector(".description").innerText = achievement.description;
 	element.querySelector(".value").innerText = formatMoney(achievement.getValue());
 	var redtext = element.querySelector(".redtext");
-	if(achievement.redtext){
+	if (achievement.redtext) {
 		redtext.style.display = "block";
 		redtext.innerText = achievement.redtext;
 	} else {
@@ -341,7 +344,7 @@ function updateAchievement(achievement, element){
 	return false;
 }
 
-function updateStats(){
+function updateStats() {
 	UI.stats.money.innerText = formatMoney();
 	UI.stats.gems.innerText = Stats.gems;
 	UI.stats.clickpower_gems.innerText = Stats.clickpower_gems;
@@ -358,22 +361,50 @@ function updateStats(){
 // MENU/MODAL
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function initSettings(){
-	UI.settings.save.onclick = function(){ saveGame(); };
-	UI.settings.lastsaved.innerText = "Last saved less than a second ago";
+function initSettings() {
+	// Save
+	UI.settings.save.onclick = function() {
+		if(saveGame()){
+			alert("Game saved.");
+			UI.settings.lastsaved.innerText = "Last saved less than a second ago";
+		}
+	};
+	
+	// Export
+	UI.settings.export.onclick = exportGame;
+
+	// Import
+	UI.settings.import_button.onclick=function() {
+		if(importGame(UI.settings.import_field.value))
+			alert("Game imported.");
+	};
+
+	// Render Sprites
+	UI.settings.sprites.checked = Settings.render_sprites;
+	UI.settings.sprites.onclick=function() {
+		if(!UI.settings.sprites.checked){
+			Settings.render_sprites = false;
+			world.bodies.forEach(function(body){
+				body.render.sprite = undefined;
+			});
+		} else {
+			Settings.render_sprites = true;
+			// TODO this will not add sprites to gems already in inv
+		}
+	}
 }
 
-function openAchievements(){
+function openAchievements() {
 	closeSettings();
 	closeStats();
 	UI.achievements.style.display = "block";
 }
 
-function closeAchievements(){
+function closeAchievements() {
 	UI.achievements.style.display = "none";
 }
 
-function openStats(){
+function openStats() {
 	closeAchievements();
 	closeSettings();
 	UI.stats.modal.style.display = "block";
@@ -381,19 +412,19 @@ function openStats(){
 	UI.stats.isOpen = true;
 }
 
-function closeStats(){
+function closeStats() {
 	UI.stats.modal.style.display = "none";
-	clearInterval(ui.stats.timeout);
+	clearInterval(UI.stats.timeout);
 	UI.stats.isOpen = false;
 }
 
-function openSettings(){
+function openSettings() {
 	closeAchievements();
 	closeStats();
 	UI.settings.modal.style.display = "block";
 }
 
-function closeSettings(){
+function closeSettings() {
 	UI.settings.modal.style.display = "none";
 }
 
@@ -402,49 +433,49 @@ function closeSettings(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Calculates the cost of a factory purchase for the given gem according to BUY MODE
-function calculatePurchase(gem, quantity = BuyMode.quantity){
+function calculatePurchase(gem, quantity = BuyMode.quantity) {
 	var r = gem.factory.getCostFactor(),
 		b = gem.factory.baseCost,
 		k = gem.factory.owned,
 		c = money,
 		n = 0;
-	if(BuyMode.mode === BuyMode.BUY){
+	if (BuyMode.mode === BuyMode.BUY) {
 		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
-		if(quantity === "max")
+		if (quantity === "max")
 			n = Math.max(max_quantity, 1);
 		else
 			n = quantity;
 	} else {
-		if(quantity === "max")
+		if (quantity === "max")
 			n = gem.factory.owned;
 		else
 			n = Math.min(gem.factory.owned, quantity);
 		k = gem.factory.owned - n;
 	}
-	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n))/(1 - r));
+	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n)) / (1 - r));
 	return { cost: cost, quantity: n };
 }
 
-function setBuyMode(mode, elem){
+function setBuyMode(mode, elem) {
 	BuyMode.mode = mode;
-	[ui.buy,	UI.sell].forEach(function(elem){
+	[ui.buy, UI.sell].forEach(function(elem) {
 		elem.className = "";
 	});
 	elem.className = "active";
-	Gems.forEach(function(gem){	updateFactory(gem); });
+	Gems.forEach(function(gem) { updateFactory(gem); });
 	// if(mode === BuyMode.BUY)
 	// 	UI.buy.className = "active";
 	// else
 	// 	UI.sell.className = "active";
 }
 
-function setBuyQuantity(quant, elem){
+function setBuyQuantity(quant, elem) {
 	BuyMode.quantity = quant;
-	[ui.buy_1,	UI.buy_10,	UI.buy_100,	UI.buy_max].forEach(function(elem){
+	[UI.buy_1, UI.buy_10, UI.buy_100, UI.buy_max].forEach(function(elem) {
 		elem.className = "";
 	});
 	elem.className = "active";
-	Gems.forEach(function(gem){ updateFactory(gem); });
+	Gems.forEach(function(gem) { updateFactory(gem); });
 	// switch(quant){
 	// 	case 1:
 	// 		UI.buy_1.className = "active";
@@ -455,25 +486,25 @@ function setBuyQuantity(quant, elem){
 // 	return num + " per second";
 // }
 
-function buyClickPower(gem){
+function buyClickPower(gem) {
 	var clickpower = gem.clickpower;
-	if(clickpower.owned || clickpower.getCost() > money)
+	if (clickpower.owned || clickpower.getCost() > money)
 		return false;
 	updateMoney(-clickpower.getCost());
 	clickpower.owned++;
-	Stats.clickpowers++;	
+	Stats.clickpowers++;
 	Achievements.clickpower.byGem(gem).check();
 	Achievements.clickpower.total.check();
 	updateClickPower(gem);
 	return true;
 }
 
-function buyFactory(gem){
+function buyFactory(gem) {
 	var factory = gem.factory;
 	var purchase = calculatePurchase(gem);
 
-	if(BuyMode.mode === BuyMode.BUY){
-		if(purchase.cost > money)
+	if (BuyMode.mode === BuyMode.BUY) {
+		if (purchase.cost > money)
 			return false;
 		factory.owned += purchase.quantity;
 		updateMoney(-purchase.cost);
@@ -492,27 +523,27 @@ function buyFactory(gem){
 	return true;
 }
 
-function buyUpgrade(upgrade){
-	if(upgrade.owned || upgrade.getCost() > money)
+function buyUpgrade(upgrade) {
+	if (upgrade.owned || upgrade.getCost() > money)
 		return false;
 	updateMoney(-upgrade.getCost());
 	upgrade.owned = true;
 	updateUpgrade(upgrade);
-	if(upgrade.onPurchase !== undefined)
+	if (upgrade.onPurchase !== undefined)
 		upgrade.onPurchase();
 	Stats.upgrades++;
 	checkAll(Achievements.upgrades);
 	return true;
 }
 
-function doClick(){
+function doClick() {
 	var bestGem = null;
-	Gems.forEach(function(gem){
-		if(gem.clickpower.owned && (bestGem === null || gem.getValue() > bestGem.getValue()))
+	Gems.forEach(function(gem) {
+		if (gem.clickpower.owned && (bestGem === null || gem.getValue() > bestGem.getValue()))
 			bestGem = gem;
 	});
 	var gemsToMake = [];
-	for(var i = 0; i < bestGem.clickpower.getRate(); i++)
+	for (var i = 0; i < bestGem.clickpower.getRate(); i++)
 		gemsToMake.push(bestGem);
 	Stats.clickpower_gems += gemsToMake.length;
 	checkAll(Achievements.clickpower_gems);
@@ -520,8 +551,8 @@ function doClick(){
 	return gemsToMake;
 }
 
-function updateMoney(amount = 0){
-	if(amount > 0){
+function updateMoney(amount = 0) {
+	if (amount > 0) {
 		Stats.money += amount;
 		checkAll(Achievements.money);
 	}
@@ -529,25 +560,25 @@ function updateMoney(amount = 0){
 	money += amount;
 	UI.actual_money.innerText = formatMoney();
 	UI.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";
-	Gems.forEach(function(gem){
-		if(!gem.clickpower.owned)
+	Gems.forEach(function(gem) {
+		if (!gem.clickpower.owned)
 			updateClickPower(gem);
 		updateFactory(gem);
 	});
-	Upgrades.forEach(function(upgrade){
-		if(!upgrade.owned)
+	Upgrades.forEach(function(upgrade) {
+		if (!upgrade.owned)
 			updateUpgrade(upgrade);
 	});
 	return money;
 }
 
-function sellGem(gem){
+function sellGem(gem) {
 	updateMoney(gem.getValue());
 	Stats.gems++;
 	checkAll(Achievements.gems);
 }
 
-function clickBuff(buff){
+function clickBuff(buff) {
 	buff.timeLeft = buff.getDuration();
 	Stats.buffs++;
 	checkAll(Achievements.buffs);
@@ -555,27 +586,27 @@ function clickBuff(buff){
 	updateMoney();
 }
 
-function getAchievement(achievement){
-	if(ui.achievement_popups.children.length >= 5)
-		UI.achievement_popups.removeChild(ui.achievement_popups.children[0]);
+function getAchievement(achievement) {
+	if (UI.achievement_popups.children.length >= 5)
+		UI.achievement_popups.removeChild(UI.achievement_popups.children[0]);
 	UI.achievement_popups.appendChild(getAchievementHTML(achievement));
 	updateMoney(achievement.getValue());
 }
 
-function genGems_deterministic(delta){
+function genGems_deterministic(delta) {
 	var toSpawn = [];
-	Gems.forEach(function(gem){
+	Gems.forEach(function(gem) {
 		var f = gem.factory;
 		var rate = f.getRate() * f.owned;
-		if(rate <= 0)
+		if (rate <= 0)
 			return false;
 		//console.log("Rate = " + rate);
-		if(f.cooldown === undefined)
+		if (f.cooldown === undefined)
 			f.cooldown = 0;
 		else
 			f.cooldown -= delta;
 
-		while(f.cooldown <= 0){
+		while (f.cooldown <= 0) {
 			toSpawn[toSpawn.length] = gem;
 			f.cooldown += (1 / rate);
 		}
@@ -584,16 +615,16 @@ function genGems_deterministic(delta){
 }
 
 
-function genGems_probabilistic(delta){
+function genGems_probabilistic(delta) {
 	var toSpawn = [];
-	Gems.forEach(function(gem){
+	Gems.forEach(function(gem) {
 		var f = gem.factory;
 		var chance = delta * f.getRate() * f.owned;
-		while(chance > 1){
+		while (chance > 1) {
 			toSpawn[toSpawn.length] = gem;
 			chance--;
 		}
-		if(Math.random() < chance)
+		if (Math.random() < chance)
 			toSpawn[toSpawn.length] = gem;
 	});
 	return toSpawn;
@@ -603,7 +634,7 @@ function genGems_probabilistic(delta){
 // LOAD/SAVE/SIM/EXPORT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function saveGame(){
+function buildSave() {
 	var save = {
 		gems: [],
 		upgrades: []
@@ -612,62 +643,83 @@ function saveGame(){
 	// Gather all gamestate elements
 	save.time = new Date().getTime();
 	save.money = money;
-	Gems.forEach(function(gem){
+	Gems.forEach(function(gem) {
 		save.gems.push({
 			factory: gem.factory.owned,
 			clickpower: gem.clickpower.owned
 		});
 	});
-	Upgrades.forEach(function(upgrade){
+	Upgrades.forEach(function(upgrade) {
 		save.upgrades.push(upgrade.owned);
 	});
 	save.AutoDrop = AutoDrop.rate;
 
-	localStorage.setItem("save", JSON.stringify(save));
-	return true;
-	//console.log("Game saved");
+	return JSON.stringify(save);
+	// console.log(JSON.stringify(save));
 }
 
-function loadGame(){
-	// Get save from localStorage
-	var gameString = localStorage.getItem("save");
-	if(gameString === null){
-		console.log("No save game found");
-		return false;
-	}
-	var save = JSON.parse(gameString);
-	console.log(save);
-	
+function loadSave(save){
 	// Copy over the gamestate
 	money = save.money;
-	Gems.forEach(function(gem, index){
+	Gems.forEach(function(gem, index) {
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
+		updateClickPower(gem);
+		updateFactory(gem);
 	});
-	Upgrades.forEach(function(upgrade, index){
+	Upgrades.forEach(function(upgrade, index) {
 		upgrade.owned = save.upgrades[index];
+		updateUpgrade(upgrade);
 	});
 	AutoDrop.rate = save.AutoDrop;
 	Inventory.build();
 
 	var delta = new Date().getTime() - save.time;
 	var offline_income = simulate(delta / 1000);
-	if(Settings.offline_gains)
+	if (Settings.offline_gains)
 		money += offline_income;
+	return true;
+}
+
+function saveGame() {
+	localStorage.setItem("save", buildSave());
+	return true;
+	//console.log("Game saved");
+}
+
+function loadGame() {
+	// Get save from localStorage
+	var gameString = localStorage.getItem("save");
+	if (gameString === null) {
+		console.log("No save game found");
+		return false;
+	}
+	var save = JSON.parse(gameString);
+	console.log(save);
+
+	loadSave(save);
 
 	// Done
 	console.log("Game loaded succesfully");
 	return true;
 }
 
-function resetGame(){
+function exportGame(){
+	prompt("Copy and paste this import code to a text file.", Base64.encode(buildSave()));
+}
+
+function importGame(code){
+	return loadSave(JSON.parse(Base64.decode(code)));
+}
+
+function resetGame() {
 	localStorage.clear();
 	console.log("Game save deleted");
 }
 
-function simulate(delta){
+function simulate(delta) {
 	// delta should be time in SECONDS
-	console.log("Offline time: "+delta+"s");
+	console.log("Offline time: " + delta + "s");
 
 	var inv_size = Inventory.getSize();
 	var inv_cap = (inv_size.width * inv_size.height) / (DEFAULT_GEM_RADIUS * DEFAULT_GEM_RADIUS * 4);
@@ -675,9 +727,9 @@ function simulate(delta){
 
 
 	var max_rate;
-	if(AutoDrop.rate === -1)
+	if (AutoDrop.rate === -1)
 		max_rate = inv_cap / delta;
-	else if(AutoDrop.rate === -1)
+	else if (AutoDrop.rate === -1)
 		max_rate = inv_cap;
 	else
 		max_rate = inv_cap / AutoDrop.rate;
@@ -685,31 +737,31 @@ function simulate(delta){
 
 	var rate = [];
 	var total_rate = 0;
-	Gems.forEach(function(gem){
+	Gems.forEach(function(gem) {
 		var spawned = gem.factory.getRate() * gem.factory.owned;
 		rate.push(spawned);
 		total_rate += spawned;
 	});
-	console.log("Uncapped rate: "+total_rate+" gems/sec");
+	console.log("Uncapped rate: " + total_rate + " gems/sec");
 
 	var cap_ratio = 1;
-	if(total_rate > max_rate){
-		cap_ratio = max_rate/total_rate;
+	if (total_rate > max_rate) {
+		cap_ratio = max_rate / total_rate;
 		total_rate = max_rate;
 	}
-	console.log("Cap ratio: "+cap_ratio);
+	console.log("Cap ratio: " + cap_ratio);
 
 	var income = 0;
-	rate.forEach(function(rate, index){
+	rate.forEach(function(rate, index) {
 		income += rate * Gems[index].getValue();
 	});
-	console.log("Uncapped income: "+formatMoney(income)+"/s");
+	console.log("Uncapped income: " + formatMoney(income) + "/s");
 
 	income *= cap_ratio;
-	console.log("Capped income: "+formatMoney(income)+"/s");
+	console.log("Capped income: " + formatMoney(income) + "/s");
 
 	var total_income = Math.round(income * delta);
-	console.log("Total income: "+formatMoney(total_income));
+	console.log("Total income: " + formatMoney(total_income));
 
 	return total_income;
 }
@@ -718,17 +770,17 @@ function simulate(delta){
 // UTILITIES
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function formatMoney(num = money){
+function formatMoney(num = money) {
 	var thirdpower = 0;
-	while(num >= 1000){
+	while (num >= 1000) {
 		num /= 1000;
 		thirdpower++;
 	}
 
 	var suffix = ["", "k", "M", "B", "T", "Q"];
 
-	var formatted ="";
-	if(thirdpower === 0 || num >= 100)
+	var formatted = "";
+	if (thirdpower === 0 || num >= 100)
 		formatted = Math.floor(num);
 	else if (num >= 10) {
 		formatted = Math.floor(num * 10) / 10;
@@ -739,25 +791,27 @@ function formatMoney(num = money){
 	return "$" + formatted;
 }
 
-function formatTime(ms){
+function formatTime(ms) {
 	return Math.ceil(ms / 1000) + "s";
 }
 
 function log(b, n) {
-    return Math.log(n) / Math.log(b);
+	return Math.log(n) / Math.log(b);
 }
 
-function getTotalRate(){
+function getTotalRate() {
 	var rate = 0;
-	for(var i = 0; i < factories.length; i++){
+	for (var i = 0; i < factories.length; i++) {
 		var factory = factories[i];
-		if(!factory.owned) continue;
+		if (!factory.owned) continue;
 		rate += factory.getRate() * factory.owned;
 	}
 	return rate;
 }
 
-function cheat(){
+
+
+function cheat() {
 	Upgrades[2].owned = true;
 	Upgrades[2].onPurchase();
 	Upgrades[3].owned = true;
@@ -768,71 +822,71 @@ function cheat(){
 	// money += 1000000000;
 	// updateMoney();
 	// updateFactory(Gems[1]);
-	
 
-/*	// Skip to amethyst
-	Upgrades[0].owned = Upgrades[1].owned = true;
-	Gems[2].clickpower.owned = true;
-	Gems[0].factory.owned = 14;
-	Gems[1].factory.owned = 3;
-	updateFactory(Gems[0]);
-	updateFactory(Gems[1]);
-	updateUpgrade(Upgrades[0]);
-	updateUpgrade(Upgrades[1]);
-	Upgrades[1].onPurchase();
-	updateClickPower(Gems[2]);
-	Upgrades[2].owned = true;
-	Upgrades[2].onPurchase();
-	Upgrades[3].owned = true;*/
+
+	/*	// Skip to amethyst
+		Upgrades[0].owned = Upgrades[1].owned = true;
+		Gems[2].clickpower.owned = true;
+		Gems[0].factory.owned = 14;
+		Gems[1].factory.owned = 3;
+		updateFactory(Gems[0]);
+		updateFactory(Gems[1]);
+		updateUpgrade(Upgrades[0]);
+		updateUpgrade(Upgrades[1]);
+		Upgrades[1].onPurchase();
+		updateClickPower(Gems[2]);
+		Upgrades[2].owned = true;
+		Upgrades[2].onPurchase();
+		Upgrades[3].owned = true;*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INIT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function init(){
+function init() {
 	money = 10000000000;
 
-	if(Settings.enable_save)
+	if (Settings.enable_save)
 		loadGame();
 
 	// Clickpowers and Factories
-	Gems.forEach(function(gem){
+	Gems.forEach(function(gem) {
 		UI.click_powers.appendChild(getClickPowerHMTL(gem));
 		UI.factories.appendChild(getFactoryHTML(gem));
 	})
 
 	// Upgrades
-	Upgrades.forEach(function(upgrade){
+	Upgrades.forEach(function(upgrade) {
 		UI.upgrades.appendChild(getUpgradeHTML(upgrade));
 	});
 
 	// Buffs
-	Buffs.forEach(function(buff){
+	Buffs.forEach(function(buff) {
 		UI.buffs.appendChild(getBuffHTML(buff))
 	});
 
 	// Achievements
-	Achievements.all.forEach(function(achievement){
+	Achievements.all.forEach(function(achievement) {
 		UI.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
 	});
 
 	// Buy Mode
-	UI.buy.onclick = function() { setBuyMode(BuyMode.BUY,	UI.buy); };
-	UI.sell.onclick = function() { setBuyMode(BuyMode.SELL,	UI.sell); };
-	UI.buy_1.onclick = function() { setBuyQuantity(1,	UI.buy_1); };
-	UI.buy_10.onclick = function() { setBuyQuantity(10,	UI.buy_10); };
-	UI.buy_100.onclick = function() { setBuyQuantity(100,	UI.buy_100); };
-	UI.buy_max.onclick = function() { setBuyQuantity("max",	UI.buy_max); };
+	UI.buy.onclick = function() { setBuyMode(BuyMode.BUY, UI.buy); };
+	UI.sell.onclick = function() { setBuyMode(BuyMode.SELL, UI.sell); };
+	UI.buy_1.onclick = function() { setBuyQuantity(1, UI.buy_1); };
+	UI.buy_10.onclick = function() { setBuyQuantity(10, UI.buy_10); };
+	UI.buy_100.onclick = function() { setBuyQuantity(100, UI.buy_100); };
+	UI.buy_max.onclick = function() { setBuyQuantity("max", UI.buy_max); };
 
 	// Achievements modal
-	UI.achievements.querySelector(".close").onclick=closeAchievements;
+	UI.achievements.querySelector(".close").onclick = closeAchievements;
 
 	// Stats modal
-	UI.stats.modal.querySelector(".close").onclick=closeStats;
+	UI.stats.modal.querySelector(".close").onclick = closeStats;
 
 	// Settings modal
-	UI.settings.modal.querySelector(".close").onclick=closeSettings;
+	UI.settings.modal.querySelector(".close").onclick = closeSettings;
 	initSettings();
 
 	updateMoney();
