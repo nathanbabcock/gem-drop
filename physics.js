@@ -431,7 +431,7 @@ function showFloatingNumber(canvasX, canvasY, num){
 	var x = canvasX + rect.left;
 	var y = canvasY - rect.top;
     
-	y += getRandomInt(0, ui.money.getBoundingClientRect().height);
+	y += getRandomInt(0, UI.money.getBoundingClientRect().height);
 
     // Spawn it
     var float = document.createElement("span");
@@ -440,7 +440,7 @@ function showFloatingNumber(canvasX, canvasY, num){
     float.style.position = "absolute";
     float.style.top = y;
     float.style.left = x;
-    ui.vfx.appendChild(float);
+	UI.vfx.appendChild(float);
 
     // Scale the font size
     var fontsize = { min: 10, max: 25 };
@@ -471,7 +471,7 @@ function showFloatingNumber(canvasX, canvasY, num){
 	}, 1);
 
 	setTimeout(function(){
-	    ui.vfx.removeChild(float);
+		   UI.vfx.removeChild(float);
 	}, ANIM_DURATION);
     
 }
@@ -574,16 +574,16 @@ function hoverAchievement(achievement, pos){
 		x = pos.x + rect.left;
 		y = pos.y - rect.top;
 
-	ui.inv_hover.style.left = x + "px";
-	ui.inv_hover.style.top = y + "px";
-	if(ui.inv_hover.achievement !== achievement)
-		updateAchievement(achievement, ui.inv_hover);
-	ui.inv_hover.style.display = "block";
+	UI.inv_hover.style.left = x + "px";
+	UI.inv_hover.style.top = y + "px";
+	if(UI.inv_hover.achievement !== achievement)
+		updateAchievement(achievement, UI.inv_hover);
+	UI.inv_hover.style.display = "block";
 }
 
 function clearHover(){
-	ui.inv_hover.style.display = "none";
-	ui.inv_hover.achievement = null;
+	UI.inv_hover.style.display = "none";
+	UI.inv_hover.achievement = null;
 }
 
 function getSpawnRect(){
@@ -658,11 +658,11 @@ function closeDrop(){
 }
 
 // Drop
-ui.drop.onmousedown = function(){
+UI.drop.onmousedown = function(){
 	AutoDrop.manuallyOpen = true;
 	openDrop();
 }
-ui.drop.onmouseup = function(){
+UI.drop.onmouseup = function(){
 	AutoDrop.manuallyOpen = false;
 	if(AutoDrop.timer <= 0)
 		closeDrop();

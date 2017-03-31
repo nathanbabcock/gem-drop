@@ -5,7 +5,7 @@
 
 var money = 0;
 
-var ui = {
+var UI = {
 	click_powers: document.getElementById("click_powers"),
 	factories: document.getElementById("factories"),
 	upgrades: document.getElementById("upgrades"),
@@ -43,7 +43,9 @@ var ui = {
 	settings: {
 		modal: document.getElementById("settings"),
 		save: document.getElementById("save"),
-		lastsaved: document.getElementById("lastsaved")
+		lastsaved: document.getElementById("lastsaved"),
+		autosave: document.getElementById("autosave"),
+		particles: document.getElementById("settings_particles")
 	}
 }; 
 
@@ -299,10 +301,10 @@ function updateBuff(buff){
 			if(buff.timeLeft > 0)
 				anyBuff = true;
 		});
-		if(!anyBuff) ui.buffs.style.display = "none";
+		if(!anyBuff)	UI.buffs.style.display = "none";
 	}
 	else {
-		ui.buffs.style.display = "block";
+		UI.buffs.style.display = "block";
 		buff.ui.container.style.display = "block";
 	}
 	buff.ui.name.innerHTML = buff.name;
@@ -340,16 +342,16 @@ function updateAchievement(achievement, element){
 }
 
 function updateStats(){
-	ui.stats.money.innerText = formatMoney();
-	ui.stats.gems.innerText = Stats.gems;
-	ui.stats.clickpower_gems.innerText = Stats.clickpower_gems;
-	ui.stats.upgrades.innerText = Stats.upgrades;
-	ui.stats.clickpowers.innerText = Stats.clickpowers;
-	ui.stats.factories.innerText = Stats.factories;
-	ui.stats.prestige.innerText = Stats.prestige;
-	ui.stats.time.innerText = formatTime(new Date().getTime() - Stats.start_date);
-	ui.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
-	ui.stats.wasted.innerText = Stats.wasted;
+	UI.stats.money.innerText = formatMoney();
+	UI.stats.gems.innerText = Stats.gems;
+	UI.stats.clickpower_gems.innerText = Stats.clickpower_gems;
+	UI.stats.upgrades.innerText = Stats.upgrades;
+	UI.stats.clickpowers.innerText = Stats.clickpowers;
+	UI.stats.factories.innerText = Stats.factories;
+	UI.stats.prestige.innerText = Stats.prestige;
+	UI.stats.time.innerText = formatTime(new Date().getTime() - Stats.start_date);
+	UI.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
+	UI.stats.wasted.innerText = Stats.wasted;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -357,42 +359,42 @@ function updateStats(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function initSettings(){
-	ui.settings.save.onclick = function(){ saveGame(); };
-	ui.settings.lastsaved.innerText = "Last saved less than a second ago";
+	UI.settings.save.onclick = function(){ saveGame(); };
+	UI.settings.lastsaved.innerText = "Last saved less than a second ago";
 }
 
 function openAchievements(){
 	closeSettings();
 	closeStats();
-	ui.achievements.style.display = "block";
+	UI.achievements.style.display = "block";
 }
 
 function closeAchievements(){
-	ui.achievements.style.display = "none";
+	UI.achievements.style.display = "none";
 }
 
 function openStats(){
 	closeAchievements();
 	closeSettings();
-	ui.stats.modal.style.display = "block";
-	ui.stats.timeout = setInterval(updateStats, 1000);
-	ui.stats.isOpen = true;
+	UI.stats.modal.style.display = "block";
+	UI.stats.timeout = setInterval(updateStats, 1000);
+	UI.stats.isOpen = true;
 }
 
 function closeStats(){
-	ui.stats.modal.style.display = "none";
+	UI.stats.modal.style.display = "none";
 	clearInterval(ui.stats.timeout);
-	ui.stats.isOpen = false;
+	UI.stats.isOpen = false;
 }
 
 function openSettings(){
 	closeAchievements();
 	closeStats();
-	ui.settings.modal.style.display = "block";
+	UI.settings.modal.style.display = "block";
 }
 
 function closeSettings(){
-	ui.settings.modal.style.display = "none";
+	UI.settings.modal.style.display = "none";
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,27 +427,27 @@ function calculatePurchase(gem, quantity = BuyMode.quantity){
 
 function setBuyMode(mode, elem){
 	BuyMode.mode = mode;
-	[ui.buy, ui.sell].forEach(function(elem){
+	[ui.buy,	UI.sell].forEach(function(elem){
 		elem.className = "";
 	});
 	elem.className = "active";
 	Gems.forEach(function(gem){	updateFactory(gem); });
 	// if(mode === BuyMode.BUY)
-	// 	ui.buy.className = "active";
+	// 	UI.buy.className = "active";
 	// else
-	// 	ui.sell.className = "active";
+	// 	UI.sell.className = "active";
 }
 
 function setBuyQuantity(quant, elem){
 	BuyMode.quantity = quant;
-	[ui.buy_1, ui.buy_10, ui.buy_100, ui.buy_max].forEach(function(elem){
+	[ui.buy_1,	UI.buy_10,	UI.buy_100,	UI.buy_max].forEach(function(elem){
 		elem.className = "";
 	});
 	elem.className = "active";
 	Gems.forEach(function(gem){ updateFactory(gem); });
 	// switch(quant){
 	// 	case 1:
-	// 		ui.buy_1.className = "active";
+	// 		UI.buy_1.className = "active";
 	// }
 }
 
@@ -525,8 +527,8 @@ function updateMoney(amount = 0){
 	}
 
 	money += amount;
-	ui.actual_money.innerText = formatMoney();
-	ui.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";
+	UI.actual_money.innerText = formatMoney();
+	UI.predicted_money.innerText = " (+" + formatMoney(Inventory.getValue()).substring(1) + ")";
 	Gems.forEach(function(gem){
 		if(!gem.clickpower.owned)
 			updateClickPower(gem);
@@ -555,8 +557,8 @@ function clickBuff(buff){
 
 function getAchievement(achievement){
 	if(ui.achievement_popups.children.length >= 5)
-		ui.achievement_popups.removeChild(ui.achievement_popups.children[0]);
-	ui.achievement_popups.appendChild(getAchievementHTML(achievement));
+		UI.achievement_popups.removeChild(ui.achievement_popups.children[0]);
+	UI.achievement_popups.appendChild(getAchievementHTML(achievement));
 	updateMoney(achievement.getValue());
 }
 
@@ -796,41 +798,41 @@ function init(){
 
 	// Clickpowers and Factories
 	Gems.forEach(function(gem){
-		ui.click_powers.appendChild(getClickPowerHMTL(gem));
-		ui.factories.appendChild(getFactoryHTML(gem));
+		UI.click_powers.appendChild(getClickPowerHMTL(gem));
+		UI.factories.appendChild(getFactoryHTML(gem));
 	})
 
 	// Upgrades
 	Upgrades.forEach(function(upgrade){
-		ui.upgrades.appendChild(getUpgradeHTML(upgrade));
+		UI.upgrades.appendChild(getUpgradeHTML(upgrade));
 	});
 
 	// Buffs
 	Buffs.forEach(function(buff){
-		ui.buffs.appendChild(getBuffHTML(buff))
+		UI.buffs.appendChild(getBuffHTML(buff))
 	});
 
 	// Achievements
 	Achievements.all.forEach(function(achievement){
-		ui.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
+		UI.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
 	});
 
 	// Buy Mode
-	ui.buy.onclick = function() { setBuyMode(BuyMode.BUY, ui.buy); };
-	ui.sell.onclick = function() { setBuyMode(BuyMode.SELL, ui.sell); };
-	ui.buy_1.onclick = function() { setBuyQuantity(1, ui.buy_1); };
-	ui.buy_10.onclick = function() { setBuyQuantity(10, ui.buy_10); };
-	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
-	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
+	UI.buy.onclick = function() { setBuyMode(BuyMode.BUY,	UI.buy); };
+	UI.sell.onclick = function() { setBuyMode(BuyMode.SELL,	UI.sell); };
+	UI.buy_1.onclick = function() { setBuyQuantity(1,	UI.buy_1); };
+	UI.buy_10.onclick = function() { setBuyQuantity(10,	UI.buy_10); };
+	UI.buy_100.onclick = function() { setBuyQuantity(100,	UI.buy_100); };
+	UI.buy_max.onclick = function() { setBuyQuantity("max",	UI.buy_max); };
 
 	// Achievements modal
-	ui.achievements.querySelector(".close").onclick=closeAchievements;
+	UI.achievements.querySelector(".close").onclick=closeAchievements;
 
 	// Stats modal
-	ui.stats.modal.querySelector(".close").onclick=closeStats;
+	UI.stats.modal.querySelector(".close").onclick=closeStats;
 
 	// Settings modal
-	ui.settings.modal.querySelector(".close").onclick=closeSettings;
+	UI.settings.modal.querySelector(".close").onclick=closeSettings;
 	initSettings();
 
 	updateMoney();
