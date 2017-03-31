@@ -39,6 +39,11 @@ var ui = {
 		time: document.getElementById("stats_time"),
 		prestige_time: document.getElementById("stats_prestige_time"),
 		isOpen: false
+	},
+	settings: {
+		modal: document.getElementById("settings"),
+		save: document.getElementById("save"),
+		lastsaved: document.getElementById("lastsaved")
 	}
 }; 
 
@@ -348,6 +353,49 @@ function updateStats(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MENU/MODAL
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function initSettings(){
+	ui.settings.save.onclick = function(){ saveGame(); };
+	ui.settings.lastsaved.innerText = "Last saved less than a second ago";
+}
+
+function openAchievements(){
+	closeSettings();
+	closeStats();
+	ui.achievements.style.display = "block";
+}
+
+function closeAchievements(){
+	ui.achievements.style.display = "none";
+}
+
+function openStats(){
+	closeAchievements();
+	closeSettings();
+	ui.stats.modal.style.display = "block";
+	ui.stats.timeout = setInterval(updateStats, 1000);
+	ui.stats.isOpen = true;
+}
+
+function closeStats(){
+	ui.stats.modal.style.display = "none";
+	clearInterval(ui.stats.timeout);
+	ui.stats.isOpen = false;
+}
+
+function openSettings(){
+	closeAchievements();
+	closeStats();
+	ui.settings.modal.style.display = "block";
+}
+
+function closeSettings(){
+	ui.settings.modal.style.display = "none";
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUY/SELL/SPAWN
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -574,6 +622,7 @@ function saveGame(){
 	save.AutoDrop = AutoDrop.rate;
 
 	localStorage.setItem("save", JSON.stringify(save));
+	return true;
 	//console.log("Game saved");
 }
 
@@ -735,20 +784,6 @@ function cheat(){
 	Upgrades[3].owned = true;*/
 }
 
-function openAchievements(){
-	ui.achievements.style.display = "block";
-}
-
-function openStats(){
-	ui.stats.modal.style.display = "block";
-	ui.stats.timeout = setInterval(updateStats, 1000);
-	ui.stats.isOpen = true;
-}
-
-function openSettings(){
-	ui.settings.style.display = "block";
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INIT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -788,19 +823,15 @@ function init(){
 	ui.buy_100.onclick = function() { setBuyQuantity(100, ui.buy_100); };
 	ui.buy_max.onclick = function() { setBuyQuantity("max", ui.buy_max); };
 
-	// Achievements menu itme
-	ui.achievements.querySelector(".close").onclick=function(){
-		ui.achievements.style.display = "none";
-	}
+	// Achievements modal
+	ui.achievements.querySelector(".close").onclick=closeAchievements;
 
-	// Stats menu item
-	ui.stats.modal.querySelector(".close").onclick=function(){
-		ui.stats.modal.style.display = "none";
-		clearInterval(ui.stats.timeout);
-		ui.stats.isOpen = false;
-	}
-	// initModal(ui.stats);
-	// initModal(ui.settings);
+	// Stats modal
+	ui.stats.modal.querySelector(".close").onclick=closeStats;
+
+	// Settings modal
+	ui.settings.modal.querySelector(".close").onclick=closeSettings;
+	initSettings();
 
 	updateMoney();
 }
