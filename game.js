@@ -88,14 +88,18 @@ var OfflineMode = {
 // CREATE UI
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getClickPowerHMTL(gem) {
+function getClickPowerHTML(gem) {
 	var clickpower = gem.clickpower,
 		refs = clickpower.ui = {},
 		container = refs.container;
 	container = document.createElement("div");
 	container.className = "gem_click_power popup_container";
 	container.innerHTML = `
-		<div class="popup_anchor">Quartz</div>
+		<div class="popup_anchor">
+			<img class="clickpower">
+			<span class="name"></span>
+			<span class="price"></span>
+		</div>
 		<div class="popup">
 			<strong class="name">Quartz</strong>
 			<div class="rate">+1 per click</div>
@@ -104,15 +108,23 @@ function getClickPowerHMTL(gem) {
 		</div>`;
 
 	refs.anchor = container.querySelector(".popup_anchor");
+	refs.img = refs.anchor.querySelector("img");
 	refs.popup = container.querySelector(".popup");
-	refs.name = container.querySelector(".name");
-	refs.rate = container.querySelector(".rate");
-	refs.price = container.querySelector(".price");
-	refs.costs = container.querySelector(".costs");
+	refs.name = refs.popup.querySelector(".name");
+	refs.rate = refs.popup.querySelector(".rate");
+	refs.price = refs.popup.querySelector(".price");
+	refs.costs = refs.popup.querySelector(".costs");
+
+	refs.anchor_name = refs.anchor.querySelector(".name");
+	refs.anchor_price = refs.anchor.querySelector(".price");
+
+	refs.anchor_name.innerText = gem.name;
+	refs.anchor_price.innerText = formatMoney(clickpower.getCost());
 
 	// Onclick
+	refs.img.src = clickpower.image;
 	refs.anchor.onclick = function() { buyClickPower(gem); };
-	refs.anchor.innerText = gem.name;
+	// refs.anchor.innerText = gem.name;
 	refs.name.innerText = gem.name;
 
 	updateClickPower(gem);
@@ -135,7 +147,11 @@ function getFactoryHTML(gem) {
 		container = refs.container = document.createElement("div");
 	container.className = "factory popup_container";
 	container.innerHTML = `
-		<div class="popup_anchor">Quartz</div>
+		<div class="popup_anchor">
+			<img>
+			<span class="owned"></span>
+			<span class="price"></span>
+		</div>
 		<div class="popup">
 			<strong class="name">Quartz Factory</strong>
 			<div class="rate">+1 per second</div>
@@ -144,14 +160,20 @@ function getFactoryHTML(gem) {
 		</div>`;
 
 	refs.anchor = container.querySelector(".popup_anchor");
+	refs.image = refs.anchor.querySelector("img");
 	refs.popup = container.querySelector(".popup");
 	refs.name = container.querySelector(".name");
 	refs.rate = container.querySelector(".rate");
 	refs.price = container.querySelector(".price");
-	refs.owned = container.querySelector(".owned");
+	refs.owned = refs.popup.querySelector(".owned");
+
+	refs.anchor_owned = refs.anchor.querySelector(".owned");
+	refs.anchor_price = refs.anchor.querySelector(".price");
+
+	refs.image.src = factory.image;
 
 	refs.anchor.onclick = function() { buyFactory(gem); };
-	refs.anchor.innerText = gem.name;
+	//refs.anchor.innerText = gem.name;
 	refs.name.innerText = gem.name + " Factory";
 
 	updateFactory(gem);
@@ -258,9 +280,14 @@ function updateClickPower(gem) {
 		clickpower.ui.costs.innerText = "";
 
 	if (!clickpower.owned && clickpower.getCost() > money)
-		clickpower.ui.anchor.className = "popup_anchor disabled";
+		clickpower.ui.anchor.className = "popup_anchor cant_afford";
+	else if(!clickpower.owned)
+		clickpower.ui.anchor.className = "popup_anchor can_afford";
+	else if(clickpower.owned && Gems.active_clickpower === gem)
+		clickpower.ui.anchor.className = "popup_anchor active";
 	else
-		clickpower.ui.anchor.className = "popup_anchor";
+		clickpower.ui.anchor.className = "popup_anchor owned";
+
 }
 
 function updateFactory(gem) {
@@ -268,8 +295,12 @@ function updateFactory(gem) {
 	var factory = gem.factory;
 	factory.ui.rate.innerText = factory.getRate() + " per second";
 	var purchase = calculatePurchase(gem);
-	factory.ui.price.innerText = (BuyMode.mode === BuyMode.BUY ? "Buy " : "Sell ") + purchase.quantity + " for " + formatMoney(purchase.cost);
+	var purchaseString = (BuyMode.mode === BuyMode.BUY ? "Buy " : "Sell ") + purchase.quantity + " for " + formatMoney(purchase.cost);
+	factory.ui.price.innerText = purchaseString;
 	factory.ui.owned.innerText = factory.owned + " owned";
+
+	factory.ui.anchor_owned.innerText = factory.owned;
+	factory.ui.anchor_price.innerText = purchase.quantity+"x "+formatMoney(purchase.cost);
 
 	if (BuyMode.mode == BuyMode.BUY) {
 		if (purchase.cost > money || purchase.quantity === 0)
@@ -491,14 +522,19 @@ function setBuyQuantity(quant, elem) {
 
 function buyClickPower(gem) {
 	var clickpower = gem.clickpower;
-	if (clickpower.owned || clickpower.getCost() > money)
+	if (clickpower.owned) {
+		Gems.active_clickpower = gem;
+		Gems.forEach(function(gem){updateClickPower(gem);});
+	} else if (clickpower.getCost() > money)
 		return false;
 	updateMoney(-clickpower.getCost());
 	clickpower.owned++;
 	Stats.clickpowers++;
-	Achievements.clickpower.byGem(gem).check();
+	if(gem !== Gems.quartz)
+		Achievements.clickpower.byGem(gem).check();
 	Achievements.clickpower.total.check();
-	updateClickPower(gem);
+	Gems.active_clickpower = gem;
+	Gems.forEach(function(gem){updateClickPower(gem);});
 	return true;
 }
 
@@ -540,11 +576,11 @@ function buyUpgrade(upgrade) {
 }
 
 function doClick() {
-	var bestGem = null;
-	Gems.forEach(function(gem) {
-		if (gem.clickpower.owned && (bestGem === null || gem.getValue() > bestGem.getValue()))
-			bestGem = gem;
-	});
+	var bestGem = Gems.active_clickpower;
+	// Gems.forEach(function(gem) {
+	// 	if (gem.clickpower.owned && (bestGem === null || gem.getValue() > bestGem.getValue()))
+	// 		bestGem = gem;
+	// });
 	var gemsToMake = [];
 	for (var i = 0; i < bestGem.clickpower.getRate(); i++)
 		gemsToMake.push(bestGem);
@@ -812,7 +848,27 @@ function getTotalRate() {
 	return rate;
 }
 
+function hasClass(el, className) {
+  if (el.classList)
+    return el.classList.contains(className)
+  else
+    return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+}
 
+function addClass(el, className) {
+  if (el.classList)
+    el.classList.add(className)
+  else if (!hasClass(el, className)) el.className += " " + className
+}
+
+function removeClass(el, className) {
+  if (el.classList)
+    el.classList.remove(className)
+  else if (hasClass(el, className)) {
+    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
+    el.className=el.className.replace(reg, ' ')
+  }
+}
 
 function cheat() {
 	Upgrades[2].owned = true;
@@ -853,10 +909,13 @@ function init() {
 	if (Settings.enable_save)
 		loadGame();
 
+	var clickpower_container = UI.click_powers.querySelector(".scroll");
+	var factory_container = UI.factories.querySelector(".scroll");
+
 	// Clickpowers and Factories
 	Gems.forEach(function(gem) {
-		UI.click_powers.appendChild(getClickPowerHMTL(gem));
-		UI.factories.appendChild(getFactoryHTML(gem));
+		clickpower_container.appendChild(getClickPowerHTML(gem));
+		factory_container.appendChild(getFactoryHTML(gem));
 	})
 
 	// Upgrades

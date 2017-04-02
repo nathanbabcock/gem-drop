@@ -72,80 +72,96 @@ var Gems = [
 		baseValue: 1,
 		clickpower: {
 			owned: true,
-			baseCost: 0
+			baseCost: 0,
+			image: "img/quartz-clickpower.png"
 		},
 		factory: {
-			baseCost: 25
+			baseCost: 25,
+			image: "img/quartz-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Topaz",
 		baseValue: 12,
 		clickpower: {
-			baseCost: 100
+			baseCost: 100,
+			image: "img/topaz-clickpower.png"
 		},
 		factory: {
-			baseCost: 500
+			baseCost: 500,
+			image: "img/topaz-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Amethyst",
 		baseValue: 150,
 		clickpower: {
-			baseCost: 1750
+			baseCost: 1750,
+			image: "img/amethyst-clickpower.png"
 		},
 		factory: {
-			baseCost: 6000
+			baseCost: 6000,
+			image: "img/amethyst-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Sapphire",
 		baseValue: 1750,
 		clickpower: {
-			baseCost: 22000
+			baseCost: 22000,
+			image: "img/sapphire-clickpower.png"
 		},
 		factory: {
-			baseCost: 33000
+			baseCost: 33000,
+			image: "img/sapphire-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Emerald",
 		baseValue: 25000,
 		clickpower: {
-			baseCost: 300000
+			baseCost: 300000,
+			image: "img/emerald-clickpower.png"
 		},
 		factory: {
-			baseCost: 450000
+			baseCost: 450000,
+			image: "img/emerald-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Ruby",
 		baseValue: 275000,
 		clickpower: {
-			baseCost: 3500000
+			baseCost: 3500000,
+			image: "img/ruby-clickpower.png"
 		},
 		factory: {
-			baseCost: 5250000
+			baseCost: 5250000,
+			image: "img/ruby-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Diamond",
 		baseValue: 1000000,
 		clickpower: {
-			baseCost: 15000000
+			baseCost: 15000000,
+			image: "img/diamond-clickpower.png"
 		},
 		factory: {
-			baseCost: 22500000
+			baseCost: 22500000,
+			image: "img/diamond-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Rainbow",
 		baseValue: 50000000,
 		clickpower: {
-			baseCost: 600000000
+			baseCost: 600000000,
+			image: "img/rainbow-clickpower.png"
 		},
 		factory: {
-			baseCost: 1000000000
+			baseCost: 1000000000,
+			image: "img/rainbow-factory.png"
 		}
 	})
 ];
@@ -159,6 +175,8 @@ Gems.emerald = Gems[4];
 Gems.ruby = Gems[5];
 Gems.diamond = Gems[6];
 Gems.rainbow = Gems[7];
+
+Gems.active_clickpower = Gems.quartz;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // UPGRADES
@@ -368,7 +386,7 @@ var Buffs = [
 		getChance: function(){ return this.baseChance; },
 	}
 ];
-Buffs.baseRate = 1;
+Buffs.baseRate = Infinity;
 Buffs.getRate = function(){ return Buffs.baseRate; };
 Buffs.autocollect = false;
 Buffs.star = Buffs[0];

@@ -43,7 +43,7 @@
 
 #ui {
 	padding:0 10px;
-	width:535px;
+	width:620px;
 	overflow-x:hidden;
 	overflow-y:scroll;
 }
@@ -81,7 +81,7 @@
 .section_name {
 	background-color:#000;
 	color:white;
-	min-width:500px;
+	width:590px;
 	padding:10px;
 	display:inline-block;
 	margin-top:5px;
@@ -434,6 +434,69 @@ button:focus {
 #settings input {
 	margin-left:10px;
 }
+
+/*img.clickpower {
+	height:50px;
+}*/
+
+.popup_anchor {
+	border:none;
+}
+
+.popup_anchor img {
+	height:50px;
+}
+
+.scroll {
+	overflow-x:scroll;
+	overflow-y:hidden;
+	white-space:nowrap;
+	width:600px;
+}
+
+.popup_container {
+	display: inline-block;
+	float:none;
+	text-align:center;
+	width:110px;
+}
+
+.popup_container,
+.popup_container * {
+	cursor:pointer;
+}
+
+.popup_anchor span {
+	display:block;
+}
+
+#factories .popup_anchor .owned {
+	font-weight:bold;
+	font-size:20px;
+}
+
+#factories .popup_anchor .price {
+	font-size:14px;
+}
+
+#click_powers .active .name {
+	font-weight:bold;
+}
+
+#click_powers .owned .price,
+#click_powers .active .price {
+	/*display:none;*/
+	opacity: 0; /*todo*/
+}
+
+#click_powers .can_afford .price {
+	color:green;
+}
+
+#click_powers .cant_afford .price {
+	color:red;
+}
+
 
 /*.timeleft {
 	float:left;
