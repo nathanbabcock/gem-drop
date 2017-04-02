@@ -46,6 +46,11 @@ var MOUSE_FILTER = {
 		group: 2,
 		category: 4,
 		mask: 5
+	},
+	NOCLIP = {
+		group: 0,
+		category:8,
+		mask:0
 	};
 
 // run the engine
@@ -351,6 +356,11 @@ function spawnGem(pos, gem){
 			return false;
 	}
 	body.gem = gem;
+
+	// Noclip
+	if(AutoDrop.rate === 0)
+		body.collisionFilter = NOCLIP;
+
 	World.add(engine.world, body);
 	updateMoney();
 }
@@ -360,38 +370,87 @@ function spawnBuff(pos, buff){
 	var DEFAULT_RADIUS = DEFAULT_GEM_RADIUS;
 	switch(buff.name){
 		case "Star":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					// {x: 9, y:48},
+					// {x:25, y:39},
+					// {x:40, y:48},
+					// {x:37, y:30},
+					// {x:49, y:18},
+					// {x:32, y:17},
+					// {x:25, y: 1},
+					// {x:18, y:17},
+					// {x: 1, y:18},
+					// {x:13, y:30}
+					{x: 9, y:48},
+					{x:40, y:48},
+					{x:49, y:18},
+					{x:25, y: 1},
+					{x: 1, y:18}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "yellow",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+						texture: 'img/star-small.png'
+					},
 				}
 			});
 			break;
 		case "Heart":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x:25, y:43},
+					{x:50, y:18},
+					{x:50, y: 7},
+					{x:43, y: 0},
+					{x: 7, y: 0},
+					{x: 0, y: 7},
+					{x: 0, y:18}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "pink",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+						texture: 'img/heart-small.png'
+					},
 				}
 			});
 			break;
 		case "Cursor":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 0, y:43},
+					{x:18, y:52},
+					{x:25, y:49},
+					{x:31, y:29},
+					{x: 1, y: 1}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "white",
-					strokeStyle: "black"
+					strokeStyle: "black",
+					sprite: {
+						texture: 'img/cursor-small.png'
+					},
 				}
 			});
 			break;
 		case "Teardrop":
-			body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+			body = Bodies.fromVertices(pos.x, pos.y, [
+					{x: 0, y:38},
+					{x: 5, y:50},
+					{x:19, y:54},
+					{x:31, y:48},
+					{x:35, y:35},
+					{x:17, y: 1}
+				], {
 				collisionFilter: BODY_FILTER,
 				render: {
 					fillStyle: "lightblue",
-					strokeStyle: "transparent"
+					strokeStyle: "transparent",
+					sprite: {
+						texture: 'img/teardrop-small.png'
+					},
 				}
 			});
 			break;
@@ -411,11 +470,39 @@ function spawnTrophy(achievement){
 		x: getRandomInt(spawnRect.x1, spawnRect.x2),
 		y: getRandomInt(spawnRect.y1, spawnRect.y2)
 	};
-	body = Bodies.circle(pos.x, pos.y, DEFAULT_RADIUS, {
+	body = Bodies.fromVertices(pos.x, pos.y, [
+		{x:10, y:53},
+		{x:40, y:53},
+		{x:50, y: 3},
+		{x:41, y: 0},
+		{x: 9, y: 0},
+		{x: 0, y: 3}
+			// {x:10, y:53},
+			// {x:40, y:53},
+			// {x:40, y:50},
+			// {x:28, y:44},
+			// {x:28, y:32},
+			// {x:46, y:17},
+			// {x:49, y:10},
+			// {x:50, y: 3},
+			// {x:41, y: 3},
+			// {x:41, y: 0},
+			// {x: 9, y: 0},
+			// {x: 9, y: 3},
+			// {x: 0, y: 3},
+			// {x: 1, y:10},
+			// {x: 5, y:17},
+			// {x:22, y:32},
+			// {x:22, y:44},
+			// {x:10, y:50}
+		], {
 		collisionFilter: BODY_FILTER,
 		render: {
 			fillStyle: "yellow",
-			strokeStyle: "transparent"
+			strokeStyle: "transparent",
+			sprite: {
+                texture: 'img/trophy-small.png'
+            },
 		}
 	});
 	body.achievement = achievement;

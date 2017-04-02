@@ -242,6 +242,7 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
+
 		}
 	},
 	{
@@ -367,7 +368,7 @@ var Buffs = [
 		getChance: function(){ return this.baseChance; },
 	}
 ];
-Buffs.baseRate = Infinity;
+Buffs.baseRate = 1;
 Buffs.getRate = function(){ return Buffs.baseRate; };
 Buffs.autocollect = false;
 Buffs.star = Buffs[0];
@@ -608,6 +609,6 @@ function checkAll(list){
 var Settings = {
 	enable_save: false,
 	offline_gains: true,
-	render_sprites: false,
+	render_sprites: true,
 	render_floatingnums: false
 }

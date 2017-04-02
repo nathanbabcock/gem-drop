@@ -326,6 +326,10 @@ button:focus {
 	font-weight:bold;
 }
 
+.locked img {
+	filter: brightness(50%) grayscale(100%);
+}
+
 #inv_hover {
 	margin-top:-25px;
 	margin-left:25px;

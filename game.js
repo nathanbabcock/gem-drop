@@ -216,7 +216,7 @@ function getAchievementHTML(achievement) {
 	var container = document.createElement("div");
 	container.className = "achievement";
 	container.innerHTML = `
-		<img class="icon" src="">
+		<img class="icon" src="img/trophy.png">
 		<div class="text">
 			<strong class="name">Hello World</strong>
 			<span class="description">Popup text goes here</span>
@@ -235,7 +235,7 @@ function getAchievementIconHTML(achievement) {
 	var refs = achievement.ui = {},
 		container = refs.container = document.createElement("div");
 	container.className = "achievement_icon popup_container";
-	container.innerHTML = `<img class="icon popup_anchor" src="">`;
+	container.innerHTML = `<img class="icon popup_anchor" src="img/trophy.png">`;
 	var popup = getAchievementHTML(achievement);
 	updateAchievement(achievement, popup);
 	popup.className += " popup";
@@ -328,7 +328,10 @@ function updateAchievement(achievement, element) {
 			<div class="clear"></div>
 		</div>*/
 
-	// element.querySelector(".icon").src = achievement.icon;
+	// if(!achievement.owned)
+	// 	element.querySelectorAll(".icon").forEach(function(e){e.style.filter = "brightness(50%) grayscale(100%)"; });
+	// else
+	// 	element.querySelector(".icon").style.filter = "";
 	element.querySelector(".name").innerText = achievement.name;
 	element.querySelector(".description").innerText = achievement.description;
 	element.querySelector(".value").innerText = formatMoney(achievement.getValue());
