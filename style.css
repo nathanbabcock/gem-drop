@@ -489,14 +489,18 @@ button:focus {
 	opacity: 0; /*todo*/
 }
 
-#click_powers .can_afford .price {
+.can_afford .price {
 	color:green;
 }
 
-#click_powers .cant_afford .price {
+.cant_afford .price {
 	color:red;
 }
 
+.cant_afford img {
+	/*filter: grayscale(100%);*/
+	opacity:0.3;
+}
 
 /*.timeleft {
 	float:left;

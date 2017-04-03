@@ -77,13 +77,13 @@ var Inventory = {
 		// TODO shorthand like this? Array must be ordered descending according to size/priority
 		// Upgrades.InvSize.forEach(function(upgrade){
 		// });
-		if(Upgrades[2].owned)
-			return Upgrades[2].size;
-		else if(Upgrades[1].owned)
+		// if(Upgrades[2].owned)
+		// 	return Upgrades[2].size;
+		if(Upgrades[1].owned)
 			return Upgrades[1].size;
 		else if(Upgrades[0].owned)
 			return Upgrades[0].size;
-		else return { width: 50, height: 250 };
+		else return { width: 100, height: 300 };//{ width: 50, height: 250 };
 	},
 
 	// body references

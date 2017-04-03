@@ -188,18 +188,18 @@ var UPGRADE_CATEGORY = {
 }
 
 var Upgrades = [
-	{
-		name: "Inventory Size I",
-		description: "More space to hold gems.",
-		baseCost:12,
-		getCost: function() { return this.baseCost; },
-		category: UPGRADE_CATEGORY.INVENTORY_SIZE,
-		onPurchase: function(){
-			Inventory.build();
-		},
-		size: { width: 100, height: 300 },
-		owned: false
-	},
+	// {
+	// 	name: "Inventory Size I",
+	// 	description: "More space to hold gems.",
+	// 	baseCost:12,
+	// 	getCost: function() { return this.baseCost; },
+	// 	category: UPGRADE_CATEGORY.INVENTORY_SIZE,
+	// 	onPurchase: function(){
+	// 		Inventory.build();
+	// 	},
+	// 	size: { width: 100, height: 300 },
+	// 	owned: false
+	// },
 	{
 		name: "Inventory Size II",
 		description: "More space to hold gems.",

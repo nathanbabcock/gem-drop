@@ -304,15 +304,17 @@ function updateFactory(gem) {
 
 	if (BuyMode.mode == BuyMode.BUY) {
 		if (purchase.cost > money || purchase.quantity === 0)
-			factory.ui.anchor.className = "popup_anchor disabled";
+			factory.ui.anchor.className = "popup_anchor cant_afford";
 		else
-			factory.ui.anchor.className = "popup_anchor";
+			factory.ui.anchor.className = "popup_anchor can_afford";
 	} else {
 		if (purchase.quantity === 0)
-			factory.ui.anchor.className = "popup_anchor disabled";
+			factory.ui.anchor.className = "popup_anchor cant_afford";
 		else
-			factory.ui.anchor.className = "popup_anchor";
+			factory.ui.anchor.className = "popup_anchor can_afford";
 	}
+
+
 }
 
 
