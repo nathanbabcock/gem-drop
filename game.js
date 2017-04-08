@@ -219,23 +219,28 @@ function getBuffHTML(buff) {
 	container.className = "buff_container";
 	container.innerHTML = `
 		 				<div class="buff popup_container">
-							<div class="popup_anchor">asdf</div>
+							<div class="popup_anchor"><img></div>
 							<div class="popup">
 								<strong class="name">asdf</strong>
 								<div class="description">+10 butts for 3.5 seconds</div>
 							</div>
 						</div>
-						<div class="progressbar_container">
-							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
-							<div class="timeleft">3s</div>
-						</div>`;
+						<!--<div style="float:left">-->
+							<div class="progressbar_container">
+								<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
+								<div class="timeleft">3s</div>
+							</div>
+							<!--<div class="description2" style="clear:left"></div>-->
+						<!--</div>-->`;
 	refs.anchor = container.querySelector(".popup_anchor");
 	refs.name = container.querySelector(".name");
 	refs.description = container.querySelector(".description");
 	refs.progressbar = container.querySelector(".progressbar_inner");
 	refs.timeleft = container.querySelector(".timeleft");
 
-	refs.anchor.innerText = buff.name;
+	refs.anchor.children[0].src = buff.img;
+	// container.querySelector(".description2").innerText = buff.description;
+	// refs.anchor.innerText = buff.name;
 	updateBuff(buff);
 	return container;
 }

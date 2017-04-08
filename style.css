@@ -228,6 +228,13 @@ button:focus {
 	outline: none;
 }
 
+
+
+.progressbar_container {
+	margin-left:10px;
+	margin-top:25px;
+}
+
 .progressbar_outer {
 	width: 150px;
 	height:7px;
@@ -235,8 +242,6 @@ button:focus {
 	background-color: black;
 	padding:3px;
 	float:left;
-	margin-left:10px;
-	margin-top:15px;
 }
 .progressbar_inner {
 	width:50%;
@@ -249,7 +254,8 @@ button:focus {
 .timeleft {
 	float:left;
 	font-weight: bold;
-	padding:10 10px;
+	margin-top: -5px;
+    margin-left: 10px;
 	opacity: 0;
 	transition:opacity 0.15s;
 }
@@ -261,7 +267,7 @@ button:focus {
 	transform: 			translateY(-50%);*/
 }
 
-.progressbar_container:hover .timeleft {
+.buff_container:hover .timeleft {
 	opacity: 1;
 }
 
@@ -540,5 +546,17 @@ a {
 
 #open_owned_upgrades{
 	display:block;
+	text-align:center;
+}
+
+.buff {
+	float:left;
+}
+
+.buff .popup_anchor {
+	padding:0;
+}
+.buff .popup_anchor{
+	width:64px;
 	text-align:center;
 }

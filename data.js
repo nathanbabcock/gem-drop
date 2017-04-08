@@ -364,6 +364,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/star.png"
 	},
 	{
 		name: "Heart",
@@ -375,6 +376,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/heart.png"
 	},
 	{
 		name: "Cursor",
@@ -386,6 +388,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/cursor.png"
 	},
 	{
 		name: "Teardrop",
@@ -395,9 +398,10 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 1, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/teardrop.png"
 	}
 ];
-Buffs.baseRate = Infinity;
+Buffs.baseRate = 0.2;
 Buffs.getRate = function(){ return Buffs.baseRate; };
 Buffs.autocollect = false;
 Buffs.star = Buffs[0];

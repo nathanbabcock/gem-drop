@@ -1097,16 +1097,23 @@ Game Balance
 - Probably just stretch the whole thing out a lot
 - factories become affordable too fast late game
 - Made it to rainbow in 15 min. Should take ~1-2hr
+- Buy/sell ui fix
 
-TODO
-- Upgrades UI
+NEED
+X Upgrades UI
+- Responsive layout (easy)
+X Buffs UI
+- Tooltips (medium)
+- Achievements modal icons (trivial)
+- total money earned bug (trivial)
+- game balance (medium)
+
+
+WANT
 - Prestige
 - Load/save/sim
 - Offline bonus upgrades
-- Responsive layout
-- Buffs UI
-
-
+- alert dialogs pause game?? (trivial)
 
 OPTIONAL
 - Selective noclip (collision with walls and nothing else)
