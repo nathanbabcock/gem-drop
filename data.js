@@ -201,7 +201,7 @@ var Upgrades = [
 	// 	owned: false
 	// },
 	{
-		name: "Inventory Size II",
+		name: "Inventory Size I",
 		description: "More space to hold gems.",
 		baseCost:250,
 		getCost: function() { return this.baseCost; },
@@ -210,10 +210,11 @@ var Upgrades = [
 			Inventory.build();
 		},
 		size: { width: 200, height: 350 },
-		owned: false
+		owned: false,
+		img: "img/inv-1.png"
 	},
 	{
-		name: "Inventory Size III",
+		name: "Inventory Size II",
 		description: "More space to hold gems.",
 		baseCost:4500,
 		getCost: function() { return this.baseCost; },
@@ -224,7 +225,8 @@ var Upgrades = [
 			Achievements.misc.inventory.check();
 		},
 		size: { width: 300, height: 500},
-		owned: false
+		owned: false,
+		img: "img/inv-2.png"
 	},
 	{
 		name: "Auto Drop",
@@ -236,7 +238,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
-		}
+		},
+		img: "img/autodrop-1.png"
 	},
 	{
 		name: "Auto Drop v2",
@@ -248,7 +251,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
-		}
+		},
+		img: "img/autodrop-2.png"
 	},
 	{
 		name: "Auto Drop v3",
@@ -261,7 +265,8 @@ var Upgrades = [
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
 
-		}
+		},
+		img: "img/autodrop-3.png"
 	},
 	{
 		name: "Buffs",
@@ -273,7 +278,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			Buffs.baseRate = this.rate;
-		}
+		},
+		img: "img/heart-1.png"
 	},
 	{
 		name: "More Buffs",
@@ -285,7 +291,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			Buffs.baseRate = this.rate;
-		}
+		},
+		img: "img/heart-2.png"
 	},
 	{
 		name: "Buff Autocollect",
@@ -296,7 +303,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			Buffs.autocollect = true;
-		}
+		},
+		img: "img/heart-3.png"
 	},
 ];
 
@@ -310,7 +318,8 @@ Gems.forEach(function(gem){
 		owned: false,
 		onPurchase: function(){
 			gem.bonus = 2;
-		}
+		},
+		img: "img/"+gem.name.toLowerCase()+"-1.png"
 	});
 
 	Upgrades.push({
@@ -322,7 +331,8 @@ Gems.forEach(function(gem){
 		owned: false,
 		onPurchase: function(){
 			gem.bonus = 4;
-		}
+		},
+		img: "img/"+gem.name.toLowerCase()+"-2.png"
 	});
 
 	Upgrades.push({
@@ -334,7 +344,8 @@ Gems.forEach(function(gem){
 		owned: false,
 		onPurchase: function(){
 			gem.bonus = 8;
-		}
+		},
+		img: "img/"+gem.name.toLowerCase()+"-3.png"
 	});
 });
 

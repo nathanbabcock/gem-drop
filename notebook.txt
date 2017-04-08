@@ -1088,3 +1088,33 @@ Javascript tooltips
 - Positions it by calculating anchor position
 - Adds mousein and mouseout listeners to anchor
 - The CSS3 transitions are essentially the same, but just with custom classes instead of the :hover selector
+
+4/6/17
+
+Game Balance
+- Buffs should come before autodrop
+- Slow down progression (forcing afk near auto_drop)
+- Probably just stretch the whole thing out a lot
+- factories become affordable too fast late game
+- Made it to rainbow in 15 min. Should take ~1-2hr
+
+TODO
+- Upgrades UI
+- Prestige
+- Load/save/sim
+- Offline bonus upgrades
+- Responsive layout
+- Buffs UI
+
+
+
+OPTIONAL
+- Selective noclip (collision with walls and nothing else)
+- Better interaction of auto_drop and 
+- Fix sell price upgrade progression
+- Auto-clear upgrades
+
+
+Post-release
+- Critical gems
+- Prestige????

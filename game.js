@@ -26,7 +26,7 @@ var UI = {
 	achievements: document.getElementById("achievements"),
 	stats: {
 		modal: document.getElementById("stats"),
-		modal_inner: document.getElementById("stats").querySelector("modal_inner"),
+		modal_inner: document.getElementById("stats").querySelector(".modal_inner"),
 		gems: document.getElementById("stats_gems"),
 		money: document.getElementById("stats_money"),
 		clickpower_gems: document.getElementById("stats_clickpower_gems"),
@@ -50,7 +50,12 @@ var UI = {
 		import_field: document.getElementById("import_field"),
 		import_button: document.getElementById("import_button"),
 		sprites: document.getElementById("sprites")
-	}
+	},
+	bought_upgrades: {
+		modal: document.getElementById("bought_upgrades"),
+		modal_inner: document.getElementById("bought_upgrades").querySelector(".modal_inner"),
+		close: document.getElementById("bought_upgrades").querySelector(".close")
+	} 
 };
 
 var BuyMode = {
@@ -185,7 +190,7 @@ function getUpgradeHTML(upgrade) {
 		container = refs.container = document.createElement("div");
 	container.className = "upgrade popup_container";
 	container.innerHTML = `
-		<div class="popup_anchor">asdf</div>
+		<div class="popup_anchor"><img></div>
 		<div class="popup">
 			<strong class="name">asdf</strong>
 			<div class="description">blah blah blah</div>
@@ -199,7 +204,8 @@ function getUpgradeHTML(upgrade) {
 	refs.costs = container.querySelector(".price");
 
 	refs.anchor.onclick = function() { buyUpgrade(upgrade); };
-	refs.anchor.innerText = refs.name.innerText = upgrade.name;
+	refs.name.innerText = upgrade.name;
+	refs.anchor.children[0].src = upgrade.img;
 	refs.description.innerText = upgrade.description;
 	refs.costs.innerText = upgrade.getCost();
 
@@ -328,6 +334,9 @@ function updateUpgrade(upgrade) {
 		upgrade.ui.anchor.className = "popup_anchor disabled";
 	else
 		upgrade.ui.anchor.className = "popup_anchor";
+
+	if(upgrade.owned && upgrade.ui.container.parentNode === UI.upgrades)
+		UI.bought_upgrades.modal_inner.appendChild(UI.upgrades.removeChild(upgrade.ui.container));
 }
 
 function updateBuff(buff) {
@@ -433,6 +442,7 @@ function initSettings() {
 function openAchievements() {
 	closeSettings();
 	closeStats();
+	closeUpgrades();
 	UI.achievements.style.display = "block";
 }
 
@@ -443,6 +453,7 @@ function closeAchievements() {
 function openStats() {
 	closeAchievements();
 	closeSettings();
+	closeUpgrades();
 	UI.stats.modal.style.display = "block";
 	UI.stats.timeout = setInterval(updateStats, 1000);
 	UI.stats.isOpen = true;
@@ -457,12 +468,25 @@ function closeStats() {
 function openSettings() {
 	closeAchievements();
 	closeStats();
+	closeUpgrades();
 	UI.settings.modal.style.display = "block";
 }
 
 function closeSettings() {
 	UI.settings.modal.style.display = "none";
 }
+
+function openUpgrades(){
+	closeAchievements();
+	closeSettings();
+	closeStats();
+	UI.bought_upgrades.modal.style.display = "block";
+}
+
+function closeUpgrades(){
+	UI.bought_upgrades.modal.style.display = "none";
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUY/SELL/SPAWN
@@ -943,13 +967,10 @@ function init() {
 	UI.buy_100.onclick = function() { setBuyQuantity(100, UI.buy_100); };
 	UI.buy_max.onclick = function() { setBuyQuantity("max", UI.buy_max); };
 
-	// Achievements modal
+	// Modals
 	UI.achievements.querySelector(".close").onclick = closeAchievements;
-
-	// Stats modal
 	UI.stats.modal.querySelector(".close").onclick = closeStats;
-
-	// Settings modal
+	UI.bought_upgrades.close.onclick = closeUpgrades;
 	UI.settings.modal.querySelector(".close").onclick = closeSettings;
 	initSettings();
 

@@ -413,7 +413,7 @@ button:focus {
 	text-align:right;
 }
 
-#menu a {
+a {
 	color:black;
 	margin-left:15px;
 	cursor:pointer;
@@ -458,7 +458,7 @@ button:focus {
 	display: inline-block;
 	float:none;
 	text-align:center;
-	width:110px;
+/*	width:110px;*/
 }
 
 .popup_container,
@@ -518,3 +518,27 @@ button:focus {
 /*#buffs .popup_container .popup, #buffs .popup_container .popup::after {
 	left:45px;
 }*/
+
+.upgrade .popup_anchor {
+	width:64px;
+	height:64px;
+	text-align:center;
+	vertical-align: center;
+	padding:0px;
+}
+
+.upgrade .popup_anchor img {
+	max-width:64px;
+	max-height:64px;
+}
+
+.upgrade .disabled {
+	border: none;
+	/*filter: brightness(50%) grayscale(100%);*/
+	opacity: 0.3;
+}
+
+#open_owned_upgrades{
+	display:block;
+	text-align:center;
+}

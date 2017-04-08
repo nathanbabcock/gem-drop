@@ -34,6 +34,9 @@
 				<div class="clear"></div>
 			</div> -->
 		</div>
+
+
+		<!-- BEGIN MODALS -->
 		<div class="modal" id="achievements">
 			<h2>Achievements</h2>
 			<a href="javascript:void(0)" class="close">[close]</a>
@@ -83,6 +86,28 @@
 				<strong>Hard reset:</strong><button id="reset">Delete all saved data</button><br>
 			</div>
 		</div>
+		<div class="modal" id="bought_upgrades">
+			<h2>Upgrades</h2>
+			<a href="javascript:void(0)" class="close">[close]</a>
+			<div class="modal_inner">
+	<!-- 			<div class="achievement_icon popup_container">
+					<img class="icon popup_anchor" src="">
+					<div class="popup achievement">
+						<img class="icon" src="">
+						<div class="text">
+							<strong class="name">Hello World</strong>
+							<span class="description">Popup text goes here</span>
+							<small class="redtext">Secret red text</small>
+						</div>
+						<div class="value">$500</div>
+						<div class="clear"></div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<!-- END MODALS -->
+
+
 		<div id="container">
 			<div id="render_container">
 				<div id="render"></div>
@@ -91,6 +116,25 @@
 					<button id="drop">Drop</button>
 					<button onclick="cheat()">Cheat</button>
 					<button onclick="debug()">Debug</button>
+				</div>
+				<div id="buffs" class="section">
+<!-- 					<div class="section_name">
+						<strong>Buffs</strong>
+					</div>
+					<div class="clear"></div> -->
+<!-- 					<div class="buff_container">
+		 				<div class="buff popup_container">
+							<div class="popup_anchor">asdf</div>
+							<div class="popup">
+								<strong class="name">asdf</strong>
+								<div class="description">+10 butts for 3.5 seconds</div>
+							</div>
+						</div>
+						<div class="progressbar_container">
+							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
+							<div class="timeleft">3s</div>
+						</div>
+					</div> -->
 				</div>
 			</div>
 			<div id="ui">
@@ -160,25 +204,7 @@
 					</div> -->
 
 				</div>
-				<div id="buffs" class="section">
-					<div class="section_name">
-						<strong>Buffs</strong>
-					</div>
-					<div class="clear"></div>
-<!-- 					<div class="buff_container">
-		 				<div class="buff popup_container">
-							<div class="popup_anchor">asdf</div>
-							<div class="popup">
-								<strong class="name">asdf</strong>
-								<div class="description">+10 butts for 3.5 seconds</div>
-							</div>
-						</div>
-						<div class="progressbar_container">
-							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
-							<div class="timeleft">3s</div>
-						</div>
-					</div> -->
-				</div>
+				<a href="javascript:openUpgrades()" id="open_owned_upgrades">View Owned Upgrades</a>
 			</div>
 			<div class="clear"></div>
 		</div>
