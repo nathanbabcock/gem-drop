@@ -58,13 +58,6 @@ var UI = {
 	} 
 };
 
-var BuyMode = {
-	BUY: 0,
-	SELL: 1,
-	mode: 0,
-	quantity: 1
-};
-
 // TODO this gets immediately overwritten when physics.js loads
 var Inventory = {
 	getValue: function() {
@@ -497,30 +490,6 @@ function closeUpgrades(){
 // BUY/SELL/SPAWN
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Calculates the cost of a factory purchase for the given gem according to BUY MODE
-function calculatePurchase(gem, quantity = BuyMode.quantity) {
-	var r = gem.factory.getCostFactor(),
-		b = gem.factory.baseCost,
-		k = gem.factory.owned,
-		c = money,
-		n = 0;
-	if (BuyMode.mode === BuyMode.BUY) {
-		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
-		if (quantity === "max")
-			n = Math.max(max_quantity, 1);
-		else
-			n = quantity;
-	} else {
-		if (quantity === "max")
-			n = gem.factory.owned;
-		else
-			n = Math.min(gem.factory.owned, quantity);
-		k = gem.factory.owned - n;
-	}
-	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n)) / (1 - r));
-	return { cost: cost, quantity: n };
-}
-
 function setBuyMode(mode, elem) {
 	BuyMode.mode = mode;
 	[ui.buy, UI.sell].forEach(function(elem) {
@@ -865,10 +834,6 @@ function formatTime(ms) {
 	return Math.ceil(ms / 1000) + "s";
 }
 
-function log(b, n) {
-	return Math.log(n) / Math.log(b);
-}
-
 function getTotalRate() {
 	var rate = 0;
 	for (var i = 0; i < factories.length; i++) {
@@ -935,7 +900,7 @@ function cheat() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function init() {
-	money = 10000000000;
+	// money = 10000000000;
 
 	if (Settings.enable_save)
 		loadGame();
