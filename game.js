@@ -295,7 +295,6 @@ function updateClickPower(gem) {
 		clickpower.ui.anchor.className = "popup_anchor active";
 	else
 		clickpower.ui.anchor.className = "popup_anchor owned";
-
 }
 
 function updateFactory(gem) {
@@ -339,6 +338,11 @@ function updateUpgrade(upgrade) {
 
 	if(upgrade.owned && upgrade.ui.container.parentNode === UI.upgrades)
 		UI.bought_upgrades.modal_inner.appendChild(UI.upgrades.removeChild(upgrade.ui.container));
+
+	if(money >= upgrade.getCost() / 10){
+		upgrade.ui.container.style.display = "block";
+		upgrade.ui.container.style.opacity = 1;
+	}
 }
 
 function updateBuff(buff) {
@@ -496,7 +500,7 @@ function closeUpgrades(){
 
 function setBuyMode(mode, elem) {
 	BuyMode.mode = mode;
-	[ui.buy, UI.sell].forEach(function(elem) {
+	[UI.buy, UI.sell].forEach(function(elem) {
 		elem.className = "";
 	});
 	elem.className = "active";
@@ -539,6 +543,11 @@ function buyClickPower(gem) {
 	Achievements.clickpower.total.check();
 	Gems.active_clickpower = gem;
 	Gems.forEach(function(gem){updateClickPower(gem);});
+
+	var index = Gems.indexOf(gem);
+	if(index < Gems.length - 1)
+		Gems[index + 1].clickpower.ui.anchor.style.display = "block";
+
 	return true;
 }
 
@@ -630,7 +639,7 @@ function clickBuff(buff) {
 }
 
 function getAchievement(achievement) {
-	if (UI.achievement_popups.children.length >= 5)
+	if (UI.achievement_popups.children.length >= 3)
 		UI.achievement_popups.removeChild(UI.achievement_popups.children[0]);
 	UI.achievement_popups.appendChild(getAchievementHTML(achievement));
 	updateMoney(achievement.getValue());
@@ -1004,12 +1013,8 @@ function init() {
 	UI.settings.modal.querySelector(".close").onclick = closeSettings;
 	initSettings();
 
-	// new Tippy(".popup_anchor", {
-	//   html: '#my-template-id',
-	//   animateFill: false,
-	//   arrow: true,
-	//   position: "bottom"
-	// });
+	Gems.quartz.clickpower.ui.anchor.style.display = "block";
+	Gems.topaz.clickpower.ui.anchor.style.display = "block";
 
 	updateMoney();
 }

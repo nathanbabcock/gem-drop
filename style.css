@@ -43,9 +43,9 @@
 
 #ui {
 	padding:0 10px;
-	width:620px;
+	width:800px;
 	overflow-x:hidden;
-	overflow-y:scroll;
+	/*overflow-y:scroll;*/
 }
 
 #drop	 {
@@ -67,7 +67,7 @@
 	background-color:#89ff97;
 	padding:10px;
 	text-align: center;
-	min-width:250px;
+	width:300px;
 }
 
 #predicted_money {
@@ -81,7 +81,7 @@
 .section_name {
 	background-color:#000;
 	color:white;
-	width:590px;
+	width:770px;
 	padding:10px;
 	display:inline-block;
 	margin-top:5px;
@@ -461,12 +461,12 @@ a {
 	height:50px;
 }
 
-.scroll {
+/*.scroll {
 	overflow-x:scroll;
 	overflow-y:hidden;
 	white-space:nowrap;
 	width:600px;
-}
+}*/
 
 .popup_container {
 	display: inline-block;
@@ -582,4 +582,23 @@ a {
 .achievement .achievement { /* TODO this is hacky */
 	margin:0;
 	padding:0;
+}
+
+.upgrade {
+	display:none;
+	opacity:0;
+	transition:opacity 1s;
+}
+
+#upgrades {
+	min-height: 135px;
+}
+
+#click_powers .popup_anchor,
+#factories .popup_anchor {
+	width:64px;
+}
+
+.gem_click_power .popup_anchor {
+	display:none;
 }
