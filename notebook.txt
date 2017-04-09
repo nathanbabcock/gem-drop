@@ -1109,13 +1109,13 @@ X Buffs UI
 / game balance (medium)
 - settings (trivial)
 - achievements text wrapping (trivial)
-- drop glitches (small)
+X drop glitches (small)
 - clickbuff not working (trivial)
 
 WANT
 - autodrop ui
 - upgrade unlocking
-- Too many gems get wasted by spawning; massive powerspike at noclip
+- Too many gems get wasted by spawning; large powerspike at noclip
 - Load/save/sim
 - alert dialogs pause game?? (trivial)
 - Clickpower buff multiple gems spawn on top of eachother

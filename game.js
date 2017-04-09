@@ -226,6 +226,7 @@ function getBuffHTML(buff) {
 							<!--<div class="description2" style="clear:left"></div>-->
 						<!--</div>-->`;
 	refs.anchor = container.querySelector(".popup_anchor");
+	refs.popup = container.querySelector(".popup");
 	refs.name = container.querySelector(".name");
 	refs.description = container.querySelector(".description");
 	refs.progressbar = container.querySelector(".progressbar_inner");
@@ -242,14 +243,16 @@ function getAchievementHTML(achievement) {
 	var container = document.createElement("div");
 	container.className = "achievement";
 	container.innerHTML = `
-		<img class="icon" src="img/trophy.png">
-		<div class="text">
-			<strong class="name">Hello World</strong>
-			<span class="description">Popup text goes here</span>
-			<small class="redtext">Secret red text</small>
-		</div>
-		<div class="value">$500</div>
-		<div class="clear"></div>`;
+		<div class="achievement">
+			<img class="icon" src="img/trophy.png">
+			<div class="text">
+				<strong class="name">Hello World</strong>
+				<span class="description">Popup text goes here</span>
+				<small class="redtext">Secret red text</small>
+			</div>
+			<div class="value">$500</div>
+			<div class="clear"></div>
+		</div>`;
 	container.onclick = function() {
 		container.parentNode.removeChild(container);
 	};
@@ -262,7 +265,8 @@ function getAchievementIconHTML(achievement) {
 		container = refs.container = document.createElement("div");
 	container.className = "achievement_icon popup_container";
 	container.innerHTML = `<img class="icon popup_anchor" src="img/trophy.png">`;
-	var popup = getAchievementHTML(achievement);
+	refs.anchor = container.querySelector(".popup_anchor");
+	var popup = refs.popup = getAchievementHTML(achievement);
 	updateAchievement(achievement, popup);
 	popup.className += " popup";
 	container.appendChild(popup);
@@ -909,24 +913,80 @@ function init() {
 	var factory_container = UI.factories.querySelector(".scroll");
 
 	// Clickpowers and Factories
-	Gems.forEach(function(gem) {
+	Gems.forEach(function(gem, id) {
 		clickpower_container.appendChild(getClickPowerHTML(gem));
+
+		// Tippy
+		gem.clickpower.ui.anchor.id = "cp_"+id+"_anchor";
+		gem.clickpower.ui.popup.id = "cp_"+id;
+		new Tippy("#cp_"+id+"_anchor", {
+		  html: "#cp_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
+
 		factory_container.appendChild(getFactoryHTML(gem));
+
+		// Tippy
+		gem.factory.ui.anchor.id = "fact_"+id+"_anchor";
+		gem.factory.ui.popup.id = "fact_"+id;
+		new Tippy("#fact_"+id+"_anchor", {
+		  html: "#fact_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	})
 
 	// Upgrades
-	Upgrades.forEach(function(upgrade) {
+	Upgrades.forEach(function(upgrade, id) {
 		UI.upgrades.appendChild(getUpgradeHTML(upgrade));
+
+		// Tippy
+		upgrade.ui.anchor.id = "upgrade_"+id+"_anchor";
+		upgrade.ui.popup.id = "upgrade_"+id;
+		new Tippy("#upgrade_"+id+"_anchor", {
+		  html: "#upgrade_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Buffs
-	Buffs.forEach(function(buff) {
+	Buffs.forEach(function(buff, id) {
 		UI.buffs.appendChild(getBuffHTML(buff))
+
+		// Tippy
+		buff.ui.anchor.id = "buff_"+id+"_anchor";
+		buff.ui.popup.id = "buff_"+id;
+		new Tippy("#buff_"+id+"_anchor", {
+		  html: "#buff_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Achievements
-	Achievements.all.forEach(function(achievement) {
+	Achievements.all.forEach(function(achievement, id) {
 		UI.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
+
+		// Tippy
+		achievement.ui.anchor.id = "ach_"+id+"_anchor";
+		achievement.ui.popup.id = "ach_"+id;
+		new Tippy("#ach_"+id+"_anchor", {
+		  html: "#ach_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Buy Mode
@@ -943,6 +1003,13 @@ function init() {
 	UI.bought_upgrades.close.onclick = closeUpgrades;
 	UI.settings.modal.querySelector(".close").onclick = closeSettings;
 	initSettings();
+
+	// new Tippy(".popup_anchor", {
+	//   html: '#my-template-id',
+	//   animateFill: false,
+	//   arrow: true,
+	//   position: "bottom"
+	// });
 
 	updateMoney();
 }
