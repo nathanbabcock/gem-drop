@@ -10,6 +10,7 @@ var UI = {
 	factories: document.getElementById("factories"),
 	upgrades: document.getElementById("upgrades"),
 	drop: document.getElementById("drop"),
+	autodrop_icon: document.getElementById("autodrop_icon"),
 	money: document.getElementById("money"),
 	actual_money: document.getElementById("actual_money"),
 	predicted_money: document.getElementById("predicted_money"),
@@ -76,6 +77,16 @@ var AutoDrop = {
 	manuallyOpen: false,
 	getOpenDuration: function() {
 		return 2;
+	},
+	getIcon: function() {
+		if(Upgrades[4].owned)
+			return Upgrades[4].image;
+		else if (Upgrades[3].owned)
+			return Upgrades[3].image;
+		else if (Upgrades[2].owned)
+			return Upgrades[2].image;
+		else
+			return "";
 	}
 };
 

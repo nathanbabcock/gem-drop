@@ -607,16 +607,22 @@ Events.on(engine, 'tick', function(event) {
 
 	// Auto drop
 	if(AutoDrop.rate === 0){
-		if(!AutoDrop.open)
+		if(!AutoDrop.open){
+			UI.autodrop_icon.src = AutoDrop.getIcon();
+			UI.autodrop_icon.style.display = "block";
 			openDrop();
+		}
 	} else if(AutoDrop.rate > 0){
 		AutoDrop.timer -= delta;
 		if(AutoDrop.timer <= 0){
 			if(AutoDrop.open){
+				UI.autodrop_icon.style.display = "none";
 				closeDrop();
 				AutoDrop.open = false;
 				AutoDrop.timer = AutoDrop.rate;
 			} else {
+				UI.autodrop_icon.src = AutoDrop.getIcon();
+				UI.autodrop_icon.style.display = "block";
 				openDrop();
 				AutoDrop.open = true;
 				AutoDrop.timer = AutoDrop.getOpenDuration();
@@ -738,7 +744,8 @@ function genBuffs(delta){
 function openDrop(){
 	Inventory.ground.collisionFilter = BG_FILTER;
 	Inventory.ground.render.fillStyle = "#D3D3D3";
-	Inventory.ground.render.strokeStyle = "#D3D3D3"
+	Inventory.ground.render.strokeStyle = "#D3D3D3";
+
 }
 
 function closeDrop(){

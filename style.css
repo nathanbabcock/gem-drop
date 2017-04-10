@@ -602,3 +602,8 @@ a {
 .gem_click_power .popup_anchor {
 	display:none;
 }
+
+#autodrop_icon {
+	display:none;
+	float:left;
+}
