@@ -609,7 +609,8 @@ Events.on(engine, 'tick', function(event) {
 	if(AutoDrop.rate === 0){
 		if(!AutoDrop.open){
 			UI.autodrop_icon.src = AutoDrop.getIcon();
-			UI.autodrop_icon.style.display = "block";
+			UI.autodrop_icon.style.display = "inline-block";
+			UI.drop.disabled = true;
 			openDrop();
 		}
 	} else if(AutoDrop.rate > 0){
@@ -617,12 +618,14 @@ Events.on(engine, 'tick', function(event) {
 		if(AutoDrop.timer <= 0){
 			if(AutoDrop.open){
 				UI.autodrop_icon.style.display = "none";
+				UI.drop.disabled = false;
 				closeDrop();
 				AutoDrop.open = false;
 				AutoDrop.timer = AutoDrop.rate;
 			} else {
+				UI.drop.disabled = true;
 				UI.autodrop_icon.src = AutoDrop.getIcon();
-				UI.autodrop_icon.style.display = "block";
+				UI.autodrop_icon.style.display = "inline-block";
 				openDrop();
 				AutoDrop.open = true;
 				AutoDrop.timer = AutoDrop.getOpenDuration();

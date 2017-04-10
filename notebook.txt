@@ -1179,14 +1179,15 @@ X drop glitches (small)
 - autodrop bugfixes
 
 WANT
-- autodrop ui
+X autodrop ui
 X upgrade unlocking
 - Too many gems get wasted by spawning; large powerspike at noclip
 X Load/save
 - alert dialogs pause game?? (trivial)
-- Title update
+X Title update
 - Buff tooltips in inventory
 X Fix sell price upgrade progression
+X When game loads, all gems have same delay
 
 GEM DROP 2.0
 - Sim

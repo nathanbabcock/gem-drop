@@ -10,7 +10,7 @@
 
 	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
-	display:none;
+	/*display:none;*/
 }
 
 /*#render {
@@ -582,6 +582,7 @@ a {
 .achievement .achievement { /* TODO this is hacky */
 	margin:0;
 	padding:0;
+	background-color:transparent;
 }
 
 .upgrade {
@@ -603,7 +604,28 @@ a {
 	display:none;
 }
 
+#drop {
+	width:200px;
+	height:64px;
+	margin-left:60px;
+	font-size:28px;
+}
+
 #autodrop_icon {
 	display:none;
+	max-height:64px;
+	vertical-align:top;
+	margin-left:5px;
+}
+
+.achievement_locked {
+	filter: grayscale(100%);
+}
+
+.upgrade.popup_container {
 	float:left;
+}
+
+.factory .popup_anchor {
+	display:none;
 }

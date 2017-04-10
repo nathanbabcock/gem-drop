@@ -80,11 +80,11 @@ var AutoDrop = {
 	},
 	getIcon: function() {
 		if(Upgrades[4].owned)
-			return Upgrades[4].image;
+			return Upgrades[4].img;
 		else if (Upgrades[3].owned)
-			return Upgrades[3].image;
+			return Upgrades[3].img;
 		else if (Upgrades[2].owned)
-			return Upgrades[2].image;
+			return Upgrades[2].img;
 		else
 			return "";
 	}
@@ -276,7 +276,7 @@ function getAchievementIconHTML(achievement) {
 	var refs = achievement.ui = {},
 		container = refs.container = document.createElement("div");
 	container.className = "achievement_icon popup_container";
-	container.innerHTML = `<img class="icon popup_anchor" src="img/trophy.png">`;
+	container.innerHTML = `<img class="icon popup_anchor achievement_locked" src="img/trophy.png">`;
 	refs.anchor = container.querySelector(".popup_anchor");
 	var popup = refs.popup = getAchievementHTML(achievement);
 	updateAchievement(achievement, popup);
@@ -376,7 +376,7 @@ function updateBuff(buff) {
 	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
 }
 
-function updateAchievement(achievement, element) {
+function updateAchievement(achievement, element) { // TODO this is wack
 	/*	<div class="achievement" id="inv_hover">
 			<img class="icon" src="">
 			<div class="text">
@@ -405,6 +405,13 @@ function updateAchievement(achievement, element) {
 	element.achievement = achievement;
 
 	return false;
+}
+
+function updateAchievementIcon(achievement){
+	if(achievement.owned)
+		achievement.ui.anchor.className = "icon popup_anchor achievement_owned";
+	else
+		achievement.ui.anchor.className = "icon popup_anchor achievement_locked";
 }
 
 function updateStats() {
@@ -597,6 +604,11 @@ function buyFactory(gem) {
 		Stats.factories -= purchase.quantity;
 		Achievements.misc.sell.check();
 	}
+
+	var index = Gems.indexOf(gem);
+	if(index < Gems.length - 1)
+		Gems[index + 1].factory.ui.anchor.style.display = "block";
+
 	return true;
 }
 
@@ -668,6 +680,7 @@ function getAchievement(achievement) {
 		UI.achievement_popups.removeChild(UI.achievement_popups.children[0]);
 	UI.achievement_popups.appendChild(getAchievementHTML(achievement));
 	updateMoney(achievement.getValue());
+	updateAchievementIcon(achievement);
 }
 
 function genGems_deterministic(delta) {
@@ -754,6 +767,8 @@ function loadSave(save){
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
 		gem.bonus = save.gems[index].bonus;
+
+		gem.factory.cooldown = getRandomFloat(0, 1 / gem.factory.getRate()); // Randomize cooldown so all the factories don't sync up
 		updateClickPower(gem);
 		updateFactory(gem);
 	});
@@ -764,6 +779,7 @@ function loadSave(save){
 	Achievements.all.forEach(function(achievement, index) {
 		achievement.owned = save.achievements[index];
 		updateAchievement(achievement, achievement.ui.popup); // TODO
+		updateAchievementIcon(achievement);
 	});
 	AutoDrop.rate = save.AutoDrop;
 	Buffs.baseRate = save.Buffs.baseRate || Infinity;
@@ -1059,6 +1075,7 @@ function init() {
 
 	Gems.quartz.clickpower.ui.anchor.style.display = "block";
 	Gems.topaz.clickpower.ui.anchor.style.display = "block";
+	Gems.quartz.factory.ui.anchor.style.display = "block";
 
 	setInterval(function() {
 		updateStats();
