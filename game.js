@@ -1079,7 +1079,7 @@ function init() {
 
 	setInterval(function() {
 		updateStats();
-		window.title = "Gem Drop ("+formatMoney()+")";
+		document.title = "Gem Drop ("+formatMoney()+")";
 		if(Settings.enable_save)
 			saveGame();
 	}, 1000);
