@@ -1057,6 +1057,7 @@ Tasks Master List
     - Clickpower sprites (easy)
     - Factory sprites (easy)
     - Upgrade sprites (???)
+    - Custom achievement sprites (???)
 - Game Balance
     - Achievement sell values
     - Upgrade prices
@@ -1088,3 +1089,65 @@ Javascript tooltips
 - Positions it by calculating anchor position
 - Adds mousein and mouseout listeners to anchor
 - The CSS3 transitions are essentially the same, but just with custom classes instead of the :hover selector
+
+4/3/17
+
+Tasks Master List
+- Upgrades
+    X auto-drop tiers (trivial)
+    X buff tiers (trivial)
+    X sell price upgrades (trivial)
+    - offline bonus upgrades (trivial)
+    - crit gems (easy)
+    X Buff autocollect (trivial)
+    - Global spawn rate (trivial)
+- UI
+    X Buffs display
+    X Achievements screen (1hr)
+    X Achievement popups
+    X Stats screen (15min)
+    / Settings menu (30min)
+    - Bought upgrades (20min)
+    / UI tweaks
+    - Tooltips rework (2hr)
+- Other
+    X Achievement dropping (easy)
+    - Load/save/sim update
+    X Export/import (easy)
+    - Basic sound (2+ hr)
+- Graphics
+    X Implement gem sprites (almost done)
+    X Make buff & trophy sprites (2hr)
+    X Clickpower sprites (easy)
+    X Factory sprites (easy)
+    - Upgrade sprites (???)
+    X Custom achievement sprites (???)
+- Game Balance
+    - Achievement sell values
+    - Upgrade prices
+    - Factory initial rates
+    - Initial inv sizes
+    - etc
+
+Popups rework
+- Should popups be created dynamically, as needed? Or always in the DOM but hidden?
+- javascript onmouseover and onmouseout on the anchor, which shows or hides the corresponding popup in the popup layer
+- positioned either according to cursor or anchor bounding rect
+- does positioning need to happen every time, or only at init?
+
+addPopup(anchor, popup, options={})
+
+4/4/17
+
+Tasks
+1. Upgrades UI
+2. Tooltips
+3. Balancing
+4. Color scheme?
+
+4/7/17
+
+=========
+
+Website which pairs up users and (some) chatbots, and the users having figure out if it is a bot or not
+- Some catchy name with "Turing" in it
