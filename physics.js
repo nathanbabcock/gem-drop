@@ -197,7 +197,10 @@ Events.on(mouseConstraint, 'mousedown', function(event) {
 	if(skip || mousePosition.y >= render.canvas.height - Inventory.bottom_margin) return;
 
     // Spawn gems
-    doClick().forEach(function(e){
+    var toSpawn = doClick();
+    toSpawn.forEach(function(e, index){
+    	if(index > 1)
+    		mousePosition.y += 15;
     	spawnGem(mousePosition, e);
     });
 });
@@ -651,8 +654,9 @@ Events.on(engine, 'tick', function(event) {
 	// TODO this freezes the game loop
 
 	// Save game
-	if(Settings.enable_save)
-		saveGame();
+	// if(Settings.enable_save)
+	// 	saveGame();
+	// Moved to setinterval loop
 });
 
 function hoverAchievement(achievement, pos){

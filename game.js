@@ -49,7 +49,8 @@ var UI = {
 		export: document.getElementById("export"),
 		import_field: document.getElementById("import_field"),
 		import_button: document.getElementById("import_button"),
-		sprites: document.getElementById("sprites")
+		sprites: document.getElementById("sprites"),
+		reset: document.getElementById("reset")
 	},
 	bought_upgrades: {
 		modal: document.getElementById("bought_upgrades"),
@@ -402,9 +403,9 @@ function updateStats() {
 	UI.stats.upgrades.innerText = Stats.upgrades;
 	UI.stats.clickpowers.innerText = Stats.clickpowers;
 	UI.stats.factories.innerText = Stats.factories;
-	UI.stats.prestige.innerText = Stats.prestige;
+	//UI.stats.prestige.innerText = Stats.prestige;
 	UI.stats.time.innerText = formatTime(new Date().getTime() - Stats.start_date);
-	UI.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
+	//UI.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
 	UI.stats.wasted.innerText = Stats.wasted;
 }
 
@@ -473,13 +474,13 @@ function openStats() {
 	closeSettings();
 	closeUpgrades();
 	UI.stats.modal.style.display = "block";
-	UI.stats.timeout = setInterval(updateStats, 1000);
+	//UI.stats.timeout = ;
 	UI.stats.isOpen = true;
 }
 
 function closeStats() {
 	UI.stats.modal.style.display = "none";
-	clearInterval(UI.stats.timeout);
+	//clearInterval(UI.stats.timeout);
 	UI.stats.isOpen = false;
 }
 
@@ -712,7 +713,8 @@ function buildSave() {
 	Gems.forEach(function(gem) {
 		save.gems.push({
 			factory: gem.factory.owned,
-			clickpower: gem.clickpower.owned
+			clickpower: gem.clickpower.owned,
+			bonus: gem.bonus
 		});
 	});
 	Upgrades.forEach(function(upgrade) {
@@ -740,6 +742,7 @@ function loadSave(save){
 	Gems.forEach(function(gem, index) {
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
+		gem.bonus = save.gems[index].bonus;
 		updateClickPower(gem);
 		updateFactory(gem);
 	});
@@ -1045,6 +1048,13 @@ function init() {
 
 	Gems.quartz.clickpower.ui.anchor.style.display = "block";
 	Gems.topaz.clickpower.ui.anchor.style.display = "block";
+
+	setInterval(function() {
+		updateStats();
+		window.title = "Gem Drop ("+formatMoney()+")";
+		if(Settings.enable_save)
+			saveGame();
+	}, 1000);
 
 	loadGame();
 	updateMoney();

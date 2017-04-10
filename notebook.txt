@@ -1169,32 +1169,33 @@ X Upgrades UI
 X Buffs UI
 X Tooltips (medium)
 - Achievements modal icons (trivial)
-- total money earned bug (trivial)
+/ total money earned bug (trivial)
 / game balance (medium)
-- settings (trivial)
+/ settings (trivial)
 - achievements text wrapping (trivial)
 X drop glitches (small)
-- clickbuff not working (trivial)
+/ clickbuff not working (trivial)
+- unused teardrop buff
+- autodrop bugfixes
 
 WANT
 - autodrop ui
-- upgrade unlocking
+X upgrade unlocking
 - Too many gems get wasted by spawning; large powerspike at noclip
-- Load/save/sim
+X Load/save
 - alert dialogs pause game?? (trivial)
-- Clickpower buff multiple gems spawn on top of eachother
 - Title update
-- Buff tooltips in invetory
+- Buff tooltips in inventory
+X Fix sell price upgrade progression
 
 GEM DROP 2.0
+- Sim
 - Prestige
 - Offline mode
 - Big gems
 - Selective noclip (collision with walls and nothing else)
-- Better interaction of auto_drop and 
-- Fix sell price upgrade progression
-- Auto-clear upgrades
 
+- Auto-clear achievements
 
 Post-release
 - Critical gems
@@ -1211,10 +1212,10 @@ Finishing touches
 - Lint CSS?
 
 New systems to save/load/simulate
-- Buffs
-- Gem value mult
+X Buffs
+X Gem value mult
 X Crit gems
-- statistics
-- achievements
-- autodrop?
-- upgrades?
+X statistics
+X achievements
+X autodrop?
+X upgrades?
