@@ -1165,9 +1165,9 @@ Game Balance
 
 NEED
 X Upgrades UI
-- Responsive layout (easy)
+/ Responsive layout (easy)
 X Buffs UI
-- Tooltips (medium)
+X Tooltips (medium)
 - Achievements modal icons (trivial)
 - total money earned bug (trivial)
 / game balance (medium)
@@ -1183,6 +1183,8 @@ WANT
 - Load/save/sim
 - alert dialogs pause game?? (trivial)
 - Clickpower buff multiple gems spawn on top of eachother
+- Title update
+- Buff tooltips in invetory
 
 GEM DROP 2.0
 - Prestige
@@ -1201,3 +1203,18 @@ Post-release
 Cookieclicker save
 - Mi4wMDJ8fDE0OTE1MzA4MjE1MjM7MTQ5MTUzMDgyMTUyODsxNDkxNjk4NDI4OTQ2O1RpbnkgQ2xpY2tlcnzDp8K9wo0HfDM0ODE4NTAxMjAuNjU4MTgxNzs2MjU1NTExMjgzLjY3MjQ3MzsxMDg1OzA7MTAyNzU3LjQ4NjU3MTAxNzY1OzY5OzA7MDswOzA7MDswOzA7MDswOzA7MDswOzA7MDswOzA7ZWFzdGVyOzA7MDswOzA7MDswOzA7LTE7LTE7LTE7LTE7LTE7MDswOzA7MDs1MDswOzA7fDc4LDc4LDE1Njc0MzQ3NywwOzY2LDY2LDE1Mzk1NTY3MCwwOzUxLDUxLDg5NTYzNDA1LDA7MzgsMzgsMjUyODM3NjUxLDA7MjgsMjgsNzM5MDY5OTE2LDA7MTgsMTgsMTIzOTYyMzg3NCwwOzE0LDE0LDI0MDQ5ODY1MTksMDszLDMsMTIxODYyNzk5OCwwOzAsMCwwLDA7MCwwLDAsMDswLDAsMCwwOzAsMCwwLDA7MCwwLDAsMDswLDAsMCwwO3zDp8K/wrDDp8K/wr/Dp8K/wrDDpMKAwoDDpMKDwq/Dp8K+wqrDpsKOwoDDpMKAwoLDpsK/woDDpMKAwoDDpMKAwo7DpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMK8woDDp8KgwoLDpMKAwozDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDocKAwoB8w6fCvMKAw6TCv8KAw6TCs8Kjw6XCqcKAw6TCgMKAw6TCqMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCkMKhw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKA%21END%21
 >>>>>>> 9363c378d5d31aba00bfb9f9ca58a925109ed851
+
+4/10/17
+
+Finishing touches
+- Remove poly-decomp and any other unused
+- Lint CSS?
+
+New systems to save/load/simulate
+- Buffs
+- Gem value mult
+X Crit gems
+- statistics
+- achievements
+- autodrop?
+- upgrades?

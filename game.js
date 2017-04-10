@@ -425,10 +425,16 @@ function initSettings() {
 	UI.settings.export.onclick = exportGame;
 
 	// Import
-	UI.settings.import_button.onclick=function() {
+	UI.settings.import_button.onclick = function() {
 		if(importGame(UI.settings.import_field.value))
 			alert("Game imported.");
 	};
+
+	// Reset
+	UI.settings.reset.onclick = function() {
+		if(confirm("Are you sure? This will completely wipe your save and reload the game."))
+			resetGame();
+	}
 
 	// Render Sprites
 	UI.settings.sprites.checked = Settings.render_sprites;
@@ -443,6 +449,12 @@ function initSettings() {
 			// TODO this will not add sprites to gems already in inv
 		}
 	}
+
+	// Autosave
+	UI.settings.autosave.checked = Settings.enable_save;
+
+	// Particles
+	UI.settings.particles.checked = Settings.render_floatingnums;
 }
 
 function openAchievements() {
@@ -561,7 +573,7 @@ function buyFactory(gem) {
 		factory.owned += purchase.quantity;
 		updateMoney(-purchase.cost);
 
-		Stats.factories++;
+		Stats.factories += purchase.quantity;
 		checkAll(Achievements.factory.byGem(gem));
 		checkAll(Achievements.factory.each);
 		checkAll(Achievements.factory.total);
@@ -570,6 +582,7 @@ function buyFactory(gem) {
 		factory.owned -= purchase.quantity;
 		updateMoney(purchase.cost);
 		Stats.sold += purchase.quantity;
+		Stats.factories -= purchase.quantity;
 		Achievements.misc.sell.check();
 	}
 	return true;
@@ -689,7 +702,8 @@ function genGems_probabilistic(delta) {
 function buildSave() {
 	var save = {
 		gems: [],
-		upgrades: []
+		upgrades: [],
+		achievements: []
 	};
 
 	// Gather all gamestate elements
@@ -704,7 +718,17 @@ function buildSave() {
 	Upgrades.forEach(function(upgrade) {
 		save.upgrades.push(upgrade.owned);
 	});
+	Achievements.all.forEach(function(achievement) {
+		save.achievements.push(achievement.owned);
+	});
 	save.AutoDrop = AutoDrop.rate;
+	save.Buffs = {
+		baseRate: Buffs.baseRate,
+		autocollect: Buffs.autocollect
+	};
+	save.Settings = Settings;
+	save.Stats = Stats;
+
 
 	return JSON.stringify(save);
 	// console.log(JSON.stringify(save));
@@ -723,13 +747,21 @@ function loadSave(save){
 		upgrade.owned = save.upgrades[index];
 		updateUpgrade(upgrade);
 	});
+	Achievements.all.forEach(function(achievement, index) {
+		achievement.owned = save.achievements[index];
+		updateAchievement(achievement, achievement.ui.popup); // TODO
+	});
 	AutoDrop.rate = save.AutoDrop;
+	Buffs.baseRate = save.Buffs.baseRate || Infinity;
+	Buffs.autocollect = save.Buffs.autocollect;
+	Settings = save.Settings;
+	Stats = save.Stats;
 	Inventory.build();
 
-	var delta = new Date().getTime() - save.time;
-	var offline_income = simulate(delta / 1000);
-	if (Settings.offline_gains)
-		money += offline_income;
+	// var delta = new Date().getTime() - save.time;
+	// var offline_income = simulate(delta / 1000);
+	// if (Settings.offline_gains)
+	// 	money += offline_income;
 	return true;
 }
 
@@ -767,6 +799,8 @@ function importGame(code){
 function resetGame() {
 	localStorage.clear();
 	console.log("Game save deleted");
+	location.reload();
+	return true;
 }
 
 function simulate(delta) {
@@ -857,7 +891,7 @@ function getTotalRate() {
 	return rate;
 }
 
-function hasClass(el, className) {
+/*function hasClass(el, className) {
   if (el.classList)
     return el.classList.contains(className)
   else
@@ -877,7 +911,7 @@ function removeClass(el, className) {
     var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
     el.className=el.className.replace(reg, ' ')
   }
-}
+}*/
 
 function cheat() {
 	Upgrades[2].owned = true;
@@ -913,10 +947,6 @@ function cheat() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function init() {
-	// money = 10000000000;
-
-	if (Settings.enable_save)
-		loadGame();
 
 	var clickpower_container = UI.click_powers.querySelector(".scroll");
 	var factory_container = UI.factories.querySelector(".scroll");
@@ -1016,6 +1046,7 @@ function init() {
 	Gems.quartz.clickpower.ui.anchor.style.display = "block";
 	Gems.topaz.clickpower.ui.anchor.style.display = "block";
 
+	loadGame();
 	updateMoney();
 }
 

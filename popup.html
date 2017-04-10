@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<style>
+#popups {
+	position:absolute;
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+}
+
+.popup {
+	position:absolute;
+	pointer-events: none;
+	border:1px solid red;
+	top:50%;
+	left:50%;
+	display:inline-block;
+}
+
+.popup_hidden {
+	display:none;
+}
+
+#anchor {
+	border:1px solid black;
+	padding:10px;
+	display:inline-block;
+}
+		</style>
+
+		<script>
+var UI = {};
+
+function addPopup(anchor, popup, options={}){
+	popup.className="popup popup_hidden";
+	UI.popups.appendChild(popup);
+	anchor.addEventListener("mouseover", function(){
+		console.log("mouseover");
+		popup.className = "popup";
+	});
+	anchor.addEventListener("mouseout", function(){
+		console.log("mouseout");
+		popup.className = "popup popup_hidden";
+	});
+}
+
+function init(){
+	UI.popups = document.getElementById("popups");
+
+	var popup = document.createElement("div");
+	popup.innerHTML = "Popup"
+	addPopup(document.getElementById("anchor"), popup);
+}
+		</script>
+	</head>
+	<body onload="init()">
+	<div id="popups"></div>
+	<div id="anchor">
+		Anchor
+	</div>
+	</body>
+</html>

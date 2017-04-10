@@ -675,8 +675,8 @@ function checkAll(list){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Settings = {
-	enable_save: false,
-	offline_gains: true,
+	enable_save: true,
+	offline_gains: false,
 	render_sprites: true,
-	render_floatingnums: false
+	render_floatingnums: true
 }
