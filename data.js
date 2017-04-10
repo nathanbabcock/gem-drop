@@ -5,6 +5,41 @@ var DEFAULT_GEM_RADIUS = 20;
 // GEMS (CLICKPOWERS & FACTORIES)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var BuyMode = {
+	BUY: 0,
+	SELL: 1,
+	mode: 0,
+	quantity: 1
+};
+
+function log(b, n) {
+	return Math.log(n) / Math.log(b);
+}
+
+// Calculates the cost of a factory purchase for the given gem according to BUY MODE
+function calculatePurchase(gem, quantity = BuyMode.quantity, mode = BuyMode.mode) {
+	var r = gem.factory.getCostFactor(),
+		b = gem.factory.baseCost,
+		k = gem.factory.owned,
+		c = money,
+		n = 0;
+	if (mode === BuyMode.BUY) {
+		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
+		if (quantity === "max")
+			n = Math.max(max_quantity, 1);
+		else
+			n = quantity;
+	} else {
+		if (quantity === "max")
+			n = gem.factory.owned;
+		else
+			n = Math.min(gem.factory.owned, quantity);
+		k = gem.factory.owned - n;
+	}
+	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n)) / (1 - r));
+	return { cost: cost, quantity: n };
+}
+
 // Gem constructor
 function Gem(options){
 	// Initialize gem defaults
@@ -82,85 +117,85 @@ var Gems = [
 	}),
 	new Gem({
 		name: "Topaz",
-		baseValue: 12,
+		baseValue: 10,
 		clickpower: {
-			baseCost: 100,
+			baseCost: 850,
 			image: "img/topaz-clickpower.png"
 		},
 		factory: {
-			baseCost: 500,
+			baseCost: 100,
 			image: "img/topaz-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Amethyst",
-		baseValue: 150,
+		baseValue: 75,
 		clickpower: {
-			baseCost: 1750,
+			baseCost: 16000,
 			image: "img/amethyst-clickpower.png"
 		},
 		factory: {
-			baseCost: 6000,
+			baseCost: 1750,
 			image: "img/amethyst-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Sapphire",
-		baseValue: 1750,
+		baseValue: 500,
 		clickpower: {
-			baseCost: 22000,
+			baseCost: 250e3,
 			image: "img/sapphire-clickpower.png"
 		},
 		factory: {
-			baseCost: 33000,
+			baseCost: 22e3,
 			image: "img/sapphire-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Emerald",
-		baseValue: 25000,
+		baseValue: 2500,
 		clickpower: {
-			baseCost: 300000,
+			baseCost: 3e6,
 			image: "img/emerald-clickpower.png"
 		},
 		factory: {
-			baseCost: 450000,
+			baseCost: 300e3,
 			image: "img/emerald-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Ruby",
-		baseValue: 275000,
+		baseValue: 15e3,
 		clickpower: {
-			baseCost: 3500000,
+			baseCost: 30e6,
 			image: "img/ruby-clickpower.png"
 		},
 		factory: {
-			baseCost: 5250000,
+			baseCost: 3.5e6,
 			image: "img/ruby-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Diamond",
-		baseValue: 1000000,
+		baseValue: 75e3,
 		clickpower: {
-			baseCost: 15000000,
+			baseCost: 123456789,
 			image: "img/diamond-clickpower.png"
 		},
 		factory: {
-			baseCost: 22500000,
+			baseCost: 15e6,
 			image: "img/diamond-factory.png"
 		}
 	}),
 	new Gem({
 		name: "Rainbow",
-		baseValue: 50000000,
+		baseValue: 500e3,
 		clickpower: {
-			baseCost: 600000000,
+			baseCost: 5e9,
 			image: "img/rainbow-clickpower.png"
 		},
 		factory: {
-			baseCost: 1000000000,
+			baseCost: 600e6,
 			image: "img/rainbow-factory.png"
 		}
 	})
@@ -201,7 +236,7 @@ var Upgrades = [
 	// 	owned: false
 	// },
 	{
-		name: "Inventory Size II",
+		name: "Inventory Size I",
 		description: "More space to hold gems.",
 		baseCost:250,
 		getCost: function() { return this.baseCost; },
@@ -210,10 +245,11 @@ var Upgrades = [
 			Inventory.build();
 		},
 		size: { width: 200, height: 350 },
-		owned: false
+		owned: false,
+		img: "img/inv-1.png"
 	},
 	{
-		name: "Inventory Size III",
+		name: "Inventory Size II",
 		description: "More space to hold gems.",
 		baseCost:4500,
 		getCost: function() { return this.baseCost; },
@@ -224,7 +260,8 @@ var Upgrades = [
 			Achievements.misc.inventory.check();
 		},
 		size: { width: 300, height: 500},
-		owned: false
+		owned: false,
+		img: "img/inv-2.png"
 	},
 	{
 		name: "Auto Drop",
@@ -236,7 +273,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
-		}
+		},
+		img: "img/autodrop-1.png"
 	},
 	{
 		name: "Auto Drop v2",
@@ -248,7 +286,8 @@ var Upgrades = [
 		owned: false,
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
-		}
+		},
+		img: "img/autodrop-2.png"
 	},
 	{
 		name: "Auto Drop v3",
@@ -261,42 +300,46 @@ var Upgrades = [
 		onPurchase: function(){
 			AutoDrop.rate = this.rate;
 
-		}
+		},
+		img: "img/autodrop-3.png"
 	},
 	{
 		name: "Buffs",
-		description: "Buffs randomly spawn (about once every 60 seconds). Click on a buff to collect it.",
-		baseCost:6000,
+		description: "Buffs randomly spawn (about once every 20 seconds). Click on a buff to collect it.",
+		baseCost:1000,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
-		rate: 60,
+		rate: 20,
 		owned: false,
 		onPurchase: function(){
 			Buffs.baseRate = this.rate;
-		}
+		},
+		img: "img/heart-1.png"
 	},
 	{
 		name: "More Buffs",
-		description: "Buffs spawn more often (about once every 30 seconds).",
-		baseCost:30000,
+		description: "Buffs spawn more often (about once every 10 seconds).",
+		baseCost:15e3,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
-		rate: 30,
+		rate: 10,
 		owned: false,
 		onPurchase: function(){
 			Buffs.baseRate = this.rate;
-		}
+		},
+		img: "img/heart-2.png"
 	},
 	{
 		name: "Buff Autocollect",
 		description: "Buffs are automatically collected when they are dropped.",
-		baseCost:1e6,
+		baseCost:400e3,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
 			Buffs.autocollect = true;
-		}
+		},
+		img: "img/heart-3.png"
 	},
 ];
 
@@ -304,37 +347,40 @@ Gems.forEach(function(gem){
 	Upgrades.push({
 		name: gem.name+" Value",
 		description: gem.name+" sell price doubled",
-		baseCost:200 * gem.baseValue,
+		baseCost:calculatePurchase(gem, 25, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
-			gem.bonus = 2;
-		}
+			gem.bonus *= 2;
+		},
+		img: "img/"+gem.name.toLowerCase()+"-1.png"
 	});
 
 	Upgrades.push({
 		name: gem.name+" Value II",
 		description: gem.name+" doubled again (4x total)",
-		baseCost:500 * gem.baseValue,
+		baseCost:calculatePurchase(gem, 50, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
-			gem.bonus = 4;
-		}
+			gem.bonus *= 2;
+		},
+		img: "img/"+gem.name.toLowerCase()+"-2.png"
 	});
 
 	Upgrades.push({
 		name: gem.name+" Value III",
 		description: gem.name+" doubled again (8x total)",
-		baseCost:1000 * gem.baseValue,
+		baseCost:calculatePurchase(gem, 75, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
-			gem.bonus = 8;
-		}
+			gem.bonus *= 2;
+		},
+		img: "img/"+gem.name.toLowerCase()+"-3.png"
 	});
 });
 
@@ -353,6 +399,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/star.png"
 	},
 	{
 		name: "Heart",
@@ -364,6 +411,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/heart.png"
 	},
 	{
 		name: "Cursor",
@@ -375,6 +423,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/cursor.png"
 	},
 	{
 		name: "Teardrop",
@@ -384,6 +433,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 1, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
+		img: "img/teardrop.png"
 	}
 ];
 Buffs.baseRate = Infinity;

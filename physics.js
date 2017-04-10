@@ -746,12 +746,13 @@ function closeDrop(){
 // Drop
 UI.drop.onmousedown = function(){
 	AutoDrop.manuallyOpen = true;
+	AutoDrop.timer = Infinity;
 	openDrop();
 }
-UI.drop.onmouseup = function(){
+UI.drop.onmouseup = UI.drop.onmouseout = function(){
 	AutoDrop.manuallyOpen = false;
-	if(AutoDrop.timer <= 0)
-		closeDrop();
+	closeDrop();
+	AutoDrop.timer = AutoDrop.rate;
 }
 
 var BackgroundMode = {

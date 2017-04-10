@@ -43,9 +43,9 @@
 
 #ui {
 	padding:0 10px;
-	width:620px;
+	width:800px;
 	overflow-x:hidden;
-	overflow-y:scroll;
+	/*overflow-y:scroll;*/
 }
 
 #drop	 {
@@ -67,7 +67,7 @@
 	background-color:#89ff97;
 	padding:10px;
 	text-align: center;
-	min-width:250px;
+	width:300px;
 }
 
 #predicted_money {
@@ -81,7 +81,7 @@
 .section_name {
 	background-color:#000;
 	color:white;
-	width:590px;
+	width:770px;
 	padding:10px;
 	display:inline-block;
 	margin-top:5px;
@@ -140,12 +140,12 @@
     border-color: transparent transparent black transparent;
 }
 
-.popup_container:hover .popup {
+/*.popup_container:hover .popup {
 	visibility: visible;
 	margin-top:7px;
 	top: 90%;
 	opacity: 1;
-}
+}*/
 
 .popup_container .disabled {
 	border: 1px solid #c1c1c1;
@@ -228,6 +228,13 @@ button:focus {
 	outline: none;
 }
 
+
+
+.progressbar_container {
+	margin-left:10px;
+	margin-top:25px;
+}
+
 .progressbar_outer {
 	width: 150px;
 	height:7px;
@@ -235,8 +242,6 @@ button:focus {
 	background-color: black;
 	padding:3px;
 	float:left;
-	margin-left:10px;
-	margin-top:15px;
 }
 .progressbar_inner {
 	width:50%;
@@ -249,7 +254,8 @@ button:focus {
 .timeleft {
 	float:left;
 	font-weight: bold;
-	padding:10 10px;
+	margin-top: -5px;
+    margin-left: 10px;
 	opacity: 0;
 	transition:opacity 0.15s;
 }
@@ -261,7 +267,7 @@ button:focus {
 	transform: 			translateY(-50%);*/
 }
 
-.progressbar_container:hover .timeleft {
+.buff_container:hover .timeleft {
 	opacity: 1;
 }
 
@@ -290,8 +296,16 @@ button:focus {
 	margin-left:10px;
 	margin-bottom:10px;
 	width: 400px;
-	opacity:0.8;
+	opacity:1;
 	z-index:100;
+}
+
+.tippy-popper .achievement {
+	background-color:transparent;
+	margin:0;
+	padding:0;
+	opacity:1;
+	width: 400px;
 }
 
 .achievement, .achievement *{
@@ -413,7 +427,7 @@ button:focus {
 	text-align:right;
 }
 
-#menu a {
+a {
 	color:black;
 	margin-left:15px;
 	cursor:pointer;
@@ -447,18 +461,18 @@ button:focus {
 	height:50px;
 }
 
-.scroll {
+/*.scroll {
 	overflow-x:scroll;
 	overflow-y:hidden;
 	white-space:nowrap;
 	width:600px;
-}
+}*/
 
 .popup_container {
 	display: inline-block;
 	float:none;
 	text-align:center;
-	width:110px;
+/*	width:110px;*/
 }
 
 .popup_container,
@@ -518,3 +532,73 @@ button:focus {
 /*#buffs .popup_container .popup, #buffs .popup_container .popup::after {
 	left:45px;
 }*/
+
+.upgrade .popup_anchor {
+	width:64px;
+	height:64px;
+	text-align:center;
+	vertical-align: center;
+	padding:0px;
+}
+
+.upgrade .popup_anchor img {
+	max-width:64px;
+	max-height:64px;
+}
+
+.upgrade .disabled {
+	border: none;
+	/*filter: brightness(50%) grayscale(100%);*/
+	opacity: 0.3;
+}
+
+#open_owned_upgrades{
+	display:block;
+	text-align:center;
+}
+
+.buff {
+	float:left;
+}
+
+.buff .popup_anchor {
+	padding:0;
+}
+.buff .popup_anchor{
+	width:64px;
+	text-align:center;
+}
+
+.tippy-tooltip {
+	background-color:black;
+	box-shadow:0px 0px 8px #727272;
+	pointer-events:none;
+}
+
+.popup {
+	display:none;
+}
+
+.achievement .achievement { /* TODO this is hacky */
+	margin:0;
+	padding:0;
+}
+
+.upgrade {
+	display:none;
+	opacity:0;
+	transition:opacity 1s;
+}
+
+#upgrades {
+	min-height: 135px;
+}
+
+#click_powers .popup_anchor,
+#factories .popup_anchor {
+	width:64px;
+}
+
+.gem_click_power .popup_anchor {
+	display:none;
+}

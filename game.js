@@ -26,7 +26,7 @@ var UI = {
 	achievements: document.getElementById("achievements"),
 	stats: {
 		modal: document.getElementById("stats"),
-		modal_inner: document.getElementById("stats").querySelector("modal_inner"),
+		modal_inner: document.getElementById("stats").querySelector(".modal_inner"),
 		gems: document.getElementById("stats_gems"),
 		money: document.getElementById("stats_money"),
 		clickpower_gems: document.getElementById("stats_clickpower_gems"),
@@ -50,14 +50,12 @@ var UI = {
 		import_field: document.getElementById("import_field"),
 		import_button: document.getElementById("import_button"),
 		sprites: document.getElementById("sprites")
-	}
-};
-
-var BuyMode = {
-	BUY: 0,
-	SELL: 1,
-	mode: 0,
-	quantity: 1
+	},
+	bought_upgrades: {
+		modal: document.getElementById("bought_upgrades"),
+		modal_inner: document.getElementById("bought_upgrades").querySelector(".modal_inner"),
+		close: document.getElementById("bought_upgrades").querySelector(".close")
+	} 
 };
 
 // TODO this gets immediately overwritten when physics.js loads
@@ -185,7 +183,7 @@ function getUpgradeHTML(upgrade) {
 		container = refs.container = document.createElement("div");
 	container.className = "upgrade popup_container";
 	container.innerHTML = `
-		<div class="popup_anchor">asdf</div>
+		<div class="popup_anchor"><img></div>
 		<div class="popup">
 			<strong class="name">asdf</strong>
 			<div class="description">blah blah blah</div>
@@ -199,7 +197,8 @@ function getUpgradeHTML(upgrade) {
 	refs.costs = container.querySelector(".price");
 
 	refs.anchor.onclick = function() { buyUpgrade(upgrade); };
-	refs.anchor.innerText = refs.name.innerText = upgrade.name;
+	refs.name.innerText = upgrade.name;
+	refs.anchor.children[0].src = upgrade.img;
 	refs.description.innerText = upgrade.description;
 	refs.costs.innerText = upgrade.getCost();
 
@@ -213,23 +212,29 @@ function getBuffHTML(buff) {
 	container.className = "buff_container";
 	container.innerHTML = `
 		 				<div class="buff popup_container">
-							<div class="popup_anchor">asdf</div>
+							<div class="popup_anchor"><img></div>
 							<div class="popup">
 								<strong class="name">asdf</strong>
 								<div class="description">+10 butts for 3.5 seconds</div>
 							</div>
 						</div>
-						<div class="progressbar_container">
-							<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
-							<div class="timeleft">3s</div>
-						</div>`;
+						<!--<div style="float:left">-->
+							<div class="progressbar_container">
+								<div class="progressbar_outer"><div class="progressbar_inner"></div></div>
+								<div class="timeleft">3s</div>
+							</div>
+							<!--<div class="description2" style="clear:left"></div>-->
+						<!--</div>-->`;
 	refs.anchor = container.querySelector(".popup_anchor");
+	refs.popup = container.querySelector(".popup");
 	refs.name = container.querySelector(".name");
 	refs.description = container.querySelector(".description");
 	refs.progressbar = container.querySelector(".progressbar_inner");
 	refs.timeleft = container.querySelector(".timeleft");
 
-	refs.anchor.innerText = buff.name;
+	refs.anchor.children[0].src = buff.img;
+	// container.querySelector(".description2").innerText = buff.description;
+	// refs.anchor.innerText = buff.name;
 	updateBuff(buff);
 	return container;
 }
@@ -238,14 +243,16 @@ function getAchievementHTML(achievement) {
 	var container = document.createElement("div");
 	container.className = "achievement";
 	container.innerHTML = `
-		<img class="icon" src="img/trophy.png">
-		<div class="text">
-			<strong class="name">Hello World</strong>
-			<span class="description">Popup text goes here</span>
-			<small class="redtext">Secret red text</small>
-		</div>
-		<div class="value">$500</div>
-		<div class="clear"></div>`;
+		<div class="achievement">
+			<img class="icon" src="img/trophy.png">
+			<div class="text">
+				<strong class="name">Hello World</strong>
+				<span class="description">Popup text goes here</span>
+				<small class="redtext">Secret red text</small>
+			</div>
+			<div class="value">$500</div>
+			<div class="clear"></div>
+		</div>`;
 	container.onclick = function() {
 		container.parentNode.removeChild(container);
 	};
@@ -258,7 +265,8 @@ function getAchievementIconHTML(achievement) {
 		container = refs.container = document.createElement("div");
 	container.className = "achievement_icon popup_container";
 	container.innerHTML = `<img class="icon popup_anchor" src="img/trophy.png">`;
-	var popup = getAchievementHTML(achievement);
+	refs.anchor = container.querySelector(".popup_anchor");
+	var popup = refs.popup = getAchievementHTML(achievement);
 	updateAchievement(achievement, popup);
 	popup.className += " popup";
 	container.appendChild(popup);
@@ -287,7 +295,6 @@ function updateClickPower(gem) {
 		clickpower.ui.anchor.className = "popup_anchor active";
 	else
 		clickpower.ui.anchor.className = "popup_anchor owned";
-
 }
 
 function updateFactory(gem) {
@@ -328,6 +335,14 @@ function updateUpgrade(upgrade) {
 		upgrade.ui.anchor.className = "popup_anchor disabled";
 	else
 		upgrade.ui.anchor.className = "popup_anchor";
+
+	if(upgrade.owned && upgrade.ui.container.parentNode === UI.upgrades)
+		UI.bought_upgrades.modal_inner.appendChild(UI.upgrades.removeChild(upgrade.ui.container));
+
+	if(money >= upgrade.getCost() / 10){
+		upgrade.ui.container.style.display = "block";
+		upgrade.ui.container.style.opacity = 1;
+	}
 }
 
 function updateBuff(buff) {
@@ -433,6 +448,7 @@ function initSettings() {
 function openAchievements() {
 	closeSettings();
 	closeStats();
+	closeUpgrades();
 	UI.achievements.style.display = "block";
 }
 
@@ -443,6 +459,7 @@ function closeAchievements() {
 function openStats() {
 	closeAchievements();
 	closeSettings();
+	closeUpgrades();
 	UI.stats.modal.style.display = "block";
 	UI.stats.timeout = setInterval(updateStats, 1000);
 	UI.stats.isOpen = true;
@@ -457,6 +474,7 @@ function closeStats() {
 function openSettings() {
 	closeAchievements();
 	closeStats();
+	closeUpgrades();
 	UI.settings.modal.style.display = "block";
 }
 
@@ -464,37 +482,25 @@ function closeSettings() {
 	UI.settings.modal.style.display = "none";
 }
 
+function openUpgrades(){
+	closeAchievements();
+	closeSettings();
+	closeStats();
+	UI.bought_upgrades.modal.style.display = "block";
+}
+
+function closeUpgrades(){
+	UI.bought_upgrades.modal.style.display = "none";
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUY/SELL/SPAWN
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Calculates the cost of a factory purchase for the given gem according to BUY MODE
-function calculatePurchase(gem, quantity = BuyMode.quantity) {
-	var r = gem.factory.getCostFactor(),
-		b = gem.factory.baseCost,
-		k = gem.factory.owned,
-		c = money,
-		n = 0;
-	if (BuyMode.mode === BuyMode.BUY) {
-		var max_quantity = Math.floor(log(r, Math.pow(r, k) - c * ((1 - r) / b)) - k);
-		if (quantity === "max")
-			n = Math.max(max_quantity, 1);
-		else
-			n = quantity;
-	} else {
-		if (quantity === "max")
-			n = gem.factory.owned;
-		else
-			n = Math.min(gem.factory.owned, quantity);
-		k = gem.factory.owned - n;
-	}
-	var cost = b * ((Math.pow(r, k) - Math.pow(r, k + n)) / (1 - r));
-	return { cost: cost, quantity: n };
-}
-
 function setBuyMode(mode, elem) {
 	BuyMode.mode = mode;
-	[ui.buy, UI.sell].forEach(function(elem) {
+	[UI.buy, UI.sell].forEach(function(elem) {
 		elem.className = "";
 	});
 	elem.className = "active";
@@ -537,6 +543,11 @@ function buyClickPower(gem) {
 	Achievements.clickpower.total.check();
 	Gems.active_clickpower = gem;
 	Gems.forEach(function(gem){updateClickPower(gem);});
+
+	var index = Gems.indexOf(gem);
+	if(index < Gems.length - 1)
+		Gems[index + 1].clickpower.ui.anchor.style.display = "block";
+
 	return true;
 }
 
@@ -628,7 +639,7 @@ function clickBuff(buff) {
 }
 
 function getAchievement(achievement) {
-	if (UI.achievement_popups.children.length >= 5)
+	if (UI.achievement_popups.children.length >= 3)
 		UI.achievement_popups.removeChild(UI.achievement_popups.children[0]);
 	UI.achievement_popups.appendChild(getAchievementHTML(achievement));
 	updateMoney(achievement.getValue());
@@ -836,10 +847,6 @@ function formatTime(ms) {
 	return Math.ceil(ms / 1000) + "s";
 }
 
-function log(b, n) {
-	return Math.log(n) / Math.log(b);
-}
-
 function getTotalRate() {
 	var rate = 0;
 	for (var i = 0; i < factories.length; i++) {
@@ -906,7 +913,7 @@ function cheat() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function init() {
-	money = 10000000000;
+	// money = 10000000000;
 
 	if (Settings.enable_save)
 		loadGame();
@@ -915,24 +922,80 @@ function init() {
 	var factory_container = UI.factories.querySelector(".scroll");
 
 	// Clickpowers and Factories
-	Gems.forEach(function(gem) {
+	Gems.forEach(function(gem, id) {
 		clickpower_container.appendChild(getClickPowerHTML(gem));
+
+		// Tippy
+		gem.clickpower.ui.anchor.id = "cp_"+id+"_anchor";
+		gem.clickpower.ui.popup.id = "cp_"+id;
+		new Tippy("#cp_"+id+"_anchor", {
+		  html: "#cp_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
+
 		factory_container.appendChild(getFactoryHTML(gem));
+
+		// Tippy
+		gem.factory.ui.anchor.id = "fact_"+id+"_anchor";
+		gem.factory.ui.popup.id = "fact_"+id;
+		new Tippy("#fact_"+id+"_anchor", {
+		  html: "#fact_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	})
 
 	// Upgrades
-	Upgrades.forEach(function(upgrade) {
+	Upgrades.forEach(function(upgrade, id) {
 		UI.upgrades.appendChild(getUpgradeHTML(upgrade));
+
+		// Tippy
+		upgrade.ui.anchor.id = "upgrade_"+id+"_anchor";
+		upgrade.ui.popup.id = "upgrade_"+id;
+		new Tippy("#upgrade_"+id+"_anchor", {
+		  html: "#upgrade_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Buffs
-	Buffs.forEach(function(buff) {
+	Buffs.forEach(function(buff, id) {
 		UI.buffs.appendChild(getBuffHTML(buff))
+
+		// Tippy
+		buff.ui.anchor.id = "buff_"+id+"_anchor";
+		buff.ui.popup.id = "buff_"+id;
+		new Tippy("#buff_"+id+"_anchor", {
+		  html: "#buff_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Achievements
-	Achievements.all.forEach(function(achievement) {
+	Achievements.all.forEach(function(achievement, id) {
 		UI.achievements.children[2].appendChild(getAchievementIconHTML(achievement));
+
+		// Tippy
+		achievement.ui.anchor.id = "ach_"+id+"_anchor";
+		achievement.ui.popup.id = "ach_"+id;
+		new Tippy("#ach_"+id+"_anchor", {
+		  html: "#ach_"+id,
+		  animateFill: false,
+		  arrow: true,
+		  position: "bottom",
+		  hideOnClick: false
+		});
 	});
 
 	// Buy Mode
@@ -943,15 +1006,15 @@ function init() {
 	UI.buy_100.onclick = function() { setBuyQuantity(100, UI.buy_100); };
 	UI.buy_max.onclick = function() { setBuyQuantity("max", UI.buy_max); };
 
-	// Achievements modal
+	// Modals
 	UI.achievements.querySelector(".close").onclick = closeAchievements;
-
-	// Stats modal
 	UI.stats.modal.querySelector(".close").onclick = closeStats;
-
-	// Settings modal
+	UI.bought_upgrades.close.onclick = closeUpgrades;
 	UI.settings.modal.querySelector(".close").onclick = closeSettings;
 	initSettings();
+
+	Gems.quartz.clickpower.ui.anchor.style.display = "block";
+	Gems.topaz.clickpower.ui.anchor.style.display = "block";
 
 	updateMoney();
 }

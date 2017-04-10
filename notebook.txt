@@ -1090,6 +1090,7 @@ Javascript tooltips
 - Adds mousein and mouseout listeners to anchor
 - The CSS3 transitions are essentially the same, but just with custom classes instead of the :hover selector
 
+<<<<<<< HEAD
 4/3/17
 
 Tasks Master List
@@ -1151,3 +1152,52 @@ Tasks
 
 Website which pairs up users and (some) chatbots, and the users having figure out if it is a bot or not
 - Some catchy name with "Turing" in it
+
+4/6/17 - 4/8/17
+
+Game Balance
+- Buffs should come before autodrop
+- Slow down progression (forcing afk near auto_drop)
+- Probably just stretch the whole thing out a lot
+- factories become affordable too fast late game
+- Made it to rainbow in 15 min. Should take ~1-2hr
+- Buy/sell ui fix
+
+NEED
+X Upgrades UI
+- Responsive layout (easy)
+X Buffs UI
+- Tooltips (medium)
+- Achievements modal icons (trivial)
+- total money earned bug (trivial)
+/ game balance (medium)
+- settings (trivial)
+- achievements text wrapping (trivial)
+X drop glitches (small)
+- clickbuff not working (trivial)
+
+WANT
+- autodrop ui
+- upgrade unlocking
+- Too many gems get wasted by spawning; large powerspike at noclip
+- Load/save/sim
+- alert dialogs pause game?? (trivial)
+- Clickpower buff multiple gems spawn on top of eachother
+
+GEM DROP 2.0
+- Prestige
+- Offline mode
+- Big gems
+- Selective noclip (collision with walls and nothing else)
+- Better interaction of auto_drop and 
+- Fix sell price upgrade progression
+- Auto-clear upgrades
+
+
+Post-release
+- Critical gems
+- Prestige????
+
+Cookieclicker save
+- Mi4wMDJ8fDE0OTE1MzA4MjE1MjM7MTQ5MTUzMDgyMTUyODsxNDkxNjk4NDI4OTQ2O1RpbnkgQ2xpY2tlcnzDp8K9wo0HfDM0ODE4NTAxMjAuNjU4MTgxNzs2MjU1NTExMjgzLjY3MjQ3MzsxMDg1OzA7MTAyNzU3LjQ4NjU3MTAxNzY1OzY5OzA7MDswOzA7MDswOzA7MDswOzA7MDswOzA7MDswOzA7ZWFzdGVyOzA7MDswOzA7MDswOzA7LTE7LTE7LTE7LTE7LTE7MDswOzA7MDs1MDswOzA7fDc4LDc4LDE1Njc0MzQ3NywwOzY2LDY2LDE1Mzk1NTY3MCwwOzUxLDUxLDg5NTYzNDA1LDA7MzgsMzgsMjUyODM3NjUxLDA7MjgsMjgsNzM5MDY5OTE2LDA7MTgsMTgsMTIzOTYyMzg3NCwwOzE0LDE0LDI0MDQ5ODY1MTksMDszLDMsMTIxODYyNzk5OCwwOzAsMCwwLDA7MCwwLDAsMDswLDAsMCwwOzAsMCwwLDA7MCwwLDAsMDswLDAsMCwwO3zDp8K/wrDDp8K/wr/Dp8K/wrDDpMKAwoDDpMKDwq/Dp8K+wqrDpsKOwoDDpMKAwoLDpsK/woDDpMKAwoDDpMKAwo7DpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMK8woDDp8KgwoLDpMKAwozDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDpMKAwoDDocKAwoB8w6fCvMKAw6TCv8KAw6TCs8Kjw6XCqcKAw6TCgMKAw6TCqMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCkMKhw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKAw6TCgMKA%21END%21
+>>>>>>> 9363c378d5d31aba00bfb9f9ca58a925109ed851
