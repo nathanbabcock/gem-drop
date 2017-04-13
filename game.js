@@ -309,6 +309,11 @@ function updateClickPower(gem) {
 		clickpower.ui.anchor.className = "popup_anchor active";
 	else
 		clickpower.ui.anchor.className = "popup_anchor owned";
+
+	
+
+	// if(gem.clickpower.tippy)
+	// 	console.log(gem.clickpower.tippy.tooltippedEls = [gem.clickpower.tippy.tooltippedEls[0]])
 }
 
 function updateFactory(gem) {
@@ -856,9 +861,18 @@ function importGame(code){
 }
 
 function resetGame() {
+	Settings.enable_save = false;
 	localStorage.clear();
 	console.log("Game save deleted");
 	location.reload();
+
+	// Gems.forEach(function(gem)){
+	// 	gem.clickpower.owned = false;
+	// 	gem.factory.owned = 0;
+	// 	gem.bonus = 1;
+	// 	AutoDrop.rate = -1;
+	// 	Buffs.baseRate = Infinity;
+	// }
 	return true;
 }
 
@@ -1017,7 +1031,7 @@ function init() {
 		// Tippy
 		gem.clickpower.ui.anchor.id = "cp_"+id+"_anchor";
 		gem.clickpower.ui.popup.id = "cp_"+id;
-		new Tippy("#cp_"+id+"_anchor", {
+		gem.clickpower.tippy = new Tippy("#cp_"+id+"_anchor", {
 		  html: "#cp_"+id,
 		  animateFill: false,
 		  arrow: true,

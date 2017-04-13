@@ -1277,10 +1277,14 @@ Achievement idea: have 3 buffs active at once
 4/12/17 http://www.kongregate.com/games/excalo/gem-drop
 
 v1.01 changelog
-- Active clickpower now saves with the gamestate
 - Fixed bug where stats only showed current money, not total money earned
+- Fixed bug where sometimes hard reset would not work
+
 TODO:
-- Reset bug?
+- Fixed playtime counter
+- Active clickpower now saves with the gamestate
 - Upgrade sequence probs
 - tooltip content updates
 - Make sure it's backwards compatible!
+- object pooling
+- fixed bug where some achievements were unobtainable (max autodrop, max inv, playtime)
