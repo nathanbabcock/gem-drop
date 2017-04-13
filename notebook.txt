@@ -1243,7 +1243,7 @@ X Cursor/teardrop still doesn't work
 / Tooltip resets active clickpower (maybe just onmouseout updateClickPower?)
 X Changing active clickpower still buys it
 X Bring floating nums back or kill them
-- Achievement values
+X Achievement values
 
 BORDERLINE
 - Tooltips are never updated
@@ -1267,8 +1267,15 @@ WONT FIX
 - Buff inv tooltips/inv tooltip rework
 - Auto-clear achievement popups
 - if achievement in inventory when you quit, it is lost forever (maybe)
-- "Last saved..." in settings doesn't actually work
+- "Last saved..." in settings doesn't actually work\
+- Active clickpower not saved
 
 Achievement idea: have 3 buffs active at once
 
 4/11/17 6:19-7:58 ~117 min
+
+4/12/17 http://www.kongregate.com/games/excalo/gem-drop
+
+v1.01 changelog
+- Active clickpower now saves with the gamestate
+- Fixed bug where stats only showed current money, not total money earned

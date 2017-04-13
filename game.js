@@ -419,7 +419,7 @@ function updateAchievementIcon(achievement){
 }
 
 function updateStats() {
-	UI.stats.money.innerText = formatMoney();
+	UI.stats.money.innerText = Stats.money;
 	UI.stats.gems.innerText = Stats.gems;
 	UI.stats.clickpower_gems.innerText = Stats.clickpower_gems;
 	UI.stats.upgrades.innerText = Stats.upgrades;
@@ -763,6 +763,7 @@ function buildSave() {
 	};
 	save.Settings = Settings;
 	save.Stats = Stats;
+	save.active_clickpower = Gems.active_clickpower;
 
 
 	return JSON.stringify(save);
@@ -772,6 +773,7 @@ function buildSave() {
 function loadSave(save){
 	// Copy over the gamestate
 	money = save.money;
+	Gems.active_clickpower = save.active_clickpower;
 	Gems.forEach(function(gem, index) {
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
