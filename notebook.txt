@@ -1279,3 +1279,8 @@ Achievement idea: have 3 buffs active at once
 v1.01 changelog
 - Active clickpower now saves with the gamestate
 - Fixed bug where stats only showed current money, not total money earned
+TODO:
+- Reset bug?
+- Upgrade sequence probs
+- tooltip content updates
+- Make sure it's backwards compatible!
