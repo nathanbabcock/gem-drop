@@ -60,7 +60,7 @@ function Gem(options){
 			baseRate: 1,
 			getRate: function(){
 				var mult = 1.0;
-				if(Buffs.cursor.timeleft > 0)
+				if(Buffs.cursor.timeLeft > 0)
 					mult *= Buffs.cursor.getPower();
 				return this.baseRate * mult;
 			}
@@ -347,12 +347,14 @@ Gems.forEach(function(gem){
 	Upgrades.push({
 		name: gem.name+" Value",
 		description: gem.name+" sell price doubled",
-		baseCost:calculatePurchase(gem, 25, BuyMode.BUY).cost,
+		baseCost:calculatePurchase(gem, 15, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
 			gem.bonus *= 2;
+			updateClickPower(gem);
+			updateFactory(gem);
 		},
 		img: "img/"+gem.name.toLowerCase()+"-1.png"
 	});
@@ -360,12 +362,14 @@ Gems.forEach(function(gem){
 	Upgrades.push({
 		name: gem.name+" Value II",
 		description: gem.name+" doubled again (4x total)",
-		baseCost:calculatePurchase(gem, 50, BuyMode.BUY).cost,
+		baseCost:calculatePurchase(gem, 30, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
 			gem.bonus *= 2;
+			updateClickPower(gem);
+			updateFactory(gem);
 		},
 		img: "img/"+gem.name.toLowerCase()+"-2.png"
 	});
@@ -373,12 +377,14 @@ Gems.forEach(function(gem){
 	Upgrades.push({
 		name: gem.name+" Value III",
 		description: gem.name+" doubled again (8x total)",
-		baseCost:calculatePurchase(gem, 75, BuyMode.BUY).cost,
+		baseCost:calculatePurchase(gem, 45, BuyMode.BUY).cost,
 		getCost: function() { return this.baseCost; },
 		category: undefined,
 		owned: false,
 		onPurchase: function(){
 			gem.bonus *= 2;
+			updateClickPower(gem);
+			updateFactory(gem);
 		},
 		img: "img/"+gem.name.toLowerCase()+"-3.png"
 	});
@@ -414,7 +420,7 @@ var Buffs = [
 		img: "img/heart.png"
 	},
 	{
-		name: "Cursor",
+		name: "Teardrop",
 		description: "Spawn twice as many gems by clicking for 5 seconds",
 		baseDuration: 5,
 		getDuration: function(){ return this.baseDuration; },
@@ -423,7 +429,7 @@ var Buffs = [
 		timeLeft: 0,
 		baseChance: 3, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
-		img: "img/cursor.png"
+		img: "img/teardrop.png"
 	},
 	{
 		name: "Teardrop",
@@ -431,7 +437,7 @@ var Buffs = [
 		baseDuration: 10,
 		getDuration: function(){ return this.baseDuration; },
 		timeLeft: 0,
-		baseChance: 1, // % of all buff spawns which will be this one
+		baseChance: 0, // % of all buff spawns which will be this one
 		getChance: function(){ return this.baseChance; },
 		img: "img/teardrop.png"
 	}
@@ -484,8 +490,8 @@ function Achievement(name, description, value, condition, options={}){
 			Stats.achievements++;
 			spawnTrophy(this);
 			//updateMoney(this.getValue());
-			console.log("Unlocked achievement: "+this.name);
-			console.log(">"+this.description);
+			// console.log("Unlocked achievement: "+this.name);
+			// console.log(">"+this.description);
 			checkAll(Achievements.meta);
 		},
 		owned: false
@@ -527,85 +533,87 @@ Achievements.factory.quartz = [
 	new Achievement("Quartz Quarry", "Buy 50 quartz factories", 5000, function(){ return Gems.quartz.factory.owned >= 50; }),
 	new Achievement("Quartz Mogul", "Buy 100 quartz factories", 20e6, function(){ return Gems.quartz.factory.owned >= 100; })
 ];
+var asdf_factor = 100;
+
 Achievements.factory.topaz = [
-	new Achievement("Diversifying Your Portfolio", "Buy a topaz factory", 0, function(){ return Gems.topaz.factory.owned >= 1; }),
-	new Achievement("Topaz x50", "Buy 50 topaz factories", 0, function(){ return Gems.topaz.factory.owned >= 50; }), // TODO
-	new Achievement("Topaz Tycoon", "Buy 100 topaz factories", 0, function(){ return Gems.topaz.factory.owned >= 100; }),
+	new Achievement("Diversifying Your Portfolio", "Buy a topaz factory", 20, function(){ return Gems.topaz.factory.owned >= 1; }),
+	new Achievement("Topaz x50", "Buy 50 topaz factories", calculatePurchase(Gems.topaz, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.topaz.factory.owned >= 50; }), // TODO
+	new Achievement("Topaz Tycoon", "Buy 100 topaz factories", calculatePurchase(Gems.topaz, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.topaz.factory.owned >= 100; }),
 ];
 Achievements.factory.amethyst = [
-	new Achievement("Amethyst Automation", "Buy an amethyst factory", 0, function(){ return Gems.amethyst.factory.owned >= 1; }),
-	new Achievement("Amethyst x50", "Buy 50 amethyst factories", 0, function(){ return Gems.amethyst.factory.owned >= 50; }), // TODO
-	new Achievement("Purple Haze", "Buy 100 amethyst factories", 0, function(){ return Gems.amethyst.factory.owned >= 100; }),
+	new Achievement("Amethyst Automation", "Buy an amethyst factory", calculatePurchase(Gems.amethyst, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.amethyst.factory.owned >= 1; }),
+	new Achievement("Amethyst x50", "Buy 50 amethyst factories", calculatePurchase(Gems.amethyst, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.amethyst.factory.owned >= 50; }), // TODO
+	new Achievement("Purple Haze", "Buy 100 amethyst factories", calculatePurchase(Gems.amethyst, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.amethyst.factory.owned >= 100; }),
 ];
 Achievements.factory.sapphire = [
-	new Achievement("Sapphire Supplier", "Buy a sapphire factory", 0, function(){ return Gems.sapphire.factory.owned >= 1; }),
-	new Achievement("Blue Skies", "Buy 50 sapphire factories", 0, function(){ return Gems.sapphire.factory.owned >= 50; }),
-	new Achievement("Sapphic Love", "Buy 100 sapphire factories", 0, function(){ return Gems.sapphire.factory.owned >= 100; }),
+	new Achievement("Sapphire Supplier", "Buy a sapphire factory", calculatePurchase(Gems.sapphire, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.sapphire.factory.owned >= 1; }),
+	new Achievement("Blue Skies", "Buy 50 sapphire factories", calculatePurchase(Gems.sapphire, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.sapphire.factory.owned >= 50; }),
+	new Achievement("Sapphic Love", "Buy 100 sapphire factories", calculatePurchase(Gems.sapphire, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.sapphire.factory.owned >= 100; }),
 ];
 Achievements.factory.emerald = [
-	new Achievement("Emerald Entrepreneur", "Buy an emerald factory", 0, function(){ return Gems.emerald.factory.owned >= 1; }),
-	new Achievement("Emerald Enthusiast", "Buy 50 emerald factories", 0, function(){ return Gems.emerald.factory.owned >= 50; }),
-	new Achievement("Emerald Engineer", "Buy 100 emerald factory", 0, function(){ return Gems.emerald.factory.owned >= 100; }),
+	new Achievement("Emerald Entrepreneur", "Buy an emerald factory", calculatePurchase(Gems.emerald, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.emerald.factory.owned >= 1; }),
+	new Achievement("Emerald Enthusiast", "Buy 50 emerald factories", calculatePurchase(Gems.emerald, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.emerald.factory.owned >= 50; }),
+	new Achievement("Emerald Engineer", "Buy 100 emerald factory", calculatePurchase(Gems.emerald, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.emerald.factory.owned >= 100; }),
 ];
 Achievements.factory.ruby = [
-	new Achievement("Ruby Producer", "Buy a ruby factory", 0, function(){ return Gems.ruby.factory.owned >= 1; }),
-	new Achievement("Ruby x50", "Buy 50 ruby factories", 0, function(){ return Gems.ruby.factory.owned >= 50; }), // TODO
-	new Achievement("Seeing Red", "Buy 100 ruby factories", 0, function(){ return Gems.ruby.factory.owned >= 100; }),
+	new Achievement("Ruby Producer", "Buy a ruby factory", calculatePurchase(Gems.ruby, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.ruby.factory.owned >= 1; }),
+	new Achievement("Ruby x50", "Buy 50 ruby factories", calculatePurchase(Gems.ruby, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.ruby.factory.owned >= 50; }), // TODO
+	new Achievement("Seeing Red", "Buy 100 ruby factories", calculatePurchase(Gems.ruby, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.ruby.factory.owned >= 100; }),
 ];
 Achievements.factory.diamond = [
-	new Achievement("Diamond Miner", "Buy a diamond factory", 0, function(){ return Gems.diamond.factory.owned >= 1; }),
-	new Achievement("Lucy in the Sky", "Buy 50 diamond factories", 0, function(){ return Gems.diamond.factory.owned >= 50; }),
-	new Achievement("The 1%", "Buy 100 diamond factories", 0, function(){ return Gems.diamond.factory.owned >= 100; }),
+	new Achievement("Diamond Miner", "Buy a diamond factory", calculatePurchase(Gems.diamond, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.diamond.factory.owned >= 1; }),
+	new Achievement("Lucy in the Sky", "Buy 50 diamond factories", calculatePurchase(Gems.diamond, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.diamond.factory.owned >= 50; }),
+	new Achievement("The 1%", "Buy 100 diamond factories", calculatePurchase(Gems.diamond, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.diamond.factory.owned >= 100; }),
 ];
 Achievements.factory.rainbow = [
-	new Achievement("Leprechaun", "Buy a rainbow factory", 0, function(){ return Gems.rainbow.factory.owned >= 1; }),
-	new Achievement("Double Rainbow", "Buy 2 rainbow factories", 0, function(){ return Gems.rainbow.factory.owned >= 2; }, {redtext: "What does it mean?"}),
-	new Achievement("Rainbow x50", "Buy 50 rainbow factories", 0, function(){ return Gems.rainbow.factory.owned >= 50; }), // TODO
-	new Achievement("The 0.1%", "Buy 100 rainbow factory", 0, function(){ return Gems.rainbow.factory.owned >= 100; }),
+	new Achievement("Leprechaun", "Buy a rainbow factory", calculatePurchase(Gems.rainbow, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.rainbow.factory.owned >= 1; }),
+	new Achievement("Double Rainbow", "Buy 2 rainbow factories", calculatePurchase(Gems.rainbow, 1, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.rainbow.factory.owned >= 2; }, {redtext: "What does it mean?"}),
+	new Achievement("Rainbow x50", "Buy 50 rainbow factories", calculatePurchase(Gems.rainbow, 50, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.rainbow.factory.owned >= 50; }), // TODO
+	new Achievement("The 0.1%", "Buy 100 rainbow factory", calculatePurchase(Gems.rainbow, 100, BuyMode.BUY).cost / asdf_factor, function(){ return Gems.rainbow.factory.owned >= 100; }),
 ];
 Achievements.factory.total = [
-	new Achievement("Overseer", "Buy 500 total factories", 0, function(){ return Stats.factories >= 500; }),
-	new Achievement("CEO", "Buy 1000 total factories", 0, function(){ return Stats.factories >= 1000; }),
+	new Achievement("Overseer", "Buy 500 total factories", 100e6, function(){ return Stats.factories >= 500; }),
+	new Achievement("CEO", "Buy 1000 total factories", 100e9, function(){ return Stats.factories >= 1000; }),
 ];
 Achievements.factory.each = [
 	//new Achievement("asdf", "Buy a factory of every type", 0, function(){ var got = true; Gems.forEach(function(gem){ got = got && gem.factory.owned >= 1; }); return got; }),
 	//new Achievement("asdf", "Buy 50 factories of every type", 50, function(){ var got = true; Gems.forEach(function(gem){ got = got && gem.factory.owned >= 50; }); return got; }),
-	new Achievement("Stacked", "Buy 100 factories of every type", 0, function(){ var got = true; Gems.forEach(function(gem){ got = got && gem.factory.owned >= 100; }); return got; }),
+	new Achievement("Stacked", "Buy 100 factories of every type", 1e12, function(){ var got = true; Gems.forEach(function(gem){ got = got && gem.factory.owned >= 100; }); return got; }),
 ];
 Achievements.factory.byGem = function(gem){ return this[gem.name.toLowerCase()]};
 
 // Clickpower gems
 Achievements.clickpower_gems = [
 	new Achievement("Hello world", "Spawn a gem by clicking", 1, function(){ return Stats.clickpower_gems >= 1; }),
-	new Achievement("Click x1000", "Spawn 1000 gems by clicking", 0, function(){ return Stats.clickpower_gems >= 1000; }), // TODO
-	new Achievement("Click x10k", "Spawn 10k gems by clicking", 0, function(){ return Stats.clickpower_gems >= 10000; }), // TODO
+	new Achievement("Click x1000", "Spawn 1000 gems by clicking", 1000, function(){ return Stats.clickpower_gems >= 1000; }), // TODO
+	new Achievement("Click x10k", "Spawn 10k gems by clicking", 10000, function(){ return Stats.clickpower_gems >= 10000; }), // TODO
 ];
 
 // Upgrades owned
 Achievements.upgrades = [
-	new Achievement("My First Upgrade", "Buy an upgrade", 0, function(){ return Stats.upgrades >= 1; }),
-	new Achievement("Upgrade x25", "Buy 25 upgrades", 0, function(){ return Stats.upgrades >= 25; }), // TODO
-	new Achievement("Upgrade x50", "Buy 50 upgrades", 0, function(){ return Stats.upgrades >= 50; }), // TODO
-	new Achievement("Lvl 99", "Buy all upgrades", 0, function(){ return Stats.upgrades >= Upgrades.length; })
+	new Achievement("My First Upgrade", "Buy an upgrade", 1, function(){ return Stats.upgrades >= 1; }),
+	new Achievement("Upgrade x25", "Buy 25 upgrades", 1e9, function(){ return Stats.upgrades >= 25; }), // TODO
+	//new Achievement("Upgrade x50", "Buy 50 upgrades", 10e6, function(){ return Stats.upgrades >= 50; }), // TODO
+	new Achievement("Lvl 99", "Buy all upgrades", 1e12, function(){ return Stats.upgrades >= Upgrades.length; })
 ];
 
 // Buffs
 Achievements.buffs = [
-	new Achievement("Buffed", "Collected a buff", 0, function(){ return Stats.buffs >= 1; }),
-	new Achievement("Buff AF", "Collected 50 buffs", 0, function(){ return Stats.buffs >= 50; }), // TODO
-	new Achievement("Do you even lift?", "Collected 100 buffs", 0, function(){ return Stats.buffs >= 100; }), // TODO
-	new Achievement("Sick gains", "Collected 1k buffs", 0, function(){ return Stats.buffs >= 1000; }), // TODO
-	new Achievement("Gym rat", "Collected 10k buffs", 0, function(){ return Stats.buffs >= 10000; }, { redtext : "Or is it gem rat?"}), // TODO
-	new Achievement("Schwarzenegger", "Collected 100k buffs", 0, function(){ return Stats.buffs >= 100000; }), // TODO
+	new Achievement("Buffed", "Collected a buff", 100, function(){ return Stats.buffs >= 1; }),
+	new Achievement("Buff AF", "Collected 50 buffs", 5000, function(){ return Stats.buffs >= 50; }), // TODO
+	new Achievement("Do you even lift?", "Collected 100 buffs", 10e3, function(){ return Stats.buffs >= 100; }), // TODO
+	new Achievement("Sick gains", "Collected 1k buffs", 1e6, function(){ return Stats.buffs >= 1000; }), // TODO
+	new Achievement("Gym rat", "Collected 10k buffs", 10e6, function(){ return Stats.buffs >= 10000; }, { redtext : "Or is it gem rat?"}), // TODO
+	new Achievement("Schwarzenegger", "Collected 100k buffs", 100e6, function(){ return Stats.buffs >= 100000; }), // TODO
 ];
 
 // Total gems
 Achievements.gems = [
-	new Achievement("Gem Dropper", "Drop 100 gems", 1, function(){ return Stats.gems >= 100; }),
-	new Achievement("Bejewelled", "Drop 1k gems", 1, function(){ return Stats.gems >= 1e3; }),
-	new Achievement("Gem Dropper III", "Drop 10k gems", 1, function(){ return Stats.gems >= 10e3; }), // TODO
-	new Achievement("Gem Dropper IV", "Drop 100k gems", 1, function(){ return Stats.gems >= 100e3; }), // TODO
-	new Achievement("Outrageous", "Drop 1M gems", 1, function(){ return Stats.gems >= 1e6; }, { redtext: "Truly, truly, TRULY outrageous."}),
+	new Achievement("Gem Dropper", "Drop 100 gems", 100, function(){ return Stats.gems >= 100; }),
+	new Achievement("Bejewelled", "Drop 1k gems", 1e3, function(){ return Stats.gems >= 1e3; }),
+	new Achievement("Gem Dropper III", "Drop 10k gems", 10e3, function(){ return Stats.gems >= 10e3; }), // TODO
+	new Achievement("Gem Dropper IV", "Drop 100k gems", 100e3, function(){ return Stats.gems >= 100e3; }), // TODO
+	new Achievement("Outrageous", "Drop 1M gems", 1e6, function(){ return Stats.gems >= 1e6; }, { redtext: "Truly, truly, TRULY outrageous."}),
 ];
 
 // Total money
@@ -618,46 +626,46 @@ Achievements.money = [
 
 // Meta-Achievement
 Achievements.meta = [
-	new Achievement("Meta-Achievement I", "Unlock 15 achievements", 0, function(){ return Stats.achievements >= 15; }),
-	new Achievement("Meta-Achievement II", "Unlock 30 achievements", 0, function(){ return Stats.achievements >= 30; }),
-	new Achievement("Meta-Achievement III", "Unlock 45 achievements", 0, function(){ return Stats.achievements >= 45; }),
-	new Achievement("Meta-Achievement IV", "Unlock 60 achievements", 0, function(){ return Stats.achievements >= 60; }),
-	new Achievement("Meta-Meta-Achievement", "Unlock 4 meta-achievements", 0, function(){ return false; }),
-	new Achievement("Overachiever", "Unlock every achievement", 0, function(){ return Stats.achievements >= Stats.achievements.length - 1; }, {redtext: "(except this one)"}),
+	new Achievement("Meta-Achievement I", "Unlock 15 achievements", 1.5e3, function(){ return Stats.achievements >= 15; }),
+	new Achievement("Meta-Achievement II", "Unlock 30 achievements", 3e3, function(){ return Stats.achievements >= 30; }),
+	new Achievement("Meta-Achievement III", "Unlock 45 achievements", 4.5e3, function(){ return Stats.achievements >= 45; }),
+	new Achievement("Meta-Achievement IV", "Unlock 60 achievements", 6e3, function(){ return Stats.achievements >= 60; }),
+	new Achievement("Meta-Meta-Achievement", "Unlock 4 meta-achievements", 4e3, function(){ return false; }),
+	new Achievement("Overachiever", "Unlock every achievement", 420, function(){ return Stats.achievements >= Stats.achievements.length - 1; }, {redtext: "(except this one)"}),
 ];
 
 // Prestige
 Achievements.prestige = [
-	new Achievement("The Prestige", "Prestige once", 0, function(){ return Stats.prestige >= 1; }, {redtext: "Are you watching closely?"}),
-	new Achievement("Once more, with feeling", "Prestige twice", 0, function(){ return Stats.prestige >= 2; }),
-	new Achievement("Ultimate Gem Hunter Mode", "Prestige three times", 0, function(){ return Stats.prestige >= 3; }),
-	new Achievement("Gem Drop 4: The Droppening", "Prestige four times", 0, function(){ return Stats.prestige >= 4; }),
-	new Achievement("Pentakill", "Prestige five times", 0, function(){ return Stats.prestige >= 5; }),
+	// new Achievement("The Prestige", "Prestige once", 0, function(){ return Stats.prestige >= 1; }, {redtext: "Are you watching closely?"}),
+	// new Achievement("Once more, with feeling", "Prestige twice", 0, function(){ return Stats.prestige >= 2; }),
+	// new Achievement("Ultimate Gem Hunter Mode", "Prestige three times", 0, function(){ return Stats.prestige >= 3; }),
+	// new Achievement("Gem Drop 4: The Droppening", "Prestige four times", 0, function(){ return Stats.prestige >= 4; }),
+	// new Achievement("Pentakill", "Prestige five times", 0, function(){ return Stats.prestige >= 5; }),
 ];
 
 // Time played
 Achievements.time = [
-	new Achievement("60 minutes", "1 hour of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 >= 1; }),
-	new Achievement("24 hours", "1 day of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 1; }),
-	new Achievement("2 days", "2 days of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 2; }),
-	new Achievement("3 days", "3 days of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 3; }),
-	new Achievement("4 days", "4 days of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 4; }),
-	new Achievement("5 days", "6 days of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 6; }),
-	new Achievement("6 days", "5 days of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 5; }),
-	new Achievement("7 days", "One week of total playtime (on and offline)", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 7; }),
+	new Achievement("60 minutes", "1 hour of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 >= 1; }),
+	new Achievement("24 hours", "1 day of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 1; }),
+	new Achievement("2 days", "2 days of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 2; }),
+	new Achievement("3 days", "3 days of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 3; }),
+	new Achievement("4 days", "4 days of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 4; }),
+	new Achievement("5 days", "6 days of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 6; }),
+	new Achievement("6 days", "5 days of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 5; }),
+	new Achievement("7 days", "One week of total playtime", 0, function(){ return (Stats.start_date - new Date().getTime) / 1000 / 60 / 60 / 24 >= 7; }),
 ];
 
 // Gems wasted
 Achievements.wasted = [
 	new Achievement("Spillage", "Lose a gem when it falls outside the inventory", 10, function(){ return Stats.wasted >= 1; }),
-	new Achievement("Buffer Overflow", "Lose 50 gems when they fall outside the inventory", 1000, function(){ return Stats.wasted >= 50; }),
-	new Achievement("Why can't I hold all these gems?", "Lose 100 gems when they fall outside the inventory", 10000, function(){ return Stats.wasted >= 100; }),
+	new Achievement("Buffer Overflow", "Lose 50 gems when they fall outside the inventory", 100, function(){ return Stats.wasted >= 50; }),
+	new Achievement("Why can't I hold all these gems?", "Lose 100 gems when they fall outside the inventory", 1000, function(){ return Stats.wasted >= 100; }),
 ];
 
 // Misc
 Achievements.misc = {
-	inventory: new Achievement("So much space for activities", "Max out the inventory", 0, function(){ return false; }), // TODO
-	autodrop: new Achievement("Open the Floodgates", "Upgrade to 100% autodrop", 0, function(){ return false; }), // TODO
+	inventory: new Achievement("So much space for activities", "Max out the inventory", 1e3, function(){ return false; }), // TODO
+	autodrop: new Achievement("Open the Floodgates", "Upgrade to 100% autodrop", 10e3, function(){ return false; }), // TODO
 	sell: new Achievement("Reimbursement", "Sell a factory", 100, function(){ return Stats.sold >= 1; }),
 	hack: new Achievement("Script kiddie", "", -1, function(){ return true; }, {redtext: "Alternatively: Introduction to the Developer Console."}),
 };

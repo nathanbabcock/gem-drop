@@ -79,10 +79,11 @@
 			<a href="javascript:void(0)" class="close">[close]</a>
 			<div class="modal_inner">
 				<strong>Render Sprites:</strong><input type="checkbox" checked id="sprites"><br>
-				<strong>Floating numbers:</strong><input type="checkbox" checked id="settings_particles"><br>
+				<div style="display:none"><strong>Floating numbers:</strong><input type="checkbox" checked id="settings_particles"><br></div>
 				<strong>Autosave:</strong><input type="checkbox" checked id="autosave"><span>Saves game in real time</span><br>
 				<strong>Save game:</strong><button id="save">Save</button><span id="lastsaved">Last saved less than a second ago</span><br>
-				<strong>Export game:</strong><button id="export">Export</button><br>
+				<strong>Export game:</strong><button id="export">Export</button><span id="export_instructions">Copy the following code to a text file:</span><br>
+				<textarea id="export_textarea">asdf</textarea>
 				<strong>Import game:</strong><input type="text" id="import_field"><button id="import_button">Import</button><br>
 				<strong style="color:red">Hard reset:</strong><button id="reset">Delete all saved data</button><br>
 			</div>
@@ -115,7 +116,7 @@
 				<div id="money"><span id="actual_money"></span><span id="predicted_money"></span></div>	
 				<div id="buttons">
 					<button id="drop">DROP</button>
-					<img id="autodrop_icon">
+					<img id="autodrop_icon" title="Auto Drop active">
 					<!-- <button onclick="cheat()">Cheat</button>
 					<button onclick="debug()">Debug</button> -->
 				</div>

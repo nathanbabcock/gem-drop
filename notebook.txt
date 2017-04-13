@@ -1220,3 +1220,55 @@ X statistics
 X achievements
 X autodrop?
 X upgrades?
+
+518-536 (18 min)
+
+Balance notes
+- Buffs still too infrequent?
+- Autodrop too weak?
+- Cursors basically impossible to see
+- Autodrop feels really week
+- midgame needs tweaks (sapphire fact->sapphire cp should be first big idle)
+- Too long a gap after autodrop and before buff autocollect (?)
+- Gem sell price upgrades probably too sparse now
+- diamond maybe too cheap (comes before ruby clickpower....)
+
+WILL FIX
+X Achievement popup text overflow bug
+X Factories dont show how much $$ gems are worth
+X Stats achievements == 0
+X Is topaz accidentally too cheap??
+X Teardrop has no function (replace cursor with teardrop)
+X Cursor/teardrop still doesn't work
+/ Tooltip resets active clickpower (maybe just onmouseout updateClickPower?)
+X Changing active clickpower still buys it
+X Bring floating nums back or kill them
+- Achievement values
+
+BORDERLINE
+- Tooltips are never updated
+- Update value after buying sell price upgrade
+X Stats.achievements seems wrong
+- Factory anchor width too small
+- close button for achievement popups
+- value tooltip in inv
+- Autodrop starts immediately
+- Time formatting in stats
+- CSS for disabled drop button
+- Autodrop v2 before v3
+X import/export broken
+
+WONT FIX
+- Achievements text pushed down a bit
+- Achievements order in modal
+- Upgrades order in modal
+- Upgrades bg color in modal
+- See spilled gems
+- Buff inv tooltips/inv tooltip rework
+- Auto-clear achievement popups
+- if achievement in inventory when you quit, it is lost forever (maybe)
+- "Last saved..." in settings doesn't actually work
+
+Achievement idea: have 3 buffs active at once
+
+4/11/17 6:19-7:58 ~117 min

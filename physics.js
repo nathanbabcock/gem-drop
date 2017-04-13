@@ -513,8 +513,8 @@ function spawnTrophy(achievement){
 }
 
 function showFloatingNumber(canvasX, canvasY, num){
-	if(!Settings.render_floatnums)
-		return false;
+	// if(!Settings.render_floatnums)
+	return false;
 
 	var rect = render.canvas.getBoundingClientRect();
 	var x = canvasX + rect.left;
