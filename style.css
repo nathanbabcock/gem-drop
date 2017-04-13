@@ -10,7 +10,7 @@
 
 	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 
-	display:none;
+	/*display:none;*/
 }
 
 /*#render {
@@ -650,8 +650,14 @@ a {
     margin-bottom: 10px;
 }
 
-html, body {
-	background-color: white;
+body {
+		background-image: url(img/bg.png)
+}
+
+.section_name {
+	border-radius:4px;
+	box-shadow: 0px 0px 5px #888888;
+	/*background-image: url(img/gun_metal.png);*/
 }
 
 /*html {

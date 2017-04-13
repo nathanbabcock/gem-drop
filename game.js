@@ -433,7 +433,7 @@ function updateAchievementIcon(achievement){
 }
 
 function updateStats() {
-	UI.stats.money.innerText = Stats.money;
+	UI.stats.money.innerText = formatMoney(Stats.money);
 	UI.stats.gems.innerText = Stats.gems;
 	UI.stats.clickpower_gems.innerText = Stats.clickpower_gems;
 	UI.stats.upgrades.innerText = Stats.upgrades;
@@ -1148,6 +1148,7 @@ function init() {
 	setInterval(function() {
 		updateStats();
 		document.title = "Gem Drop ("+formatMoney()+")";
+		checkAll(Achievements.time);
 		if(Settings.enable_save)
 			saveGame();
 	}, 1000);

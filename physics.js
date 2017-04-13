@@ -26,7 +26,7 @@ var render = Render.create({
     options: {
         width: Math.min(document.documentElement.clientWidth, 300),
         height: Math.min(document.documentElement.clientHeight, 500),
-        background: '#fff',
+        background: 'transparent',
         wireframes: false
     }
 });
