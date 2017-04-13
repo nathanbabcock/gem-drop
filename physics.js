@@ -361,7 +361,7 @@ function spawnGem(pos, gem){
 	body.gem = gem;
 
 	// Noclip
-	if(AutoDrop.rate === 0)
+	if(AutoDrop.getRate() === 0)
 		body.collisionFilter = NOCLIP;
 
 	World.add(engine.world, body);
@@ -601,19 +601,21 @@ Events.on(engine, 'tick', function(event) {
 	//if(delta < BackgroundMode.threshhold)
 	genGems(delta);
 	genBuffs(delta);
+	Stats.play_time += delta;
 	// else
 	// 	console.warn("Dropped frames, delta = " + delta);
 
 
 	// Auto drop
-	if(AutoDrop.rate === 0){
+	var rate = AutoDrop.getRate();
+	if(rate === 0){
 		if(!AutoDrop.open){
 			UI.autodrop_icon.src = AutoDrop.getIcon();
 			UI.autodrop_icon.style.display = "inline-block";
 			UI.drop.disabled = true;
 			openDrop();
 		}
-	} else if(AutoDrop.rate > 0){
+	} else if(rate > 0){
 		AutoDrop.timer -= delta;
 		if(AutoDrop.timer <= 0){
 			if(AutoDrop.open){
@@ -621,7 +623,7 @@ Events.on(engine, 'tick', function(event) {
 				UI.drop.disabled = false;
 				closeDrop();
 				AutoDrop.open = false;
-				AutoDrop.timer = AutoDrop.rate;
+				AutoDrop.timer = rate;
 			} else {
 				UI.drop.disabled = true;
 				UI.autodrop_icon.src = AutoDrop.getIcon();
@@ -766,7 +768,7 @@ UI.drop.onmousedown = function(){
 UI.drop.onmouseup = UI.drop.onmouseout = function(){
 	AutoDrop.manuallyOpen = false;
 	closeDrop();
-	AutoDrop.timer = AutoDrop.rate;
+	AutoDrop.timer = AutoDrop.getRate();
 }
 
 var BackgroundMode = {

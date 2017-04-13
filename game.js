@@ -87,6 +87,15 @@ var AutoDrop = {
 			return Upgrades[2].img;
 		else
 			return "";
+	},
+	getRate: function() {
+		if(Upgrades[4].owned)
+			return Upgrades[4].rate;
+		else if(Upgrades[3].owned)
+			return Upgrades[3].rate;
+		else if (Upgrades[2].owned)
+			return Upgrades[2].rate;
+		return -1;
 	}
 };
 
@@ -382,7 +391,7 @@ function updateBuff(buff) {
 	buff.ui.name.innerHTML = buff.name;
 	buff.ui.description.innerHTML = buff.description;
 	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
-	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft * 1000);
+	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft);
 }
 
 function updateAchievement(achievement, element) { // TODO this is wack
@@ -431,7 +440,7 @@ function updateStats() {
 	UI.stats.clickpowers.innerText = Stats.clickpowers;
 	UI.stats.factories.innerText = Stats.factories;
 	//UI.stats.prestige.innerText = Stats.prestige;
-	UI.stats.time.innerText = formatTime(new Date().getTime() - Stats.start_date);
+	UI.stats.time.innerText = formatTime(Stats.play_time);
 	//UI.stats.prestige_time.innerText = formatTime(new Date().getTime() - Stats.prestige_start_date);
 	UI.stats.wasted.innerText = Stats.wasted;
 	UI.stats.achievements.innerText = Stats.achievements;
@@ -761,14 +770,14 @@ function buildSave() {
 	Achievements.all.forEach(function(achievement) {
 		save.achievements.push(achievement.owned);
 	});
-	save.AutoDrop = AutoDrop.rate;
+	//save.AutoDrop = AutoDrop.get;
 	save.Buffs = {
 		baseRate: Buffs.baseRate,
 		autocollect: Buffs.autocollect
 	};
 	save.Settings = Settings;
 	save.Stats = Stats;
-	save.active_clickpower = Gems.active_clickpower;
+	save.active_clickpower = Gems.indexOf(Gems.active_clickpower);
 
 
 	return JSON.stringify(save);
@@ -778,7 +787,7 @@ function buildSave() {
 function loadSave(save){
 	// Copy over the gamestate
 	money = save.money;
-	Gems.active_clickpower = save.active_clickpower;
+	Gems.active_clickpower = Gems[save.active_clickpower];
 	Gems.forEach(function(gem, index) {
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
@@ -810,7 +819,7 @@ function loadSave(save){
 		updateAchievement(achievement, achievement.ui.popup); // TODO
 		updateAchievementIcon(achievement);
 	});
-	AutoDrop.rate = save.AutoDrop;
+	//AutoDrop.rate = save.AutoDrop;
 	Buffs.baseRate = save.Buffs.baseRate || Infinity;
 	Buffs.autocollect = save.Buffs.autocollect;
 	Settings = save.Settings;
@@ -885,13 +894,14 @@ function simulate(delta) {
 	console.log("Inventory capacity: " + inv_cap + " gems");
 
 
-	var max_rate;
-	if (AutoDrop.rate === -1)
+	var max_rate,
+		rate = AutoDrop.getRate();
+	if (rate === -1)
 		max_rate = inv_cap / delta;
-	else if (AutoDrop.rate === -1)
+	else if (rate === -1)
 		max_rate = inv_cap;
 	else
-		max_rate = inv_cap / AutoDrop.rate;
+		max_rate = inv_cap / rate;
 	console.log("Max rate: " + max_rate + " gems/sec");
 
 	var rate = [];
@@ -950,9 +960,21 @@ function formatMoney(num = money) {
 	return "$" + formatted;
 }
 
-function formatTime(ms) {
-	return Math.ceil(ms / 1000) + "s";
+function formatTime (sec_num) {
+    //var sec_num = parseInt(this, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+Math.ceil(seconds);
 }
+
+// function formatTime(ms) {
+// 	return Math.ceil(ms / 1000) + "s";
+// }
 
 function getTotalRate() {
 	var rate = 0;

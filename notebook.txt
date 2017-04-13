@@ -1278,13 +1278,33 @@ Achievement idea: have 3 buffs active at once
 
 v1.01 changelog
 - Fixed bug where stats only showed current money, not total money earned
+    -http://www.kongregate.com/accounts/Der_Chris, /u/IronMaidenFan
 - Fixed bug where sometimes hard reset would not work
+    - http://www.kongregate.com/accounts/CassyM
+- Fixed 5- and 6-day achievement order
+    -http://www.kongregate.com/accounts/Sorcelius
+- Opened public bitbucket repo
+    - https://bitbucket.org/nbabcock/gem-drop
+
+TO TEST:
+- Fixed bug where playtime counter included time spent offline
+- Fixed bug where downgrading the auto drop was possible
+    - http://www.kongregate.com/accounts/Remy49, /u/jogorhan, /u/IMP1017, /u/Cymonie
+- Fixed bug where some achievements were unobtainable (max autodrop, playtime)
+    - /u/liontrap
+- Active clickpower now saves with the gamestate
+- Slightly nicer time formatting in stats
 
 TODO:
-- Fixed playtime counter
-- Active clickpower now saves with the gamestate
-- Upgrade sequence probs
-- tooltip content updates
+- Fixed bug where tooltips never updated their information, for example to reflect increased sell price from upgrades\
+    - http://www.kongregate.com/accounts/Der_Chris, /u/IronMaidenFan
+- Counter-ripped a nice background from /u/Candunc
+
 - Make sure it's backwards compatible!
+
+v1.?
 - object pooling
-- fixed bug where some achievements were unobtainable (max autodrop, max inv, playtime)
+
+- Other marketing
+    - Request reviews on TIGsource, indie game forums?
+    - Ad buy?
