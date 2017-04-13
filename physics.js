@@ -110,6 +110,9 @@ var Inventory = {
 		this.right = Bodies.rectangle(render.canvas.width - (this.wall_radius / 2), render.canvas.height / 2  - this.bottom_margin, this.wall_radius, render.canvas.height, this.wall_options);
 		this.ground = Bodies.rectangle(render.canvas.width / 2, render.canvas.height - (this.wall_radius / 2) - this.bottom_margin, render.canvas.width, this.wall_radius, this.wall_options);
 
+		if(AutoDrop.open)
+			openDrop();
+
 		// Add
 		World.add(engine.world, [this.left, this.right, this.ground]);
 	},
@@ -601,6 +604,8 @@ Events.on(engine, 'tick', function(event) {
 	//if(delta < BackgroundMode.threshhold)
 	genGems(delta);
 	genBuffs(delta);
+	if(!Stats.play_time)
+		Stats.play_time = 0;
 	Stats.play_time += delta;
 	// else
 	// 	console.warn("Dropped frames, delta = " + delta);

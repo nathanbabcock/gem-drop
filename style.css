@@ -650,8 +650,8 @@ a {
     margin-bottom: 10px;
 }
 
-body {
-		background-image: url(img/bg.png)
+html {
+	background-image: url(img/bg.png);
 }
 
 .section_name {
@@ -665,6 +665,6 @@ body {
 	color:white;
 }*/
 
-/*.factory .owned {
+.factory .owned {
 	display: none; /* Hide tippy bug */
-/*}*/
+}

@@ -1277,6 +1277,7 @@ Achievement idea: have 3 buffs active at once
 4/12/17 http://www.kongregate.com/games/excalo/gem-drop
 
 v1.01 changelog
+- BUGFIXES
 - Fixed bug where downgrading the auto drop was possible (Remy49, /u/jogorhan, /u/IMP1017, /u/Cymonie)
 - Fixed bug where tooltips never updated their information, for example to reflect increased sell price from upgrades (Der_Chris, /u/IronMaidenFan)
 - Fixed bug where stats only showed current money, not total money earned (Der_Chris, /u/IronMaidenFan)

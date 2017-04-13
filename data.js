@@ -271,9 +271,9 @@ var Upgrades = [
 		category: UPGRADE_CATEGORY.AUTO_DROP,
 		rate: 10,
 		owned: false,
-		// onPurchase: function(){
-		// 	AutoDrop.rate = this.rate;
-		// },
+		onPurchase: function(){
+			UI.autodrop_icon.src = AutoDrop.getIcon();
+		},
 		img: "img/autodrop-1.png"
 	},
 	{
@@ -284,9 +284,9 @@ var Upgrades = [
 		category: UPGRADE_CATEGORY.AUTO_DROP,
 		rate: 5,
 		owned: false,
-		// onPurchase: function(){
-		// 	AutoDrop.rate = this.rate;
-		// },
+		onPurchase: function(){
+			UI.autodrop_icon.src = AutoDrop.getIcon();
+		},
 		img: "img/autodrop-2.png"
 	},
 	{
@@ -298,7 +298,7 @@ var Upgrades = [
 		rate: 0,
 		owned: false,
 		onPurchase: function(){
-			//AutoDrop.rate = this.rate;
+			UI.autodrop_icon.src = AutoDrop.getIcon();
 			Achievements.misc.autodrop.check();
 		},
 		img: "img/autodrop-3.png"

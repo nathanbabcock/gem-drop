@@ -319,7 +319,14 @@ function updateClickPower(gem) {
 	else
 		clickpower.ui.anchor.className = "popup_anchor owned";
 
-	
+	// TODO redundancy
+	// Tippy
+	if(gem.clickpower.tippy){
+		var index = Gems.indexOf(gem);
+		var popper = gem.clickpower.tippy.getPopperElement(document.getElementById("cp_"+index+"_anchor"));
+		popper.querySelector(".rate").innerText = clickpower.getRate() + " "+gem.name.toLowerCase()+" per click";
+		popper.querySelector(".value").innerText = gem.name + " sells for " + formatMoney(gem.getValue()) + " each";
+	}
 
 	// if(gem.clickpower.tippy)
 	// 	console.log(gem.clickpower.tippy.tooltippedEls = [gem.clickpower.tippy.tooltippedEls[0]])
@@ -351,7 +358,15 @@ function updateFactory(gem) {
 			factory.ui.anchor.className = "popup_anchor can_afford";
 	}
 
-
+	// TODO redundancy
+	// Tippy
+	if(gem.factory.tippy){
+		var index = Gems.indexOf(gem);
+		var popper = gem.factory.tippy.getPopperElement(document.getElementById("fact_"+index+"_anchor"));
+		popper.querySelector(".value").innerText = gem.name + " sells for " + formatMoney(gem.getValue()) + " each";
+		popper.querySelector(".price").innerText = purchaseString;
+		popper.querySelector(".owned").innerText = factory.owned;
+	}
 }
 
 
@@ -391,7 +406,7 @@ function updateBuff(buff) {
 	buff.ui.name.innerHTML = buff.name;
 	buff.ui.description.innerHTML = buff.description;
 	buff.ui.progressbar.style.width = (buff.timeLeft / buff.getDuration()) * 100 + "%";
-	buff.ui.timeleft.innerHTML = formatTime(buff.timeLeft);
+	buff.ui.timeleft.innerHTML = Math.ceil(buff.timeLeft)+"s";
 }
 
 function updateAchievement(achievement, element) { // TODO this is wack
@@ -464,8 +479,11 @@ function initSettings() {
 
 	// Import
 	UI.settings.import_button.onclick = function() {
-		if(importGame(UI.settings.import_field.value))
+		if(importGame(UI.settings.import_field.value)){
 			alert("Game imported.");
+			saveGame();
+			location.reload();
+		}
 	};
 
 	// Reset
@@ -787,7 +805,7 @@ function buildSave() {
 function loadSave(save){
 	// Copy over the gamestate
 	money = save.money;
-	Gems.active_clickpower = Gems[save.active_clickpower];
+	Gems.active_clickpower = Gems[save.active_clickpower] || Gems.quartz;
 	Gems.forEach(function(gem, index) {
 		gem.clickpower.owned = save.gems[index].clickpower;
 		gem.factory.owned = save.gems[index].factory;
@@ -1049,27 +1067,28 @@ function init() {
 	// Clickpowers and Factories
 	Gems.forEach(function(gem, id) {
 		clickpower_container.appendChild(getClickPowerHTML(gem));
+		//updateClickPower(gem);
 
-		// Tippy
 		gem.clickpower.ui.anchor.id = "cp_"+id+"_anchor";
 		gem.clickpower.ui.popup.id = "cp_"+id;
 		gem.clickpower.tippy = new Tippy("#cp_"+id+"_anchor", {
-		  html: "#cp_"+id,
-		  animateFill: false,
-		  arrow: true,
-		  position: "bottom",
-		  hideOnClick: false,
-		  hidden: function() {
-		    updateClickPower(gem);
-		  }
-		});
+			html: "#cp_"+id,
+			animateFill: false,
+			arrow: true,
+			position: "bottom",
+			hideOnClick: false,
+			hidden: function() {
+			updateClickPower(gem);
+		}
+	});
 
 		factory_container.appendChild(getFactoryHTML(gem));
 
 		// Tippy
+		updateFactory(gem);
 		gem.factory.ui.anchor.id = "fact_"+id+"_anchor";
 		gem.factory.ui.popup.id = "fact_"+id;
-		new Tippy("#fact_"+id+"_anchor", {
+		gem.factory.tippy = new Tippy("#fact_"+id+"_anchor", {
 		  html: "#fact_"+id,
 		  animateFill: false,
 		  arrow: true,
