@@ -1060,6 +1060,12 @@ function cheat() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function init() {
+	kongregateAPI.loadAPI(function(){
+	  window.kongregate = kongregateAPI.getAPI();
+	  // You can now access the Kongregate API with: kongregate.services.getUsername(), etc
+	  // Proceed with loading your game...
+	});
+
 
 	var clickpower_container = UI.click_powers.querySelector(".scroll");
 	var factory_container = UI.factories.querySelector(".scroll");
@@ -1170,6 +1176,11 @@ function init() {
 		checkAll(Achievements.time);
 		if(Settings.enable_save)
 			saveGame();
+
+		// Kongregate Stats
+		kongregate.stats.submit("Gems Dropped", Stats.gems);
+		kongregate.stats.submit("Achievements", Math.min(Stats.achievements, Achievements.all.length));
+		kongregate.stats.submit("Money", Stats.money);
 	}, 1000);
 
 	loadGame();

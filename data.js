@@ -654,8 +654,8 @@ Achievements.time = [
 	new Achievement("2 days", "2 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 2; }),
 	new Achievement("3 days", "3 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 3; }),
 	new Achievement("4 days", "4 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 4; }),
-	new Achievement("5 days", "6 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 5; }),
-	new Achievement("6 days", "5 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 6; }),
+	new Achievement("5 days", "5 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 5; }),
+	new Achievement("6 days", "6 days of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 6; }),
 	new Achievement("7 days", "One week of total playtime", 0, function(){ return Stats.play_time / 60 / 60 / 24 >= 7; })
 ];
 
